@@ -1,0 +1,48 @@
+{
+  "_note": "Root classes for the fetch. Every QID was resolved by label lookup (wbsearchentities) and checked against its English label and description on 2026-10-28. Items match a root through wdt:P31/wdt:P279* unless subclassClosure is false. candidate: true means measured in the audit only, not yet approved for the product. membershipEndpoint: qlever marks classes too large for WDQS to list (it times out); all per-item lookups use WDQS.",
+  "verifiedOn": "2026-10-28",
+  "categoryPriority": [
+    "disaster",
+    "conflict",
+    "politics",
+    "founding",
+    "science",
+    "culture",
+    "other"
+  ],
+  "classes": [
+    { "key": "battle", "qid": "Q178561", "label": "battle", "category": "conflict", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "siege", "qid": "Q188055", "label": "siege", "category": "conflict", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "war", "qid": "Q198", "label": "war", "category": "conflict", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "military-campaign", "qid": "Q831663", "label": "military campaign", "category": "conflict", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "rebellion", "qid": "Q124734", "label": "rebellion", "category": "conflict", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "massacre", "qid": "Q3199915", "label": "massacre", "category": "conflict", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "treaty", "qid": "Q131569", "label": "treaty", "category": "politics", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "coronation", "qid": "Q209715", "label": "coronation", "category": "politics", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "coup", "qid": "Q45382", "label": "coup d'état", "category": "politics", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "revolution", "qid": "Q10931", "label": "revolution", "category": "politics", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "assassination", "qid": "Q3882219", "label": "assassination", "category": "politics", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "earthquake", "qid": "Q7944", "label": "earthquake", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "volcanic-eruption", "qid": "Q7692360", "label": "volcanic eruption", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "epidemic", "qid": "Q44512", "label": "epidemic", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "flood", "qid": "Q8068", "label": "flood", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "famine", "qid": "Q168247", "label": "famine", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "tsunami", "qid": "Q8070", "label": "tsunami", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "conflagration", "qid": "Q168983", "label": "conflagration", "category": "disaster", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "expedition", "qid": "Q2401485", "label": "expedition", "category": "science", "dateProps": ["P585", "P580", "P582"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1 },
+    { "key": "settlement-founding", "qid": "Q486972", "label": "human settlement", "category": "founding", "dateProps": ["P571"], "locProps": ["P625"], "minSitelinks": 1, "membershipEndpoint": "qlever" },
+    { "key": "structure", "qid": "Q811979", "label": "built structure", "category": "culture", "dateProps": ["P571"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 5, "candidate": true, "membershipEndpoint": "qlever" },
+    { "key": "archaeological-site", "qid": "Q839954", "label": "archaeological site", "category": "culture", "dateProps": ["P571"], "locProps": ["P625", "P276", "P131"], "minSitelinks": 1, "candidate": true },
+    { "key": "birth", "qid": "Q5", "label": "human", "category": "culture", "dateProps": ["P569"], "locProps": ["P19"], "minSitelinks": 20, "subclassClosure": false, "candidate": true, "membershipEndpoint": "qlever" }
+  ],
+  "_locationStoplistNote": "A place matching any of these through wdt:P31/wdt:P279* is too large to stand in for an event location (CLAUDE.md: never inherit from a country). Checked 2026-10-28: Greece, Turkey, Byzantine Empire, and Ancient Rome (the state) are stopped; Athens, Classical Athens, Sparta, Ancient Corinth, Marathon, and Salamis Island pass.",
+  "locationStoplist": [
+    { "qid": "Q6256", "label": "country" },
+    { "qid": "Q3624078", "label": "sovereign state" },
+    { "qid": "Q3024240", "label": "historical country" },
+    { "qid": "Q48349", "label": "empire" },
+    { "qid": "Q5107", "label": "continent" },
+    { "qid": "Q165", "label": "sea" },
+    { "qid": "Q9430", "label": "ocean" }
+  ]
+}

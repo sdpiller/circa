@@ -1,0 +1,454 @@
+{
+ "_note": "Raw WDQS facet rows for four battles, from etl/fetch.ts on 2026-10-28.",
+ "items": [
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233366"
+   },
+   "sl": {
+    "type": "literal",
+    "value": "2",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233386"
+   },
+   "sl": {
+    "type": "literal",
+    "value": "19",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "sl": {
+    "type": "literal",
+    "value": "67",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "sl": {
+    "type": "literal",
+    "value": "76",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  }
+ ],
+ "meta": [
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233386"
+   },
+   "enwiki": {
+    "type": "literal",
+    "value": "Battle of Herdonia (210 BC)",
+    "xml:lang": "en"
+   },
+   "desc": {
+    "type": "literal",
+    "value": "210 BCE battle of the Second Punic War in which Hannibal's Carthaginians encircled and destroyed a Roman army which was operating against his allies in Apulia",
+    "xml:lang": "en"
+   },
+   "label": {
+    "type": "literal",
+    "value": "Battle of Herdonia",
+    "xml:lang": "en"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "enwiki": {
+    "type": "literal",
+    "value": "Battle of Salamis",
+    "xml:lang": "en"
+   },
+   "desc": {
+    "type": "literal",
+    "value": "480 BCE naval battle fought between an alliance of Greek city-states and the Persian Empire",
+    "xml:lang": "en"
+   },
+   "label": {
+    "type": "literal",
+    "value": "Battle of Salamis",
+    "xml:lang": "en"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "enwiki": {
+    "type": "literal",
+    "value": "Battle of Marathon",
+    "xml:lang": "en"
+   },
+   "desc": {
+    "type": "literal",
+    "value": "490 BCE battle in the Greco-Persian wars",
+    "xml:lang": "en"
+   },
+   "label": {
+    "type": "literal",
+    "value": "Battle of Marathon",
+    "xml:lang": "en"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233366"
+   },
+   "desc": {
+    "type": "literal",
+    "value": "battle between Romans and Carthaginians in 243 BCE during the First Punic War",
+    "xml:lang": "en"
+   },
+   "label": {
+    "type": "literal",
+    "value": "Second Battle of Drepana",
+    "xml:lang": "en"
+   }
+  }
+ ],
+ "dates": [
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233386"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#NormalRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0209-01-01T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "9",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233366"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#NormalRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0242-01-01T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "9",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#NormalRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0479-09-22T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "11",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#PreferredRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0479-09-24T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "11",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#NormalRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0489-08-07T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "11",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#NormalRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0489-09-05T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "11",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "prop": {
+    "type": "literal",
+    "value": "P585"
+   },
+   "rank": {
+    "type": "uri",
+    "value": "http://wikiba.se/ontology#PreferredRank"
+   },
+   "t": {
+    "type": "literal",
+    "value": "-0489-09-07T00:00:00Z",
+    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+   },
+   "prec": {
+    "type": "literal",
+    "value": "11",
+    "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+   }
+  }
+ ],
+ "locs": [
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(23.961944444 38.153333333)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q212150"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P276"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233386"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(15.6333333 41.3166667)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233386"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P625"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(23.56666667 37.95138889)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P625"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(23.978333333 38.118055555)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q31900"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P625"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233386"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(15.633333333 41.316666666)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q51938"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P276"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q233366"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(14.266666666 37.566666666)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q4951156"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P276"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(23.485277777 37.938055555)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q202422"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P276"
+   }
+  },
+  {
+   "item": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q178850"
+   },
+   "coord": {
+    "type": "literal",
+    "value": "Point(23.5 37.933333)",
+    "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral"
+   },
+   "place": {
+    "type": "uri",
+    "value": "http://www.wikidata.org/entity/Q202422"
+   },
+   "src": {
+    "type": "literal",
+    "value": "P276"
+   }
+  }
+ ]
+}

@@ -58,3 +58,24 @@ pnpm 10 blocks dependency install scripts by default, and better-sqlite3 needs i
 
 ## 14. @types/node pinned to ^22 (2026-10-28)
 create-next-app 16.4.3 scaffolds `@types/node@^20`, but the runtime is Node 22 and vitest 5 requires Node 22+ types. Types should match the runtime.
+
+## 15. Fetch design: list membership once, then look up details by explicit QID chunks (2026-10-28)
+Measured, not assumed. A single query per class that joins class membership with labels, sitelinks, and dates times out on both public endpoints for anything bigger than a few dozen items. What works:
+
+1. **Membership query** per class (`?item wdt:P31/wdt:P279* wd:Q...` + sitelinks floor + has a date). WDQS lists all 15,591 dated battles in about 2 s.
+2. **Facet queries** (meta, dates, locs) over `VALUES ?item { ...1000 QIDs... }`, about 1 to 10 s each on WDQS.
+3. One raw file per class and chunk under `data/raw/<class>/`, so the run resumes at the chunk level.
+
+Query shape matters on WDQS: the dates facet written as an outer `VALUES ?item` plus `UNION` branches timed out at 60 s, while the same logic with predicates bound through `VALUES (?p ?psv)` took 1 s. Blazegraph evaluated the UNION branches over all of Wikidata before joining.
+
+Deviation from PLAN.md: the plan said to split queries by class and time bucket. Splitting by explicit QID chunks is simpler and never needs OFFSET; time buckets were unnecessary once membership was a separate query.
+
+## 16. QLever for membership of the three huge classes only (2026-10-28)
+QLever's public Wikidata endpoint (`https://qlever.dev/api/wikidata`) is live; its data was from the 2026-08-07 dump when checked. It returns the same RDF encoding as WDQS (astronomical years, Julian-to-Gregorian day shift, ranks), verified on Marathon, Vesuvius, Constantinople, and a year-precision battle. It answers whole-class aggregations that WDQS cannot: notable births (152k humans with a located birthplace at ≥15 sitelinks) took 5 s on QLever, while WDQS timed out at 65 s.
+
+But it is a shared research server with roughly a 30 s budget, and it is flaky under load: the same membership query took 49 s once and timed out other times. Failure modes seen: HTTP 429 for server-side timeouts (not only rate limits), and errors appended mid-stream to a body that began with HTTP 200 (marker `!!!!>>#`). The client treats both as retryable with 30 s+ backoff.
+
+So QLever is used only for membership of `settlement-founding`, `structure`, and `birth` (one query each). Every per-item lookup goes to WDQS. The User-Agent sent to QLever carries no contact email; the email goes only to Wikimedia, per the owner.
+
+## 17. Location stoplist instead of literal "no P17" (2026-10-28)
+The rule "never inherit from country" is enforced by type, not by property: a P276 or P131 place is skipped if it is an instance (through subclasses) of country, sovereign state, historical country, empire, continent, sea, or ocean (`locationStoplist` in `etl/classes.json`). Checked live: Greece, Turkey, Byzantine Empire, and Ancient Rome (the state) are stopped; Athens, Classical Athens, Sparta, Ancient Corinth, Marathon, and Salamis Island pass. P17 is never fetched.
