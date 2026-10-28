@@ -5,7 +5,7 @@ import { z } from "zod";
  * - One request at a time, with a minimum gap between requests (etiquette).
  * - Retries 429 and 5xx with backoff, honouring Retry-After.
  * - Validates the SPARQL JSON results shape with zod.
- * - The WIKIMEDIA_CONTACT goes ONLY to Wikimedia hosts, per the owner's instruction.
+ * - Sends WIKIMEDIA_CONTACT in the User-Agent to both endpoints (required by Wikimedia, courtesy to QLever).
  */
 
 export const ENDPOINTS = {
@@ -52,12 +52,11 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 class RetryableError extends Error {}
 
-export function userAgent(endpoint: EndpointName): string {
-  const runtime = `node/${process.version}`;
-  if (endpoint !== "wdqs") return `Chronoglobe/0.1 (personal history-map project) ${runtime}`;
+/** Wikimedia requires a contact; QLever gets the same one as a courtesy (owner approved 2026-10-28). */
+export function userAgent(_endpoint: EndpointName): string {
   const contact = process.env.WIKIMEDIA_CONTACT;
-  if (!contact) throw new Error("WIKIMEDIA_CONTACT is required for Wikimedia requests (see .env.example)");
-  return `Chronoglobe/0.1 (${contact}) ${runtime}`;
+  if (!contact) throw new Error("WIKIMEDIA_CONTACT is required (see .env.example)");
+  return `Chronoglobe/0.1 (${contact}) node/${process.version}`;
 }
 
 export async function query(endpoint: EndpointName, sparql: string, timeoutMs = 300_000): Promise<SparqlResults> {

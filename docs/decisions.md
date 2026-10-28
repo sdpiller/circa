@@ -75,7 +75,7 @@ QLever's public Wikidata endpoint (`https://qlever.dev/api/wikidata`) is live; i
 
 But it is a shared research server with roughly a 30 s budget, and it is flaky under load: the same membership query took 49 s once and timed out other times. Failure modes seen: HTTP 429 for server-side timeouts (not only rate limits), and errors appended mid-stream to a body that began with HTTP 200 (marker `!!!!>>#`). The client treats both as retryable with 30 s+ backoff.
 
-So QLever is used only for membership of `settlement-founding`, `structure`, and `birth` (one query each). Every per-item lookup goes to WDQS. The User-Agent sent to QLever carries no contact email; the email goes only to Wikimedia, per the owner.
+So QLever is used only for membership of `settlement-founding`, `structure`, and `birth` (one query each). Every per-item lookup goes to WDQS. Both endpoints get the same User-Agent with the WIKIMEDIA_CONTACT: Wikimedia requires it, and the owner chose to send it to QLever too as a courtesy to its operators (2026-10-28).
 
 ## 17. Location stoplist instead of literal "no P17" (2026-10-28)
 The rule "never inherit from country" is enforced by type, not by property: a P276 or P131 place is skipped if it is an instance (through subclasses) of country, sovereign state, historical country, empire, continent, sea, or ocean (`locationStoplist` in `etl/classes.json`). Checked live: Greece, Turkey, Byzantine Empire, and Ancient Rome (the state) are stopped; Athens, Classical Athens, Sparta, Ancient Corinth, Marathon, and Salamis Island pass. P17 is never fetched.

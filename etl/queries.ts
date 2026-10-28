@@ -29,10 +29,12 @@ export const FACETS: Facet[] = ["meta", "dates", "locs"];
 export function membershipQuery(c: ClassConfig): string {
   const path = c.subclassClosure === false ? "wdt:P31" : "wdt:P31/wdt:P279*";
   const anyDate = c.dateProps.map((p) => `wdt:${p}`).join("|");
-  return `SELECT ?item ?sl WHERE {
+  // A plain join + DISTINCT, not FILTER EXISTS: on QLever the join is much cheaper
+  // (settlements: 15 s, versus repeated timeouts and an out-of-memory error with FILTER EXISTS).
+  return `SELECT DISTINCT ?item ?sl WHERE {
   ?item ${path} wd:${c.qid} .
+  ?item ${anyDate} ?anyDate .
   ?item wikibase:sitelinks ?sl . FILTER(?sl >= ${c.minSitelinks})
-  FILTER EXISTS { ?item ${anyDate} ?anyDate }
 }`;
 }
 
