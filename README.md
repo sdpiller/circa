@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chronoglobe
 
-## Getting Started
+A 3D globe of human history. Spin and zoom the globe, pick a year range (about 3500 BCE to today), and see notable historical events as dots. Click an area to get the events there, plus a short narrative written by Claude that is grounded only in those events and cites each one.
 
-First, run the development server:
+The narrative is the point; the globe is how you get to it.
+
+## Status
+
+Work in progress, built in phases (see [docs/PLAN.md](docs/PLAN.md)).
+
+- **Done (Phase 0):** project scaffold, year-convention library with tests, and a Wikidata fetch plus data audit. The audit results are in [docs/data-audit.md](docs/data-audit.md).
+- **Not built yet:** the database loader, the events API, the globe UI, the area panel, and the narratives. `npm run dev` currently shows only the default starter page.
+
+## Requirements
+
+- Node.js 22.18 or newer (scripts run TypeScript directly, with no build step)
+- npm
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then edit `.env.local`. For the current phase only `WIKIMEDIA_CONTACT` is needed:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Needed for | Notes |
+| --- | --- | --- |
+| `WIKIMEDIA_CONTACT` | Data fetch | An email or URL. Wikimedia's User-Agent policy requires a contact on every request. |
+| `ANTHROPIC_API_KEY` | Narratives (later phase) | Never commit it. |
+| `ANTHROPIC_MODEL` | Narratives (later phase) | Defaults to `claude-sonnet-5-5`. |
+| `BASEMAP_STYLE_URL` | Globe (later phase) | A tile provider with a free tier. Do not use the public OpenStreetMap tile servers. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Commands
 
-## Learn More
+| Command | What it does |
+| --- | --- |
+| `npm test` | Run the unit tests (vitest). |
+| `npm run typecheck` | Generate Next.js route types and run the TypeScript compiler. |
+| `npm run lint` | Run ESLint. |
+| `npm run etl:fetch` | Download event data from Wikidata into `data/raw/`. See below. |
+| `npm run audit` | Rebuild the tables in `docs/data-audit.md` from `data/raw/`. |
+| `npm run dev` | Start the Next.js dev server on http://localhost:3000. |
 
-To learn more about Next.js, take a look at the following resources:
+## Fetching the data
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run etl:fetch                                 # everything
+npm run etl:fetch -- --only=battle,siege          # some classes
+npm run etl:fetch -- --only=battle --facets=dates # one kind of detail
+npm run etl:fetch -- --force                      # re-download instead of skipping
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The classes to fetch (battles, sieges, earthquakes, and so on) and their Wikidata IDs live in [etl/classes.json](etl/classes.json).
 
-## Deploy on Vercel
+How it works, briefly:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- For each class, one query lists the matching items and their sitelink counts. Then labels, dates, and locations are looked up in batches of 1,000 items.
+- Queries go to the public Wikidata Query Service, except three very large class listings, which go to the public [QLever](https://qlever.dev) Wikidata endpoint. Both services are free and shared, so requests run one at a time with a pause in between, and failed requests back off.
+- Every batch is saved as its own file under `data/raw/` (gitignored). If a run stops, rerunning it skips what is already there and continues.
+- A full run makes about a thousand small queries and takes roughly an hour. The raw files take well over 100 MB.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The reasoning behind these choices, including the Wikidata year-zero trap and why the queries are shaped the way they are, is in [docs/decisions.md](docs/decisions.md).
+
+## Repository layout
+
+```
+app/         Next.js app (starter page for now)
+lib/time/    Year conventions: no year 0, BCE as negative years, imprecise-date intervals
+etl/         Fetch, normalize, and audit scripts, plus classes.json
+tests/       Unit tests and live API fixtures
+docs/        PLAN.md, decisions.md, data-audit.md
+data/        Local data, gitignored
+```
+
+## Data and attribution
+
+- **Wikidata:** event data (labels, dates, coordinates, sitelink counts) comes from [Wikidata](https://www.wikidata.org), available under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+- **Wikipedia:** later phases will show short extracts from Wikipedia articles and use them to ground narratives. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the app will credit and link the source article wherever an extract or a narrative based on one appears.
+- **Query services:** data is fetched through the [Wikidata Query Service](https://query.wikidata.org) and [QLever](https://qlever.dev) (University of Freiburg).
+- **Basemap:** the tile provider will be credited here and in the app footer once one is chosen.
+
+Coverage is uneven: Wikidata documents some regions and eras far better than others. Documented history is not the same as history.
