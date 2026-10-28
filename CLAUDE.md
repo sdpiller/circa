@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 0 complete, at the gate: awaiting the owner's decision on adding structures and births (see `docs/data-audit.md`, "Decision needed at the gate"). (Update this line at every phase gate.)
+Phase 0 complete; gate passed 2026-10-28 (structures, births, extra event classes, and discoveries added; see docs/decisions.md 18 and 19). Phase 1 (ETL load) next. (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 

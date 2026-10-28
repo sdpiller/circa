@@ -22,6 +22,10 @@ export type ClassConfig = {
   subclassClosure?: boolean;
   kind: Kind;
   membershipEndpoint?: EndpointName;
+  /** SPARQL pattern on ?item that defines membership when qid is null. */
+  memberPattern?: string;
+  /** SPARQL filters on ?item that must hold before its own P625 is used (see classes.json _note). */
+  ownCoordsFilter?: string;
 };
 
 export type Kind = "event" | "founding" | "structure" | "birth" | "discovery";
@@ -35,9 +39,8 @@ export function membershipQuery(c: ClassConfig): string {
   const anyDate = c.dateProps.map((p) => `wdt:${p}`).join("|");
   // A plain join + DISTINCT, not FILTER EXISTS: on QLever the join is much cheaper
   // (settlements: 15 s, versus repeated timeouts and an out-of-memory error with FILTER EXISTS).
-  const member = c.qid
-    ? `?item ${path} wd:${c.qid} .`
-    : c.locProps.map((p) => `?item wdt:${p} ?any${p} .`).join(" ");
+  if (!c.qid && !c.memberPattern) throw new Error(`Class ${c.key} needs a qid or a memberPattern`);
+  const member = c.qid ? `?item ${path} wd:${c.qid} .` : c.memberPattern;
   return `SELECT DISTINCT ?item ?sl WHERE {
   ${member}
   ?item ${anyDate} ?anyDate .
@@ -67,7 +70,7 @@ export function facetQuery(c: ClassConfig, facet: Facet, qids: string[], stoplis
     case "locs": {
       const branches = c.locProps.map((p) =>
         p === "P625"
-          ? `{ ?item wdt:P625 ?coord . BIND(?item AS ?place) BIND("P625" AS ?src) }`
+          ? `{ ?item wdt:P625 ?coord . ${c.ownCoordsFilter ?? ""} BIND(?item AS ?place) BIND("P625" AS ?src) }`
           : `{ ?item wdt:${p} ?place . ?place wdt:P625 ?coord . BIND("${p}" AS ?src) }`,
       );
       const stops = stoplist.map((q) => `wd:${q}`).join(" ");

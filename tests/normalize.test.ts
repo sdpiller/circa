@@ -142,3 +142,17 @@ describe("chooseLabel", () => {
     expect(chooseLabel({ otherLabels: [] })).toBeNull();
   });
 });
+
+describe("chooseDates with values of different precision", () => {
+  const discovery: ClassConfig = { ...battle, key: "discovery", kind: "discovery", dateProps: ["P575"], locProps: ["P189", "P625"] };
+
+  it("keeps only the most precise values (Lascaux: discovered 1940, not the paintings' age)", () => {
+    // Real Lascaux (Q172125) rows, 2026-10-28: two normal-rank P575 values.
+    const lascaux = [date("P575", 1940, 11), date("P575", -16001, 6)];
+    expect(chooseDates(discovery, lascaux)).toMatchObject({ start: 1940, end: 1940, precision: 11 });
+  });
+
+  it("still spans disagreeing values of equal precision", () => {
+    expect(chooseDates(battle, [date("P585", -491), date("P585", -489)])).toMatchObject({ start: -491, end: -489 });
+  });
+});

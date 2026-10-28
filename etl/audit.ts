@@ -174,13 +174,14 @@ function main() {
 
   h("C. Location confidence");
   out.push(table(
-    ["Group", "Usable", "Exact (own P625)", "Inherited P276", "Inherited P131", "Inherited P19", "Several places to pick from"],
+    ["Group", "Usable", "Exact (own P625)", "Inherited P276", "Inherited P131", "Inherited P19 (birthplace)", "P189 (find spot)", "Several places to pick from"],
     groups.map(([name, rs]) => [
       name, rs.length,
       pct(rs.filter((r) => r.locSource === "P625").length, rs.length),
       pct(rs.filter((r) => r.locSource === "P276").length, rs.length),
       pct(rs.filter((r) => r.locSource === "P131").length, rs.length),
       pct(rs.filter((r) => r.locSource === "P19").length, rs.length),
+      pct(rs.filter((r) => r.locSource === "P189").length, rs.length),
       pct(rs.filter((r) => r.locChoices > 1).length, rs.length),
     ]),
   ));

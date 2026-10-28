@@ -125,11 +125,17 @@ export function collectFacts(items: Binding[], meta: Binding[], dates: Binding[]
   return facts;
 }
 
-/** Best-ranked, non-deprecated values of one property. */
+/**
+ * Best-ranked, non-deprecated values of one property, keeping only the most precise of those.
+ * A precise value is more informative than a vague one of the same rank; without this, Lascaux's
+ * misfiled millennium-precision "discovery" (the paintings' age) would stretch 1940 back 19,000 years.
+ */
 function bestRanked(values: DateValue[]): DateValue[] {
   const live = values.filter((v) => v.rank !== "deprecated");
   const preferred = live.filter((v) => v.rank === "preferred");
-  return preferred.length ? preferred : live;
+  const best = preferred.length ? preferred : live;
+  const top = Math.max(...best.map((v) => Math.min(v.precision, 9)));
+  return best.filter((v) => Math.min(v.precision, 9) === top);
 }
 
 export function chooseDates(c: ClassConfig, dates: DateValue[]): { start: number; end: number; origYear: number; precision: number } | Rejection {
