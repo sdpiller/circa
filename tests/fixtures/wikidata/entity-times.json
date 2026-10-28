@@ -1,0 +1,295 @@
+{
+  "_note": "wbgetentities claims (slimmed) fetched 2026-10-28. Entity JSON uses historical year numbering (-0490 = 490 BCE).",
+  "Q31900": {
+    "claims": {
+      "P585": [
+        {
+          "rank": "preferred",
+          "value": {
+            "time": "-0490-09-12T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0490-08-12T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0490-09-10T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q178850": {
+    "claims": {
+      "P585": [
+        {
+          "rank": "preferred",
+          "value": {
+            "time": "-0480-09-29T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0480-09-27T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q2411998": {
+    "claims": {
+      "P585": [
+        {
+          "rank": "deprecated",
+          "value": {
+            "time": "+0079-08-24T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "time": "+0079-10-24T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "time": "+0079-11-23T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q160077": {
+    "claims": {
+      "P580": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "+1453-04-06T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ],
+      "P582": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "+1453-05-29T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          }
+        }
+      ]
+    }
+  },
+  "Q233363": {
+    "label": "Second Battle of Beneventum",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0212-00-00T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q204343": {
+    "label": "Battle of Sellasia",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0222-00-00T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          }
+        }
+      ]
+    }
+  },
+  "Q233386": {
+    "label": "Battle of Herdonia",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0210-11-30T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q233352": {
+    "label": "Battle of Chaeronea",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0086-00-00T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q195881": {
+    "label": "Battle of the 300 Champions",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0546-00-00T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q233344": {
+    "label": "Battle of the Silarius River",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0071-00-00T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q233366": {
+    "label": "Second Battle of Drepana",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0243-01-01T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          }
+        }
+      ]
+    }
+  },
+  "Q223220": {
+    "label": "Battle of Megalopolis",
+    "claims": {
+      "P585": [
+        {
+          "rank": "normal",
+          "value": {
+            "time": "-0331-00-00T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 9,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985786"
+          }
+        }
+      ]
+    }
+  },
+  "Q1985786": {
+    "label": "proleptic Julian calendar",
+    "claims": {}
+  },
+  "Q1985727": {
+    "label": "proleptic Gregorian calendar",
+    "claims": {}
+  },
+  "Q178561": {
+    "label": "battle",
+    "claims": {}
+  }
+}
