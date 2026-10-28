@@ -249,6 +249,14 @@ function main() {
       return [name, ...thresholds.slice(0, 6).map((t) => rs.filter((r) => r.sitelinks >= t).length)];
     }),
   ));
+  out.push("\nDoes a threshold cut some regions harder than others? Share of each region's strict events that survive:\n");
+  out.push(table(
+    ["Region", "Events (≥1)", "kept at ≥2", "kept at ≥3", "kept at ≥5", "kept at ≥10"],
+    REGIONS.map((reg) => {
+      const rs = strict.filter((r) => region(r.lat, r.lon) === reg);
+      return [reg, rs.length, ...[2, 3, 5, 10].map((t) => pct(rs.filter((r) => r.sitelinks >= t).length, rs.length))];
+    }),
+  ));
 
   h("G. Spotlights: focus areas by era");
   const spotEras: [string, number, number][] = [["1000 to 501 BCE", -1000, -501], ["500 to 300 BCE", -500, -300], ["299 to 1 BCE", -299, -1], ["1 to 500", 1, 500], ["1001 to 1500", 1001, 1500]];
