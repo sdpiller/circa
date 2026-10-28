@@ -79,3 +79,25 @@ So QLever is used only for membership of `settlement-founding`, `structure`, and
 
 ## 17. Location stoplist instead of literal "no P17" (2026-10-28)
 The rule "never inherit from country" is enforced by type, not by property: a P276 or P131 place is skipped if it is an instance (through subclasses) of country, sovereign state, historical country, empire, continent, sea, or ocean (`locationStoplist` in `etl/classes.json`). Checked live: Greece, Turkey, Byzantine Empire, and Ancient Rome (the state) are stopped; Athens, Classical Athens, Sparta, Ancient Corinth, Marathon, and Salamis Island pass. P17 is never fetched.
+
+## 18. Gate decision: structures and births enter the product, as separate kinds (2026-10-28, owner decided)
+The Phase 0 audit showed ancient events are 94 to 100% conflict per century. The owner chose to add built structures and archaeological sites (inception date) and notable births (birth date, birthplace). Each class in `etl/classes.json` now has a `kind`: event, founding, structure, birth, or discovery. This replaces stretching the fixed `category` list: births and structures keep category `culture`, but ranking, quotas, and display copy go by kind.
+
+Consequences for later phases: rank and cap per kind in each viewport, never one mixed ranking (births have about 9 times the median sitelinks of events); births show as people at their birthplace (inherited location, "born here"); structures say "dated", not "built", because inception is sometimes a rebuild. Phase 1 adds a `kind` column to the schema.
+
+## 19. More event classes, chosen from a data-driven gap scan (2026-10-28, owner decided)
+Prompted by the owner's examples (Stonewall riots, the 1962 Alcatraz escape, the last guillotine execution, discoveries, science). A QLever scan ranked the classes of dated, located items that our list did not cover, once for all eras at ≥10 sitelinks and once for items before 1500 at ≥3. Added, all QIDs from live label lookups or live query results:
+
+- Civil and social: protest, demonstration, riot (politics); prison escape (other); synod, church council, world's fair (culture); papal election, conclave (politics).
+- Accidents and disasters: transport collision, aviation accident, railway accident, shipwrecking (the event, Q906512, not the wreck, Q852190), explosion, disease outbreak (disaster); terrorist attack, mass shooting (conflict).
+- More conflict: invasion, conquest, revolt, military raid, pogrom.
+- Discoveries: a new kind defined by properties, not a class: any item with time of discovery (P575) and location of discovery (P189). Location comes ONLY from P189, because P276 on museum objects is their current home (the Rosetta Stone's P276 is the British Museum; its P189 is Fort Julien).
+
+Not added: sports and entertainment editions (owner's choice: thousands of post-1950 races, tournaments, and award nights would flood the modern era), military operation and offensive (granular, mostly 20th century, and more war), solar eclipses (the location is only the point of greatest eclipse), geological ages, archaeological periods and cultures (spans, not events).
+
+Not representable as data: "last execution by guillotine". The person (Hamida Djandoubi) is an item, but "last" is a fact in Wikipedia prose. It can reach a narrative only through a Wikipedia extract. A deaths kind (P570 date of death, P20 place of death) would add such people; it is in the backlog, not planned.
+
+Honest limit: these additions mostly enrich modern history. For antiquity the non-war gain is small (councils, synods, a few protests); structures, births, and foundings carry the ancient non-war content.
+
+## 20. QLever: compare years with YEAR(), never against an xsd:dateTime literal (2026-10-28)
+On QLever, `FILTER(?d < "1500-01-01"^^xsd:dateTime)` silently matched nothing, while `FILTER(YEAR(?d) < 1500)` found 10,950 items. No error is raised, so a wrong query looks like an empty result. Use `YEAR()` for date filters on QLever, and treat a zero-row result from QLever as suspect.
