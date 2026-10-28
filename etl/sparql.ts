@@ -53,7 +53,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 class RetryableError extends Error {}
 
 /** Wikimedia requires a contact; QLever gets the same one as a courtesy (owner approved 2026-10-28). */
-export function userAgent(_endpoint: EndpointName): string {
+export function userAgent(): string {
   const contact = process.env.WIKIMEDIA_CONTACT;
   if (!contact) throw new Error("WIKIMEDIA_CONTACT is required (see .env.example)");
   return `Chronoglobe/0.1 (${contact}) node/${process.version}`;
@@ -71,7 +71,7 @@ export async function query(endpoint: EndpointName, sparql: string, timeoutMs = 
       const res = await fetch(ENDPOINTS[endpoint], {
         method: "POST",
         headers: {
-          "User-Agent": userAgent(endpoint),
+          "User-Agent": userAgent(),
           Accept: "application/sparql-results+json",
           "Content-Type": "application/x-www-form-urlencoded",
         },
