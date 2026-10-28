@@ -23,8 +23,9 @@ export type ClassConfig = {
   membershipEndpoint?: EndpointName;
 };
 
-export type Facet = "meta" | "dates" | "locs";
-export const FACETS: Facet[] = ["meta", "dates", "locs"];
+export type Facet = "meta" | "dates" | "locs" | "labels";
+/** "labels" runs last and only for items whose meta has no English label (see fetch.ts). */
+export const FACETS: Facet[] = ["meta", "dates", "locs", "labels"];
 
 export function membershipQuery(c: ClassConfig): string {
   const path = c.subclassClosure === false ? "wdt:P31" : "wdt:P31/wdt:P279*";
@@ -70,5 +71,11 @@ export function facetQuery(c: ClassConfig, facet: Facet, qids: string[], stoplis
   OPTIONAL { VALUES ?stop { ${stops} } ?place wdt:P31/wdt:P279* ?stop . }
 }`;
     }
+    case "labels":
+      // Every language, including "mul" (Wikidata's language-neutral default label).
+      return `SELECT ?item ?label WHERE {
+  ${values}
+  ?item rdfs:label ?label .
+}`;
   }
 }

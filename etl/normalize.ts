@@ -13,7 +13,9 @@ export type LocValue = { src: string; place: string; lat: number; lon: number; s
 export type ItemFacts = {
   qid: string;
   sitelinks: number;
-  label?: string;
+  label?: string; // English, from meta
+  /** Labels in other languages, from the labels facet (only fetched when there is no English label). */
+  otherLabels: { lang: string; value: string }[];
   description?: string;
   enwiki?: string;
   dates: DateValue[];
@@ -25,6 +27,8 @@ export type EventRecord = {
   classKey: string;
   category: string;
   label: string;
+  /** Language of `label`: "en", "mul" (language-neutral), or another code when no English label exists. */
+  labelLang: string;
   description?: string;
   wikipediaTitle?: string;
   sitelinks: number;
@@ -65,13 +69,13 @@ export function parseWktPoint(wkt: string): { lat: number; lon: number } | null 
 }
 
 /** Group membership + facet rows into per-item facts. */
-export function collectFacts(items: Binding[], meta: Binding[], dates: Binding[], locs: Binding[]): Map<string, ItemFacts> {
+export function collectFacts(items: Binding[], meta: Binding[], dates: Binding[], locs: Binding[], labels: Binding[] = []): Map<string, ItemFacts> {
   const facts = new Map<string, ItemFacts>();
   for (const b of items) {
     const qid = qidOf(b.item.value);
     const sl = Number(b.sl.value);
     const prev = facts.get(qid);
-    if (!prev) facts.set(qid, { qid, sitelinks: sl, dates: [], locs: [] });
+    if (!prev) facts.set(qid, { qid, sitelinks: sl, otherLabels: [], dates: [], locs: [] });
     else prev.sitelinks = Math.max(prev.sitelinks, sl);
   }
   const get = (b: Binding) => facts.get(qidOf(b.item.value));
@@ -81,6 +85,11 @@ export function collectFacts(items: Binding[], meta: Binding[], dates: Binding[]
     f.label ??= b.label?.value;
     f.description ??= b.desc?.value;
     f.enwiki ??= b.enwiki?.value;
+  }
+  for (const b of labels) {
+    const lang = b.label["xml:lang"];
+    const f = get(b);
+    if (f && lang) f.otherLabels.push({ lang, value: b.label.value });
   }
   for (const b of dates) {
     const f = get(b);
@@ -164,8 +173,22 @@ export function chooseLocation(c: ClassConfig, locs: LocValue[]): Pick<EventReco
   return "country-only";
 }
 
+/** After English and "mul": widely read languages first, then any other, by language code. */
+const LABEL_FALLBACK = ["mul", "fr", "es", "de", "it", "pt", "nl", "ru", "zh", "ja", "ar"];
+
+export function chooseLabel(f: Pick<ItemFacts, "label" | "otherLabels">): { label: string; labelLang: string } | null {
+  if (f.label) return { label: f.label, labelLang: "en" };
+  const rank = (lang: string) => {
+    const i = LABEL_FALLBACK.indexOf(lang);
+    return i < 0 ? LABEL_FALLBACK.length : i;
+  };
+  const best = [...f.otherLabels].sort((a, b) => rank(a.lang) - rank(b.lang) || a.lang.localeCompare(b.lang))[0];
+  return best ? { label: best.value, labelLang: best.lang } : null;
+}
+
 export function normalize(c: ClassConfig, f: ItemFacts): NormalizeResult {
-  if (!f.label) return { ok: false, reason: "no-label" };
+  const label = chooseLabel(f);
+  if (!label) return { ok: false, reason: "no-label" };
   const dates = chooseDates(c, f.dates);
   if (typeof dates === "string") return { ok: false, reason: dates };
   const loc = chooseLocation(c, f.locs);
@@ -176,7 +199,7 @@ export function normalize(c: ClassConfig, f: ItemFacts): NormalizeResult {
       qid: f.qid,
       classKey: c.key,
       category: c.category,
-      label: f.label,
+      ...label,
       description: f.description,
       wikipediaTitle: f.enwiki,
       sitelinks: f.sitelinks,

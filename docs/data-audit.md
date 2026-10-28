@@ -8,7 +8,7 @@ Phase 0 gate report. The findings below are written by hand from the generated t
 - **The strict event set is about 27,000 usable events, and it is overwhelmingly war.** 79% are conflict (section B). In the owner's focus area, Greece 500 to 300 BCE, 24 of the top 25 events are battles or wars; the only exception is the Plague of Athens. Narratives built on this alone would read like a military timeline.
 - **Coverage is thin, sometimes zero, outside the Mediterranean before about 1500.** See "Where coverage is thin" below.
 - **Recommended sitelink threshold: none (keep the fetch floor of 1).** Rank by sitelinks, do not filter. Reasons below.
-- **Pending:** structures, archaeological sites, and births (the candidate types) are still downloading. Their findings go in the "Candidates" section and decide whether the war-heavy problem is fixable.
+- **Pending:** settlement foundings (partly downloaded), structures, archaeological sites, and births are still downloading. Headline numbers above cover the event classes only and will be redone when everything is in. Their findings go in the "Candidates" section and decide whether the war-heavy problem is fixable.
 
 ## Where coverage is thin
 
@@ -38,8 +38,8 @@ Keep the threshold configurable (`minSitelinks` per class in `etl/classes.json`)
 
 ## Other findings to act on in Phase 1
 
-- **English-label bias: 3,093 events were rejected only for lacking an English label** (section A), concentrated in massacres (755), earthquakes (637), and treaties (498). These are likely non-European events labelled only in their local language. Phase 1 should fall back to another language's label instead of dropping them, or the app adds a language bias on top of Wikidata's.
-- **Dedupe:** 917 events matched more than one class (for example both battle and siege); they are resolved by category priority.
+- **Label fallback: done, small gain, no bias effect.** The first audit pass rejected 3,093 events for having no English label (massacres 755, earthquakes 637, treaties 498), and I guessed these were mostly non-European events. **That guess was wrong.** After fetching labels in every language for just those items, the fallback (`chooseLabel`: English, then `mul`, then a preference list) recovers about 1,800 usable events, about 6.5% more strict events; the rest also lacked a date or location. Their labels are mostly French (716), Russian (446), Spanish (159), and German (98). Every region relies on non-English labels for only 1 to 5% of its events, except the Americas south of 15°N at 9%, mostly Spanish (section C2). `mul` labels barely occur. Conclusion: keep the fallback (cheap, recovers real events, helps Latin America most), but the coverage bias comes from what Wikidata models, not from labels. The UI and narrative should know when a label is not English (`labelLang` on each record).
+- **Dedupe:** 925 events matched more than one class (for example both battle and siege); they are resolved by category priority.
 - **Multi-valued dates** are common for famous events (Marathon has three P585 values with different ranks). Rank handling works as designed.
 
 ## Candidates (structures, sites, births)
@@ -59,49 +59,69 @@ Generated 2026-10-28 from `data/raw/`. Year window: 3500 BCE to 2026 (overlap te
 
 | Class | Floor (sitelinks) | Fetched | Usable | no-label | no-date | bad-date | no-location | country-only | Exact loc | Queries |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| battle | 1 | 15,572 | 13,211 | 199 | 1 | 0 | 1,994 | 167 | 65% | 49 |
-| siege | 1 | 3,581 | 3,476 | 13 | 4 | 0 | 76 | 12 | 76% | 13 |
-| war | 1 | 2,540 | 1,125 | 23 | 1 | 0 | 876 | 515 | 12% | 10 |
-| military-campaign | 1 | 1,230 | 819 | 20 | 1 | 0 | 262 | 128 | 21% | 7 |
-| rebellion | 1 | 1,855 | 972 | 158 | 2 | 0 | 586 | 137 | 19% | 7 |
-| massacre | 1 | 3,431 | 2,198 | 755 | 0 | 0 | 437 | 41 | 57% | 13 |
-| treaty | 1 | 2,897 | 1,498 | 498 | 2 | 0 | 886 | 13 | 10% | 10 |
-| coronation | 1 | 58 | 52 | 4 | 0 | 0 | 2 | 0 | 25% | 4 |
-| coup | 1 | 877 | 304 | 61 | 0 | 0 | 439 | 73 | 33% | 4 |
-| revolution | 1 | 189 | 63 | 16 | 0 | 0 | 66 | 44 | 21% | 4 |
-| assassination | 1 | 259 | 221 | 18 | 0 | 0 | 18 | 2 | 59% | 4 |
-| earthquake | 1 | 2,430 | 1,704 | 637 | 0 | 0 | 89 | 0 | 96% | 10 |
-| volcanic-eruption | 1 | 100 | 79 | 11 | 0 | 0 | 10 | 0 | 77% | 4 |
-| epidemic | 1 | 219 | 89 | 18 | 0 | 0 | 91 | 21 | 19% | 4 |
-| flood | 1 | 848 | 335 | 94 | 0 | 0 | 371 | 48 | 32% | 4 |
-| famine | 1 | 90 | 23 | 4 | 0 | 0 | 58 | 5 | 43% | 4 |
-| tsunami | 1 | 35 | 27 | 2 | 0 | 0 | 5 | 1 | 100% | 4 |
-| conflagration | 1 | 1,602 | 1,222 | 276 | 5 | 0 | 95 | 4 | 69% | 7 |
-| expedition | 1 | 1,016 | 385 | 86 | 0 | 0 | 487 | 58 | 21% | 7 |
-| settlement-founding | 1 | 76,568 | 0 | 75,580 | 988 | 0 | 0 | 0 | n/a | 2 |
+| battle | 1 | 15,572 | 13,311 | 0 | 1 | 0 | 2,090 | 170 | 65% | 50 |
+| siege | 1 | 3,581 | 3,487 | 0 | 4 | 0 | 78 | 12 | 76% | 14 |
+| war | 1 | 2,540 | 1,126 | 0 | 1 | 0 | 897 | 516 | 12% | 11 |
+| military-campaign | 1 | 1,230 | 824 | 0 | 1 | 0 | 276 | 129 | 21% | 8 |
+| rebellion | 1 | 1,855 | 1,036 | 0 | 2 | 0 | 676 | 141 | 18% | 8 |
+| massacre | 1 | 3,431 | 2,658 | 0 | 0 | 0 | 731 | 42 | 52% | 14 |
+| treaty | 1 | 2,897 | 1,775 | 0 | 2 | 0 | 1,106 | 14 | 9% | 11 |
+| coronation | 1 | 58 | 52 | 0 | 0 | 0 | 6 | 0 | 25% | 5 |
+| coup | 1 | 877 | 313 | 0 | 0 | 0 | 491 | 73 | 32% | 5 |
+| revolution | 1 | 189 | 70 | 0 | 0 | 0 | 75 | 44 | 19% | 5 |
+| assassination | 1 | 259 | 230 | 0 | 0 | 0 | 27 | 2 | 58% | 5 |
+| earthquake | 1 | 2,430 | 2,251 | 0 | 0 | 0 | 179 | 0 | 96% | 11 |
+| volcanic-eruption | 1 | 100 | 88 | 0 | 0 | 0 | 12 | 0 | 72% | 5 |
+| epidemic | 1 | 219 | 100 | 0 | 0 | 0 | 98 | 21 | 18% | 5 |
+| flood | 1 | 848 | 381 | 0 | 0 | 0 | 409 | 58 | 30% | 5 |
+| famine | 1 | 90 | 24 | 0 | 0 | 0 | 61 | 5 | 42% | 5 |
+| tsunami | 1 | 35 | 29 | 0 | 0 | 0 | 5 | 1 | 100% | 5 |
+| conflagration | 1 | 1,602 | 1,458 | 0 | 5 | 0 | 135 | 4 | 63% | 8 |
+| expedition | 1 | 1,016 | 402 | 0 | 0 | 0 | 546 | 68 | 20% | 8 |
+| settlement-founding | 1 | 76,568 | 22,922 | 1 | 467 | 0 | 53,178 | 0 | 100% | 189 |
 
-Usable items that matched more than one class: 917 (deduped by category priority: disaster > conflict > politics > founding > science > culture > other). Total queries: 171, total server time about 14 min.
+Usable items that matched more than one class: 925 (deduped by category priority: disaster > conflict > politics > founding > science > culture > other). Total queries: 377, total server time about 27 min.
 
 ### B. Usable items by category (deduped, in year window)
 
 | Category | Strict events | Candidates |
 | --- | ---: | ---: |
-| conflict | 21,275 | 0 |
-| politics | 1,980 | 0 |
-| disaster | 3,448 | 0 |
-| science | 146 | 0 |
-| founding | 0 | 0 |
+| conflict | 21,911 | 0 |
+| politics | 2,278 | 0 |
+| disaster | 4,300 | 0 |
+| science | 161 | 0 |
+| founding | 22,896 | 0 |
 | culture | 0 | 0 |
 
-Strict events total: **26,849**. Structures and sites: 0. Births: 0.
+Strict events total: **51,546**. Structures and sites: 0. Births: 0.
 
 ### C. Location confidence
 
 | Group | Usable | Exact (own P625) | Inherited P276 | Inherited P131 | Inherited P19 | Several places to pick from |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Strict events | 26,849 | 58% | 41% | 1% | 0% | 3% |
+| Strict events | 51,546 | 76% | 23% | 1% | 0% | 2% |
 | Structures and sites (candidate) | 0 | n/a | n/a | n/a | n/a | n/a |
 | Births (candidate) | 0 | n/a | n/a | n/a | n/a | n/a |
+
+### C2. Label language (strict events)
+
+Items with no English label fall back to `mul` (language-neutral), then other languages (`chooseLabel` in `etl/normalize.ts`).
+
+| Region | Events | English label | mul label | Other language only |
+| --- | ---: | ---: | ---: | ---: |
+| Europe | 21,764 | 96% | 0% | 4% |
+| North Africa | 1,051 | 98% | 0% | 2% |
+| Anatolia and Middle East | 4,376 | 96% | 0% | 4% |
+| Sub-Saharan Africa | 1,606 | 97% | 0% | 3% |
+| South Asia | 1,351 | 97% | 0% | 3% |
+| East Asia | 4,368 | 96% | 0% | 4% |
+| Southeast Asia and Oceania | 2,788 | 92% | 3% | 5% |
+| Russia, Central and North Asia | 1,247 | 96% | 0% | 4% |
+| Americas north of 15°N | 10,351 | 99% | 0% | 1% |
+| Americas south of 15°N | 2,596 | 91% | 0% | 9% |
+| Other (oceans, polar) | 48 | 88% | 0% | 13% |
+
+Strict events with a non-English, non-mul label: 1,850. Most common languages: fr 716, ru 446, es 159, de 98, nl 51, ja 38, cs 37, it 37, zh 30, uk 26, hu 16, pl 16.
 
 ### D. Strict events by coarse region and era
 
@@ -109,109 +129,109 @@ Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). 
 
 | Region | before 1000 BCE | 1000 to 501 BCE | 500 to 1 BCE | 1 to 500 | 501 to 1000 | 1001 to 1500 | 1501 to 1800 | 1801 to 1900 | 1901 to now | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Europe | 4 | 32 | 532 | 237 | 497 | 2,222 | 3,552 | 1,765 | 3,266 | 12,072 |
-| North Africa | 3 | 4 | 49 | 10 | 49 | 127 | 246 | 102 | 380 | 965 |
-| Anatolia and Middle East | 21 | 54 | 199 | 137 | 347 | 560 | 361 | 211 | 1,593 | 3,471 |
-| Sub-Saharan Africa | 0 | 0 | 1 | 0 | 1 | 14 | 74 | 192 | 804 | 1,079 |
-| South Asia | 0 | 2 | 17 | 6 | 22 | 74 | 369 | 117 | 515 | 1,114 |
-| East Asia | 4 | 7 | 20 | 72 | 59 | 195 | 478 | 274 | 904 | 2,006 |
-| Southeast Asia and Oceania | 0 | 0 | 0 | 1 | 4 | 23 | 133 | 275 | 1,030 | 1,458 |
-| Russia, Central and North Asia | 0 | 0 | 10 | 4 | 23 | 35 | 49 | 32 | 183 | 334 |
-| Americas north of 15°N | 0 | 0 | 0 | 0 | 3 | 12 | 643 | 1,427 | 966 | 3,035 |
-| Americas south of 15°N | 0 | 0 | 0 | 0 | 0 | 10 | 210 | 520 | 549 | 1,286 |
-| Other (oceans, polar) | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 5 | 17 | 29 |
+| Europe | 15 | 79 | 572 | 274 | 669 | 6,407 | 5,650 | 2,632 | 5,558 | 21,764 |
+| North Africa | 10 | 9 | 54 | 11 | 57 | 135 | 255 | 116 | 409 | 1,051 |
+| Anatolia and Middle East | 64 | 75 | 221 | 153 | 364 | 588 | 401 | 315 | 2,214 | 4,376 |
+| Sub-Saharan Africa | 0 | 0 | 1 | 4 | 2 | 21 | 113 | 473 | 1,000 | 1,606 |
+| South Asia | 2 | 3 | 20 | 6 | 26 | 83 | 417 | 163 | 640 | 1,351 |
+| East Asia | 5 | 7 | 25 | 74 | 81 | 208 | 522 | 568 | 2,893 | 4,368 |
+| Southeast Asia and Oceania | 0 | 0 | 1 | 2 | 9 | 38 | 385 | 616 | 1,781 | 2,788 |
+| Russia, Central and North Asia | 0 | 3 | 12 | 8 | 25 | 56 | 382 | 210 | 554 | 1,247 |
+| Americas north of 15°N | 0 | 0 | 0 | 1 | 4 | 28 | 2,006 | 5,473 | 2,925 | 10,351 |
+| Americas south of 15°N | 1 | 0 | 0 | 0 | 1 | 13 | 615 | 928 | 1,047 | 2,596 |
+| Other (oceans, polar) | 0 | 0 | 0 | 1 | 0 | 1 | 11 | 8 | 27 | 48 |
 
 ### D2. Candidates by coarse region
 
 | Region | Strict events | Structures and sites | Births |
 | --- | ---: | ---: | ---: |
-| Europe | 12,072 | 0 | 0 |
-| North Africa | 965 | 0 | 0 |
-| Anatolia and Middle East | 3,471 | 0 | 0 |
-| Sub-Saharan Africa | 1,079 | 0 | 0 |
-| South Asia | 1,114 | 0 | 0 |
-| East Asia | 2,006 | 0 | 0 |
-| Southeast Asia and Oceania | 1,458 | 0 | 0 |
-| Russia, Central and North Asia | 334 | 0 | 0 |
-| Americas north of 15°N | 3,035 | 0 | 0 |
-| Americas south of 15°N | 1,286 | 0 | 0 |
-| Other (oceans, polar) | 29 | 0 | 0 |
+| Europe | 21,764 | 0 | 0 |
+| North Africa | 1,051 | 0 | 0 |
+| Anatolia and Middle East | 4,376 | 0 | 0 |
+| Sub-Saharan Africa | 1,606 | 0 | 0 |
+| South Asia | 1,351 | 0 | 0 |
+| East Asia | 4,368 | 0 | 0 |
+| Southeast Asia and Oceania | 2,788 | 0 | 0 |
+| Russia, Central and North Asia | 1,247 | 0 | 0 |
+| Americas north of 15°N | 10,351 | 0 | 0 |
+| Americas south of 15°N | 2,596 | 0 | 0 |
+| Other (oceans, polar) | 48 | 0 | 0 |
 
 ### E. By century (effective start year), 3500 BCE to now
 
 | Century | Strict events | of which conflict | Structures and sites | Births |
 | --- | ---: | ---: | ---: | ---: |
-| 35th c. BCE | 3 | 33% | 0 | 0 |
-| 34th c. BCE | 0 | n/a | 0 | 0 |
+| 35th c. BCE | 7 | 14% | 0 | 0 |
+| 34th c. BCE | 2 | 0% | 0 | 0 |
 | 33rd c. BCE | 1 | 100% | 0 | 0 |
-| 32nd c. BCE | 0 | n/a | 0 | 0 |
-| 31st c. BCE | 0 | n/a | 0 | 0 |
-| 30th c. BCE | 1 | 0% | 0 | 0 |
+| 32nd c. BCE | 3 | 0% | 0 | 0 |
+| 31st c. BCE | 3 | 0% | 0 | 0 |
+| 30th c. BCE | 15 | 0% | 0 | 0 |
 | 29th c. BCE | 0 | n/a | 0 | 0 |
-| 28th c. BCE | 1 | 100% | 0 | 0 |
+| 28th c. BCE | 3 | 33% | 0 | 0 |
 | 27th c. BCE | 1 | 100% | 0 | 0 |
-| 26th c. BCE | 1 | 100% | 0 | 0 |
-| 25th c. BCE | 1 | 100% | 0 | 0 |
-| 24th c. BCE | 0 | n/a | 0 | 0 |
+| 26th c. BCE | 4 | 25% | 0 | 0 |
+| 25th c. BCE | 2 | 50% | 0 | 0 |
+| 24th c. BCE | 1 | 0% | 0 | 0 |
 | 23rd c. BCE | 0 | n/a | 0 | 0 |
-| 22nd c. BCE | 0 | n/a | 0 | 0 |
+| 22nd c. BCE | 1 | 0% | 0 | 0 |
 | 21st c. BCE | 0 | n/a | 0 | 0 |
-| 20th c. BCE | 0 | n/a | 0 | 0 |
+| 20th c. BCE | 3 | 0% | 0 | 0 |
 | 19th c. BCE | 1 | 0% | 0 | 0 |
-| 18th c. BCE | 1 | 100% | 0 | 0 |
-| 17th c. BCE | 1 | 0% | 0 | 0 |
-| 16th c. BCE | 1 | 100% | 0 | 0 |
-| 15th c. BCE | 1 | 100% | 0 | 0 |
-| 14th c. BCE | 2 | 50% | 0 | 0 |
-| 13th c. BCE | 9 | 89% | 0 | 0 |
-| 12th c. BCE | 3 | 100% | 0 | 0 |
-| 11th c. BCE | 4 | 100% | 0 | 0 |
-| 10th c. BCE | 4 | 75% | 0 | 0 |
-| 9th c. BCE | 4 | 100% | 0 | 0 |
-| 8th c. BCE | 22 | 100% | 0 | 0 |
-| 7th c. BCE | 28 | 100% | 0 | 0 |
-| 6th c. BCE | 40 | 100% | 0 | 0 |
-| 5th c. BCE | 125 | 94% | 0 | 0 |
-| 4th c. BCE | 179 | 97% | 0 | 0 |
-| 3rd c. BCE | 216 | 100% | 0 | 0 |
-| 2nd c. BCE | 114 | 96% | 0 | 0 |
-| 1st c. BCE | 190 | 97% | 0 | 0 |
-| 1st c. | 76 | 95% | 0 | 0 |
-| 2nd c. | 44 | 89% | 0 | 0 |
-| 3rd c. | 112 | 96% | 0 | 0 |
-| 4th c. | 91 | 96% | 0 | 0 |
-| 5th c. | 138 | 95% | 0 | 0 |
-| 6th c. | 159 | 93% | 0 | 0 |
-| 7th c. | 228 | 96% | 0 | 0 |
-| 8th c. | 187 | 92% | 0 | 0 |
-| 9th c. | 220 | 89% | 0 | 0 |
-| 10th c. | 202 | 96% | 0 | 0 |
-| 11th c. | 361 | 95% | 0 | 0 |
-| 12th c. | 526 | 92% | 0 | 0 |
-| 13th c. | 688 | 90% | 0 | 0 |
-| 14th c. | 762 | 90% | 0 | 0 |
-| 15th c. | 925 | 89% | 0 | 0 |
-| 16th c. | 1,728 | 92% | 0 | 0 |
-| 17th c. | 1,856 | 87% | 0 | 0 |
-| 18th c. | 2,521 | 89% | 0 | 0 |
-| 19th c. | 4,892 | 84% | 0 | 0 |
-| 20th c. | 6,762 | 71% | 0 | 0 |
-| 21st c. | 3,417 | 47% | 0 | 0 |
+| 18th c. BCE | 3 | 33% | 0 | 0 |
+| 17th c. BCE | 3 | 0% | 0 | 0 |
+| 16th c. BCE | 2 | 50% | 0 | 0 |
+| 15th c. BCE | 5 | 20% | 0 | 0 |
+| 14th c. BCE | 5 | 20% | 0 | 0 |
+| 13th c. BCE | 14 | 57% | 0 | 0 |
+| 12th c. BCE | 8 | 38% | 0 | 0 |
+| 11th c. BCE | 10 | 40% | 0 | 0 |
+| 10th c. BCE | 10 | 30% | 0 | 0 |
+| 9th c. BCE | 14 | 29% | 0 | 0 |
+| 8th c. BCE | 36 | 61% | 0 | 0 |
+| 7th c. BCE | 50 | 56% | 0 | 0 |
+| 6th c. BCE | 65 | 62% | 0 | 0 |
+| 5th c. BCE | 137 | 86% | 0 | 0 |
+| 4th c. BCE | 203 | 86% | 0 | 0 |
+| 3rd c. BCE | 233 | 92% | 0 | 0 |
+| 2nd c. BCE | 122 | 90% | 0 | 0 |
+| 1st c. BCE | 205 | 90% | 0 | 0 |
+| 1st c. | 97 | 74% | 0 | 0 |
+| 2nd c. | 56 | 70% | 0 | 0 |
+| 3rd c. | 123 | 88% | 0 | 0 |
+| 4th c. | 98 | 89% | 0 | 0 |
+| 5th c. | 153 | 86% | 0 | 0 |
+| 6th c. | 175 | 85% | 0 | 0 |
+| 7th c. | 261 | 84% | 0 | 0 |
+| 8th c. | 239 | 72% | 0 | 0 |
+| 9th c. | 269 | 73% | 0 | 0 |
+| 10th c. | 280 | 70% | 0 | 0 |
+| 11th c. | 516 | 66% | 0 | 0 |
+| 12th c. | 914 | 53% | 0 | 0 |
+| 13th c. | 1,770 | 35% | 0 | 0 |
+| 14th c. | 2,274 | 30% | 0 | 0 |
+| 15th c. | 2,085 | 40% | 0 | 0 |
+| 16th c. | 3,105 | 52% | 0 | 0 |
+| 17th c. | 3,106 | 52% | 0 | 0 |
+| 18th c. | 4,505 | 51% | 0 | 0 |
+| 19th c. | 11,412 | 37% | 0 | 0 |
+| 20th c. | 14,307 | 36% | 0 | 0 |
+| 21st c. | 4,629 | 37% | 0 | 0 |
 
-Outside the window (dropped): 9 strict events end before 3500 BCE, 0 start after 2026.
+Outside the window (dropped): 37 strict events end before 3500 BCE, 0 start after 2026.
 | Date precision | Strict events | Structures and sites | Births |
 | --- | ---: | ---: | ---: |
-| day or month (10 to 11) | 78% | n/a | n/a |
-| year (9) | 21% | n/a | n/a |
+| day or month (10 to 11) | 53% | n/a | n/a |
+| year (9) | 45% | n/a | n/a |
 | decade (8) | 0% | n/a | n/a |
-| century (7) | 0% | n/a | n/a |
+| century (7) | 1% | n/a | n/a |
 | millennium or coarser (6 or less) | 0% | n/a | n/a |
 
 ### F. Sitelink distribution
 
 | Group | Median | p90 | p99 | ≥1 | ≥2 | ≥3 | ≥5 | ≥10 | ≥20 | ≥50 | ≥100 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Strict events | 4 | 17 | 52 | 26,849 | 21,170 | 16,996 | 11,774 | 5,726 | 2,137 | 321 | 24 |
+| Strict events | 10 | 43 | 110 | 51,546 | 44,354 | 39,784 | 34,175 | 26,028 | 16,280 | 3,440 | 650 |
 | Structures and sites (candidate) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Births (candidate) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
@@ -219,31 +239,31 @@ Candidates were fetched with a floor (structures ≥5, births ≥20), so their c
 
 | Strict events: sitelinks ≥ t, by era | ≥1 | ≥2 | ≥3 | ≥5 | ≥10 | ≥20 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| before 1000 BCE | 32 | 27 | 22 | 20 | 15 | 6 |
-| 1000 to 501 BCE | 99 | 72 | 64 | 48 | 33 | 15 |
-| 500 to 1 BCE | 828 | 646 | 564 | 463 | 325 | 135 |
-| 1 to 500 | 467 | 377 | 326 | 247 | 140 | 41 |
-| 501 to 1000 | 1,005 | 784 | 639 | 506 | 299 | 99 |
-| 1001 to 1500 | 3,272 | 2,389 | 1,861 | 1,283 | 628 | 221 |
-| 1501 to 1800 | 6,122 | 4,756 | 3,782 | 2,519 | 1,102 | 336 |
-| 1801 to 1900 | 4,920 | 3,917 | 3,125 | 2,082 | 854 | 263 |
-| 1901 to now | 10,207 | 8,288 | 6,684 | 4,663 | 2,367 | 1,041 |
+| before 1000 BCE | 97 | 91 | 86 | 84 | 78 | 62 |
+| 1000 to 501 BCE | 176 | 149 | 141 | 125 | 108 | 84 |
+| 500 to 1 BCE | 906 | 720 | 637 | 536 | 394 | 191 |
+| 1 to 500 | 534 | 440 | 385 | 304 | 191 | 85 |
+| 501 to 1000 | 1,238 | 1,004 | 849 | 710 | 483 | 263 |
+| 1001 to 1500 | 7,578 | 6,615 | 6,019 | 5,343 | 4,071 | 1,436 |
+| 1501 to 1800 | 10,757 | 9,252 | 8,228 | 6,923 | 5,143 | 3,027 |
+| 1801 to 1900 | 11,502 | 10,382 | 9,550 | 8,468 | 6,936 | 5,364 |
+| 1901 to now | 19,048 | 15,970 | 14,139 | 11,912 | 8,831 | 5,928 |
 
 Does a threshold cut some regions harder than others? Share of each region's strict events that survive:
 
 | Region | Events (≥1) | kept at ≥2 | kept at ≥3 | kept at ≥5 | kept at ≥10 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Europe | 12,072 | 79% | 64% | 46% | 24% |
-| North Africa | 965 | 78% | 61% | 40% | 17% |
-| Anatolia and Middle East | 3,471 | 80% | 67% | 51% | 27% |
-| Sub-Saharan Africa | 1,079 | 84% | 62% | 38% | 14% |
-| South Asia | 1,114 | 80% | 58% | 36% | 15% |
-| East Asia | 2,006 | 78% | 65% | 47% | 22% |
-| Southeast Asia and Oceania | 1,458 | 79% | 61% | 41% | 20% |
-| Russia, Central and North Asia | 334 | 82% | 70% | 49% | 24% |
-| Americas north of 15°N | 3,035 | 77% | 59% | 37% | 15% |
-| Americas south of 15°N | 1,286 | 75% | 59% | 34% | 12% |
-| Other (oceans, polar) | 29 | 86% | 62% | 52% | 17% |
+| Europe | 21,764 | 85% | 76% | 64% | 45% |
+| North Africa | 1,051 | 78% | 63% | 43% | 22% |
+| Anatolia and Middle East | 4,376 | 81% | 71% | 57% | 36% |
+| Sub-Saharan Africa | 1,606 | 87% | 72% | 56% | 38% |
+| South Asia | 1,351 | 80% | 62% | 44% | 27% |
+| East Asia | 4,368 | 87% | 80% | 72% | 60% |
+| Southeast Asia and Oceania | 2,788 | 84% | 75% | 63% | 50% |
+| Russia, Central and North Asia | 1,247 | 93% | 89% | 82% | 72% |
+| Americas north of 15°N | 10,351 | 93% | 87% | 80% | 72% |
+| Americas south of 15°N | 2,596 | 80% | 71% | 58% | 45% |
+| Other (oceans, polar) | 48 | 79% | 65% | 58% | 38% |
 
 ### G. Spotlights: focus areas by era
 
@@ -251,15 +271,15 @@ Cells: strict events / structures and sites / births.
 
 | Area | 1000 to 501 BCE | 500 to 300 BCE | 299 to 1 BCE | 1 to 500 | 1001 to 1500 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Greece and Aegean | 27 / 0 / 0 | 146 / 0 / 0 | 115 / 0 / 0 | 28 / 0 / 0 | 247 / 0 / 0 |
-| Italy | 11 / 0 / 0 | 91 / 0 / 0 | 179 / 0 / 0 | 77 / 0 / 0 | 322 / 0 / 0 |
-| Nile valley (Egypt) | 5 / 0 / 0 | 4 / 0 / 0 | 9 / 0 / 0 | 1 / 0 / 0 | 17 / 0 / 0 |
-| Mesopotamia and Levant | 41 / 0 / 0 | 21 / 0 / 0 | 43 / 0 / 0 | 93 / 0 / 0 | 237 / 0 / 0 |
-| Ganges plain | 0 / 0 / 0 | 5 / 0 / 0 | 2 / 0 / 0 | 2 / 0 / 0 | 21 / 0 / 0 |
-| Eastern China | 7 / 0 / 0 | 4 / 0 / 0 | 14 / 0 / 0 | 64 / 0 / 0 | 31 / 0 / 0 |
-| West Africa | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 7 / 0 / 0 |
-| Mesoamerica | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 4 / 0 / 0 |
-| Andes | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 6 / 0 / 0 |
+| Greece and Aegean | 40 / 0 / 0 | 151 / 0 / 0 | 117 / 0 / 0 | 32 / 0 / 0 | 262 / 0 / 0 |
+| Italy | 34 / 0 / 0 | 98 / 0 / 0 | 184 / 0 / 0 | 80 / 0 / 0 | 397 / 0 / 0 |
+| Nile valley (Egypt) | 5 / 0 / 0 | 5 / 0 / 0 | 10 / 0 / 0 | 2 / 0 / 0 | 19 / 0 / 0 |
+| Mesopotamia and Levant | 44 / 0 / 0 | 30 / 0 / 0 | 48 / 0 / 0 | 98 / 0 / 0 | 246 / 0 / 0 |
+| Ganges plain | 1 / 0 / 0 | 7 / 0 / 0 | 2 / 0 / 0 | 2 / 0 / 0 | 25 / 0 / 0 |
+| Eastern China | 7 / 0 / 0 | 6 / 0 / 0 | 15 / 0 / 0 | 66 / 0 / 0 | 35 / 0 / 0 |
+| West Africa | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 3 / 0 / 0 | 11 / 0 / 0 |
+| Mesoamerica | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 1 / 0 / 0 | 13 / 0 / 0 |
+| Andes | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 7 / 0 / 0 |
 
 ### H. Greece and Aegean, 500 to 300 BCE: top items by sitelinks
 
@@ -267,6 +287,8 @@ Strict events:
 
 | Label | QID | Years | Precision | Category | Location | Sitelinks |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Thessaloniki | Q17151 | 315 BCE | 9 | founding | exact | 159 |
+| Berat | Q170244 | 314 BCE | 9 | founding | exact | 116 |
 | Battle of Thermopylae | Q131969 | 480 BCE | 11 | conflict | exact | 83 |
 | Greco-Persian Wars | Q76026 | 499 BCE to 449 BCE | 9 | conflict | inherited | 79 |
 | Battle of Marathon | Q31900 | 490 BCE | 11 | conflict | exact | 76 |
@@ -274,6 +296,7 @@ Strict events:
 | Battle of Plataea | Q204636 | 479 BCE | 11 | conflict | exact | 52 |
 | Battle of Chaeronea | Q200716 | 338 BCE | 10 | conflict | exact | 51 |
 | Battle of the Granicus | Q192938 | 334 BCE | 10 | conflict | exact | 48 |
+| Amphipolis | Q217414 | 437 BCE | 9 | founding | exact | 45 |
 | Corinthian War | Q651008 | 395 BCE to 387 BCE | 9 | conflict | inherited | 43 |
 | Battle of Leuctra | Q461599 | 371 BCE | 11 | conflict | exact | 41 |
 | Battle of Mycale | Q503982 | 479 BCE | 9 | conflict | exact | 39 |
@@ -283,15 +306,12 @@ Strict events:
 | Plague of Athens | Q758173 | 430 BCE to 426 BCE | 9 | disaster | inherited | 31 |
 | Battle of Lade | Q427565 | 494 BCE | 9 | conflict | exact | 27 |
 | Battle of Arginusae | Q389257 | 406 BCE | 10 | conflict | exact | 26 |
+| Messene | Q1022117 | 371 BCE | 9 | founding | exact | 25 |
 | Battle of Mantinea | Q233399 | 362 BCE | 11 | conflict | exact | 24 |
 | Battle of Sybota | Q951932 | 433 BCE | 9 | conflict | inherited | 24 |
 | Siege of Halicarnassus | Q28933 | 334 BCE | 9 | conflict | exact | 23 |
 | Battle of Potidaea | Q1356189 | 432 BCE | 9 | conflict | exact | 22 |
 | Battle of Delium | Q1424844 | 424 BCE | 9 | conflict | exact | 22 |
-| First Persian invasion of Greece | Q2362482 | 492 BCE to 490 BCE | 9 | conflict | inherited | 22 |
-| Battle of Sphacteria | Q176416 | 425 BCE | 9 | conflict | exact | 21 |
-| Battle of Amphipolis | Q637544 | 422 BCE | 9 | conflict | exact | 21 |
-| Battle of Cnidus | Q1151812 | 394 BCE | 9 | conflict | exact | 21 |
 
 Structures and sites:
 

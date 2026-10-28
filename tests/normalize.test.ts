@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import rows from "./fixtures/wikidata/battle-rows.json" with { type: "json" };
-import { chooseDates, chooseLocation, collectFacts, normalize, parseWktPoint, type DateValue, type LocValue } from "../etl/normalize.ts";
+import { chooseDates, chooseLabel, chooseLocation, collectFacts, normalize, parseWktPoint, type DateValue, type LocValue } from "../etl/normalize.ts";
 import type { ClassConfig } from "../etl/queries.ts";
 import type { Binding } from "../etl/sparql.ts";
 
@@ -121,5 +121,23 @@ describe("parseWktPoint", () => {
   it("rejects coordinates on other globes and out-of-range values", () => {
     expect(parseWktPoint("<http://www.wikidata.org/entity/Q111> Point(10 20)")).toBeNull();
     expect(parseWktPoint("Point(200 10)")).toBeNull();
+  });
+});
+
+describe("chooseLabel", () => {
+  const other = (...pairs: [string, string][]) => pairs.map(([lang, value]) => ({ lang, value }));
+
+  it("uses the English label when there is one", () => {
+    expect(chooseLabel({ label: "Siege of Uruk", otherLabels: other(["de", "Belagerung von Uruk"]) })).toEqual({ label: "Siege of Uruk", labelLang: "en" });
+  });
+
+  it("falls back to mul, then the preference list, then any language by code", () => {
+    expect(chooseLabel({ otherLabels: other(["de", "Schlacht"], ["mul", "Bataille"]) })).toEqual({ label: "Bataille", labelLang: "mul" });
+    expect(chooseLabel({ otherLabels: other(["pl", "Bitwa"], ["de", "Schlacht"]) })).toEqual({ label: "Schlacht", labelLang: "de" });
+    expect(chooseLabel({ otherLabels: other(["uk", "Битва"], ["pl", "Bitwa"]) })).toEqual({ label: "Bitwa", labelLang: "pl" });
+  });
+
+  it("returns null when the item has no label in any language", () => {
+    expect(chooseLabel({ otherLabels: [] })).toBeNull();
   });
 });

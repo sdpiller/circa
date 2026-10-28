@@ -96,14 +96,14 @@ function loadClass(c: ClassConfig): ClassStats | null {
   const dir = join(RAW_DIR, c.key);
   if (!existsSync(join(dir, "items.json"))) return null;
   const files = readdirSync(dir).filter((f) => f.endsWith(".json"));
-  const byFacet: Record<string, RawFile["bindings"]> = { items: [], meta: [], dates: [], locs: [] };
+  const byFacet: Record<string, RawFile["bindings"]> = { items: [], meta: [], dates: [], locs: [], labels: [] };
   let queryMs = 0;
   for (const f of files) {
     const raw: RawFile = JSON.parse(readFileSync(join(dir, f), "utf8"));
     byFacet[raw.part.split("-")[0]].push(...raw.bindings);
     queryMs += raw.elapsedMs;
   }
-  const facts = collectFacts(byFacet.items, byFacet.meta, byFacet.dates, byFacet.locs);
+  const facts = collectFacts(byFacet.items, byFacet.meta, byFacet.dates, byFacet.locs, byFacet.labels);
   const records: EventRecord[] = [];
   const rejections = new Map<Rejection, number>();
   for (const f of facts.values()) {
@@ -183,6 +183,21 @@ function main() {
       pct(rs.filter((r) => r.locChoices > 1).length, rs.length),
     ]),
   ));
+
+  h("C2. Label language (strict events)");
+  out.push("Items with no English label fall back to `mul` (language-neutral), then other languages (`chooseLabel` in `etl/normalize.ts`).\n");
+  const langOf = (r: EventRecord) => (r.labelLang === "en" || r.labelLang === "mul" ? r.labelLang : "other");
+  out.push(table(
+    ["Region", "Events", "English label", "mul label", "Other language only"],
+    REGIONS.map((reg) => {
+      const rs = strict.filter((r) => region(r.lat, r.lon) === reg);
+      return [reg, rs.length, ...["en", "mul", "other"].map((l) => pct(rs.filter((r) => langOf(r) === l).length, rs.length))];
+    }),
+  ));
+  const otherLangs = new Map<string, number>();
+  for (const r of strict) if (langOf(r) === "other") otherLangs.set(r.labelLang, (otherLangs.get(r.labelLang) ?? 0) + 1);
+  const topLangs = [...otherLangs].sort((a, b) => b[1] - a[1]).slice(0, 12).map(([l, n]) => `${l} ${fmt(n)}`).join(", ");
+  out.push(`\nStrict events with a non-English, non-mul label: ${fmt([...otherLangs.values()].reduce((a, b) => a + b, 0))}. Most common languages: ${topLangs || "none"}.`);
 
   h("D. Strict events by coarse region and era");
   out.push("Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). An event spanning two eras counts in both.\n");
