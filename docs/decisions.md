@@ -101,3 +101,11 @@ Honest limit: these additions mostly enrich modern history. For antiquity the no
 
 ## 20. QLever: compare years with YEAR(), never against an xsd:dateTime literal (2026-10-28)
 On QLever, `FILTER(?d < "1500-01-01"^^xsd:dateTime)` silently matched nothing, while `FILTER(YEAR(?d) < 1500)` found 10,950 items. No error is raised, so a wrong query looks like an empty result. Use `YEAR()` for date filters on QLever, and treat a zero-row result from QLever as suspect.
+
+## 21. Discovery placement: find spot first, own coordinates only for an allowlist (2026-10-28)
+A discovery is placed at its find spot (P189). Falling back to the item's own P625 recovers about 1,250 real finds whose site is the item itself (the tomb of Tutankhamun, Lascaux, Chauvet, Persepolis, Abu Simbel), but it also pulled in places with European "discovery" dates at their centroids (Brazil 1500, Greenland, the Cayman Islands, Lake Victoria). A blocklist of geographic classes (country, continent, landmass, body of water, island, region) was tried first: "region" also removed about 150 real archaeological sites and caves, and without it island territories still leaked (Norfolk Island, Bora Bora, the US Virgin Islands) because Wikidata classifies them in many ways. The fallback is therefore an allowlist: own coordinates only for items outside museum collections (no P195) that are archaeological sites, built structures, caves, meteorites, or impact craters (`ownCoordsFilter` on the discovery class in `etl/classes.json`).
+
+Risk to watch: the discovery membership query took 59.5 s on WDQS, just under its 60 s limit. If it times out on a rebuild, move it to QLever (`membershipEndpoint`).
+
+## 22. Among equal-rank dates, the most precise win (2026-10-28)
+`chooseDates` keeps only the most precise of the best-ranked values (day, month, and year count as equal), then spans them. Found through Lascaux (Q172125): two normal-rank P575 values, 1940-09-12 at day precision (the discovery) and a millennium-precision value for the paintings' age. Spanning both gave a 19,000-year interval that would match almost every range query. Equal-precision disagreements (Marathon's three dates) still span as before.
