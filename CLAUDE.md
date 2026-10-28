@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 0 in progress: scaffold and `/lib/time` done; data audit next. (Update this line at every phase gate.)
+Phase 0 complete, at the gate: awaiting the owner's decision on adding structures and births (see `docs/data-audit.md`, "Decision needed at the gate"). (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 

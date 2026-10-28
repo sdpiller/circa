@@ -136,11 +136,14 @@ function main() {
   }
   for (const q of strictByQid.keys()) candidateByQid.delete(q); // an event that is also a structure counts as an event
   const inRange = (r: EventRecord) => overlapsYears(r, MIN_YEAR, MAX_YEAR);
-  const strict = [...strictByQid.values()].filter(inRange);
+  // Settlement foundings are a "strict" class but outnumber all other events 3 to 1, so they get their own group.
+  const strictAll = [...strictByQid.values()].filter(inRange);
+  const strict = strictAll.filter((r) => r.category !== "founding");
+  const foundings = strictAll.filter((r) => r.category === "founding");
   const byClass = (key: string) => [...candidateByQid.values()].filter((r) => r.classKey === key && inRange(r));
   const structures = [...byClass("structure"), ...byClass("archaeological-site")];
   const births = byClass("birth");
-  const groups: [string, EventRecord[]][] = [["Strict events", strict], ["Structures and sites (candidate)", structures], ["Births (candidate)", births]];
+  const groups: [string, EventRecord[]][] = [["Events", strict], ["Settlement foundings", foundings], ["Structures and sites (candidate)", structures], ["Births (candidate)", births]];
 
   const out: string[] = [];
   const h = (s: string) => out.push(`\n### ${s}\n`);
@@ -168,8 +171,8 @@ function main() {
 
   h("B. Usable items by category (deduped, in year window)");
   const cats = [...new Set(config.classes.map((c) => c.category))];
-  out.push(table(["Category", "Strict events", "Candidates"], cats.map((cat) => [cat, strict.filter((r) => r.category === cat).length, [...structures, ...births].filter((r) => r.category === cat).length])));
-  out.push(`\nStrict events total: **${fmt(strict.length)}**. Structures and sites: ${fmt(structures.length)}. Births: ${fmt(births.length)}.`);
+  out.push(table(["Category", "Strict classes", "Candidates"], cats.map((cat) => [cat, strictAll.filter((r) => r.category === cat).length, [...structures, ...births].filter((r) => r.category === cat).length])));
+  out.push(`\nEvents (strict classes except settlement foundings): **${fmt(strict.length)}**. Settlement foundings: ${fmt(foundings.length)}. Structures and sites: ${fmt(structures.length)}. Births: ${fmt(births.length)}.`);
 
   h("C. Location confidence");
   out.push(table(
@@ -184,7 +187,7 @@ function main() {
     ]),
   ));
 
-  h("C2. Label language (strict events)");
+  h("C2. Label language (events)");
   out.push("Items with no English label fall back to `mul` (language-neutral), then other languages (`chooseLabel` in `etl/normalize.ts`).\n");
   const langOf = (r: EventRecord) => (r.labelLang === "en" || r.labelLang === "mul" ? r.labelLang : "other");
   out.push(table(
@@ -197,9 +200,9 @@ function main() {
   const otherLangs = new Map<string, number>();
   for (const r of strict) if (langOf(r) === "other") otherLangs.set(r.labelLang, (otherLangs.get(r.labelLang) ?? 0) + 1);
   const topLangs = [...otherLangs].sort((a, b) => b[1] - a[1]).slice(0, 12).map(([l, n]) => `${l} ${fmt(n)}`).join(", ");
-  out.push(`\nStrict events with a non-English, non-mul label: ${fmt([...otherLangs.values()].reduce((a, b) => a + b, 0))}. Most common languages: ${topLangs || "none"}.`);
+  out.push(`\nEvents with a non-English, non-mul label: ${fmt([...otherLangs.values()].reduce((a, b) => a + b, 0))}. Most common languages: ${topLangs || "none"}.`);
 
-  h("D. Strict events by coarse region and era");
+  h("D. Events by coarse region and era");
   out.push("Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). An event spanning two eras counts in both.\n");
   out.push(table(
     ["Region", ...ERAS.map((e) => e[0]), "Total"],
@@ -208,9 +211,9 @@ function main() {
       return [reg, ...ERAS.map(([, a, b]) => rs.filter((r) => overlapsYears(r, a, b)).length), rs.length];
     }),
   ));
-  h("D2. Candidates by coarse region");
+  h("D2. All groups by coarse region");
   out.push(table(
-    ["Region", "Strict events", "Structures and sites", "Births"],
+    ["Region", "Events", "Settlement foundings", "Structures and sites", "Births"],
     REGIONS.map((reg) => [reg, ...groups.map(([, rs]) => rs.filter((r) => region(r.lat, r.lon) === reg).length)]),
   ));
 
@@ -230,14 +233,14 @@ function main() {
   const cm = groups.map(([, rs]) => counts(rs));
   const strictConflict = counts(strict.filter((r) => r.category === "conflict"));
   out.push(table(
-    ["Century", "Strict events", "of which conflict", "Structures and sites", "Births"],
-    centuries.map((c) => [centLabel(c), cm[0].get(c) ?? 0, pct(strictConflict.get(c) ?? 0, cm[0].get(c) ?? 0), cm[1].get(c) ?? 0, cm[2].get(c) ?? 0]),
+    ["Century", "Events", "of which conflict", "Settlement foundings", "Structures and sites", "Births"],
+    centuries.map((c) => [centLabel(c), cm[0].get(c) ?? 0, pct(strictConflict.get(c) ?? 0, cm[0].get(c) ?? 0), cm[1].get(c) ?? 0, cm[2].get(c) ?? 0, cm[3].get(c) ?? 0]),
   ));
   const allStrict = [...strictByQid.values()];
-  out.push(`\nOutside the window (dropped): ${fmt(allStrict.filter((r) => r.endYear < MIN_YEAR).length)} strict events end before ${formatYear(MIN_YEAR)}, ${fmt(allStrict.filter((r) => r.startYear > MAX_YEAR).length)} start after ${MAX_YEAR}.`);
+  out.push(`\nOutside the window (dropped): ${fmt(allStrict.filter((r) => r.endYear < MIN_YEAR).length)} events and foundings end before ${formatYear(MIN_YEAR)}, ${fmt(allStrict.filter((r) => r.startYear > MAX_YEAR).length)} start after ${MAX_YEAR}.`);
   const prec = (rs: EventRecord[], p: (n: number) => boolean) => pct(rs.filter((r) => p(r.yearPrecision)).length, rs.length);
   out.push(table(
-    ["Date precision", "Strict events", "Structures and sites", "Births"],
+    ["Date precision", "Events", "Settlement foundings", "Structures and sites", "Births"],
     [
       ["day or month (10 to 11)", ...groups.map(([, rs]) => prec(rs, (n) => n >= 10))],
       ["year (9)", ...groups.map(([, rs]) => prec(rs, (n) => n === 9))],
@@ -258,13 +261,13 @@ function main() {
   ));
   out.push("\nCandidates were fetched with a floor (structures ≥5, births ≥20), so their counts below the floor are zero by construction.\n");
   out.push(table(
-    ["Strict events: sitelinks ≥ t, by era", ...thresholds.slice(0, 6).map((t) => `≥${t}`)],
+    ["Events: sitelinks ≥ t, by era", ...thresholds.slice(0, 6).map((t) => `≥${t}`)],
     ERAS.map(([name, a, b]) => {
       const rs = strict.filter((r) => overlapsYears(r, a, b));
       return [name, ...thresholds.slice(0, 6).map((t) => rs.filter((r) => r.sitelinks >= t).length)];
     }),
   ));
-  out.push("\nDoes a threshold cut some regions harder than others? Share of each region's strict events that survive:\n");
+  out.push("\nDoes a threshold cut some regions harder than others? Share of each region's events that survive:\n");
   out.push(table(
     ["Region", "Events (≥1)", "kept at ≥2", "kept at ≥3", "kept at ≥5", "kept at ≥10"],
     REGIONS.map((reg) => {
@@ -275,7 +278,7 @@ function main() {
 
   h("G. Spotlights: focus areas by era");
   const spotEras: [string, number, number][] = [["1000 to 501 BCE", -1000, -501], ["500 to 300 BCE", -500, -300], ["299 to 1 BCE", -299, -1], ["1 to 500", 1, 500], ["1001 to 1500", 1001, 1500]];
-  out.push("Cells: strict events / structures and sites / births.\n");
+  out.push("Cells: events / settlement foundings / structures and sites / births.\n");
   out.push(table(
     ["Area", ...spotEras.map((e) => e[0])],
     SPOTLIGHTS.map((b) => [b.name, ...spotEras.map(([, a, z]) => groups.map(([, rs]) => rs.filter((r) => inBox(r, b) && overlapsYears(r, a, z)).length).join(" / "))]),
@@ -286,8 +289,10 @@ function main() {
   const top = (rs: EventRecord[], n: number) => rs.filter((r) => inBox(r, greece) && overlapsYears(r, -500, -300)).sort((a, b) => b.sitelinks - a.sitelinks).slice(0, n);
   const row = (r: EventRecord) => [r.label, r.qid, r.startYear === r.endYear ? formatYear(r.startYear) : `${formatYear(r.startYear)} to ${formatYear(r.endYear)}`, r.yearPrecision, r.category, r.locConfidence, r.sitelinks];
   const hdr = ["Label", "QID", "Years", "Precision", "Category", "Location", "Sitelinks"];
-  out.push("Strict events:\n");
+  out.push("Events:\n");
   out.push(table(hdr, top(strict, 25).map(row)));
+  out.push("\nSettlement foundings:\n");
+  out.push(table(hdr, top(foundings, 10).map(row)));
   out.push("\nStructures and sites:\n");
   out.push(table(hdr, top(structures, 10).map(row)));
   out.push("\nBirths:\n");
@@ -314,7 +319,7 @@ function main() {
   const j = existing.indexOf(END);
   if (i < 0 || j < 0) throw new Error(`Markers missing in ${REPORT}`);
   writeFileSync(REPORT, `${existing.slice(0, i + BEGIN.length)}\n${body}\n${existing.slice(j)}`);
-  console.log(`Wrote ${REPORT}: ${fmt(strict.length)} strict events, ${fmt(structures.length)} structures, ${fmt(births.length)} births`);
+  console.log(`Wrote ${REPORT}: ${fmt(strict.length)} events, ${fmt(foundings.length)} foundings, ${fmt(structures.length)} structures, ${fmt(births.length)} births`);
 }
 
 if (import.meta.main) main();
