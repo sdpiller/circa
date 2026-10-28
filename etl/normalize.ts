@@ -3,7 +3,7 @@
  * Shared by the Phase 0 audit and the Phase 1 loader.
  */
 import { effectiveInterval, yearFromSparqlTime } from "../lib/time/index.ts";
-import type { ClassConfig } from "./queries.ts";
+import type { ClassConfig, Kind } from "./queries.ts";
 import type { Binding } from "./sparql.ts";
 
 export type Rank = "preferred" | "normal" | "deprecated";
@@ -25,6 +25,7 @@ export type ItemFacts = {
 export type EventRecord = {
   qid: string;
   classKey: string;
+  kind: Kind;
   category: string;
   label: string;
   /** Language of `label`: "en", "mul" (language-neutral), or another code when no English label exists. */
@@ -198,6 +199,7 @@ export function normalize(c: ClassConfig, f: ItemFacts): NormalizeResult {
     record: {
       qid: f.qid,
       classKey: c.key,
+      kind: c.kind,
       category: c.category,
       ...label,
       description: f.description,

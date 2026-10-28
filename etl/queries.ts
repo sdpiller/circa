@@ -12,16 +12,19 @@ import type { EndpointName } from "./sparql.ts";
 
 export type ClassConfig = {
   key: string;
-  qid: string;
+  /** Root class. null for a property-defined group (membership = has every locProp and a dateProp). */
+  qid: string | null;
   label: string;
   category: string;
   dateProps: string[];
   locProps: string[];
   minSitelinks: number;
   subclassClosure?: boolean;
-  candidate?: boolean;
+  kind: Kind;
   membershipEndpoint?: EndpointName;
 };
+
+export type Kind = "event" | "founding" | "structure" | "birth" | "discovery";
 
 export type Facet = "meta" | "dates" | "locs" | "labels";
 /** "labels" runs last and only for items whose meta has no English label (see fetch.ts). */
@@ -32,8 +35,11 @@ export function membershipQuery(c: ClassConfig): string {
   const anyDate = c.dateProps.map((p) => `wdt:${p}`).join("|");
   // A plain join + DISTINCT, not FILTER EXISTS: on QLever the join is much cheaper
   // (settlements: 15 s, versus repeated timeouts and an out-of-memory error with FILTER EXISTS).
+  const member = c.qid
+    ? `?item ${path} wd:${c.qid} .`
+    : c.locProps.map((p) => `?item wdt:${p} ?any${p} .`).join(" ");
   return `SELECT DISTINCT ?item ?sl WHERE {
-  ?item ${path} wd:${c.qid} .
+  ${member}
   ?item ${anyDate} ?anyDate .
   ?item wikibase:sitelinks ?sl . FILTER(?sl >= ${c.minSitelinks})
 }`;

@@ -10,7 +10,7 @@ import { join } from "node:path";
 import { formatYear } from "../lib/time/index.ts";
 import { loadConfig, RAW_DIR, type RawFile } from "./fetch.ts";
 import { collectFacts, normalize, type EventRecord, type Rejection } from "./normalize.ts";
-import type { ClassConfig } from "./queries.ts";
+import type { ClassConfig, Kind } from "./queries.ts";
 
 const REPORT = join(import.meta.dirname, "..", "docs", "data-audit.md");
 const BEGIN = "<!-- BEGIN GENERATED (npm run audit) -->";
@@ -121,29 +121,27 @@ function main() {
   const stats = config.classes.map(loadClass).filter((s): s is ClassStats => s !== null);
   const missing = config.classes.filter((c) => !stats.some((s) => s.c.key === c.key)).map((c) => c.key);
 
-  // Dedupe across classes: an item keeps the highest-priority category (classes.json categoryPriority).
-  const prio = (cat: string) => config.categoryPriority.indexOf(cat);
-  const strictByQid = new Map<string, EventRecord>();
-  const candidateByQid = new Map<string, EventRecord>();
+  // Dedupe across classes: an item keeps the highest-priority kind, then category (classes.json).
+  const rank = (r: EventRecord) => config.kindPriority.indexOf(r.kind) * 100 + config.categoryPriority.indexOf(r.category);
+  const byQid = new Map<string, EventRecord>();
   const classCount = new Map<string, number>();
   for (const s of stats) {
     for (const r of s.records) {
       classCount.set(r.qid, (classCount.get(r.qid) ?? 0) + 1);
-      const target = s.c.candidate ? candidateByQid : strictByQid;
-      const prev = target.get(r.qid);
-      if (!prev || prio(r.category) < prio(prev.category)) target.set(r.qid, r);
+      const prev = byQid.get(r.qid);
+      if (!prev || rank(r) < rank(prev)) byQid.set(r.qid, r);
     }
   }
-  for (const q of strictByQid.keys()) candidateByQid.delete(q); // an event that is also a structure counts as an event
   const inRange = (r: EventRecord) => overlapsYears(r, MIN_YEAR, MAX_YEAR);
-  // Settlement foundings are a "strict" class but outnumber all other events 3 to 1, so they get their own group.
-  const strictAll = [...strictByQid.values()].filter(inRange);
-  const strict = strictAll.filter((r) => r.category !== "founding");
-  const foundings = strictAll.filter((r) => r.category === "founding");
-  const byClass = (key: string) => [...candidateByQid.values()].filter((r) => r.classKey === key && inRange(r));
-  const structures = [...byClass("structure"), ...byClass("archaeological-site")];
-  const births = byClass("birth");
-  const groups: [string, EventRecord[]][] = [["Events", strict], ["Settlement foundings", foundings], ["Structures and sites (candidate)", structures], ["Births (candidate)", births]];
+  const all = [...byQid.values()].filter(inRange);
+  const ofKind = (k: Kind) => all.filter((r) => r.kind === k);
+  const strict = ofKind("event"); // "events" throughout the report
+  const foundings = ofKind("founding");
+  const structures = ofKind("structure");
+  const births = ofKind("birth");
+  const discoveries = ofKind("discovery");
+  const groups: [string, EventRecord[]][] = [["Events", strict], ["Settlement foundings", foundings], ["Structures and sites", structures], ["Births", births], ["Discoveries", discoveries]];
+  const groupNames = groups.map(([name]) => name);
 
   const out: string[] = [];
   const h = (s: string) => out.push(`\n### ${s}\n`);
@@ -155,7 +153,7 @@ function main() {
   out.push(table(
     ["Class", "Floor (sitelinks)", "Fetched", "Usable", ...reasons, "Exact loc", "Queries"],
     stats.map((s) => [
-      `${s.c.key}${s.c.candidate ? " (candidate)" : ""}`,
+      `${s.c.key} (${s.c.kind})`,
       s.c.minSitelinks,
       s.fetched,
       s.records.length,
@@ -171,8 +169,8 @@ function main() {
 
   h("B. Usable items by category (deduped, in year window)");
   const cats = [...new Set(config.classes.map((c) => c.category))];
-  out.push(table(["Category", "Strict classes", "Candidates"], cats.map((cat) => [cat, strictAll.filter((r) => r.category === cat).length, [...structures, ...births].filter((r) => r.category === cat).length])));
-  out.push(`\nEvents (strict classes except settlement foundings): **${fmt(strict.length)}**. Settlement foundings: ${fmt(foundings.length)}. Structures and sites: ${fmt(structures.length)}. Births: ${fmt(births.length)}.`);
+  out.push(table(["Category", ...groupNames], cats.map((cat) => [cat, ...groups.map(([, rs]) => rs.filter((r) => r.category === cat).length)])));
+  out.push(`\n${groups.map(([name, rs]) => `${name}: **${fmt(rs.length)}**`).join(". ")}.`);
 
   h("C. Location confidence");
   out.push(table(
@@ -213,7 +211,7 @@ function main() {
   ));
   h("D2. All groups by coarse region");
   out.push(table(
-    ["Region", "Events", "Settlement foundings", "Structures and sites", "Births"],
+    ["Region", ...groupNames],
     REGIONS.map((reg) => [reg, ...groups.map(([, rs]) => rs.filter((r) => region(r.lat, r.lon) === reg).length)]),
   ));
 
@@ -233,14 +231,14 @@ function main() {
   const cm = groups.map(([, rs]) => counts(rs));
   const strictConflict = counts(strict.filter((r) => r.category === "conflict"));
   out.push(table(
-    ["Century", "Events", "of which conflict", "Settlement foundings", "Structures and sites", "Births"],
-    centuries.map((c) => [centLabel(c), cm[0].get(c) ?? 0, pct(strictConflict.get(c) ?? 0, cm[0].get(c) ?? 0), cm[1].get(c) ?? 0, cm[2].get(c) ?? 0, cm[3].get(c) ?? 0]),
+    ["Century", "Events", "of which conflict", ...groupNames.slice(1)],
+    centuries.map((c) => [centLabel(c), cm[0].get(c) ?? 0, pct(strictConflict.get(c) ?? 0, cm[0].get(c) ?? 0), ...cm.slice(1).map((m) => m.get(c) ?? 0)]),
   ));
-  const allStrict = [...strictByQid.values()];
-  out.push(`\nOutside the window (dropped): ${fmt(allStrict.filter((r) => r.endYear < MIN_YEAR).length)} events and foundings end before ${formatYear(MIN_YEAR)}, ${fmt(allStrict.filter((r) => r.startYear > MAX_YEAR).length)} start after ${MAX_YEAR}.`);
+  const allStrict = [...byQid.values()];
+  out.push(`\nOutside the window (dropped): ${fmt(allStrict.filter((r) => r.endYear < MIN_YEAR).length)} items end before ${formatYear(MIN_YEAR)}, ${fmt(allStrict.filter((r) => r.startYear > MAX_YEAR).length)} start after ${MAX_YEAR}.`);
   const prec = (rs: EventRecord[], p: (n: number) => boolean) => pct(rs.filter((r) => p(r.yearPrecision)).length, rs.length);
   out.push(table(
-    ["Date precision", "Events", "Settlement foundings", "Structures and sites", "Births"],
+    ["Date precision", ...groupNames],
     [
       ["day or month (10 to 11)", ...groups.map(([, rs]) => prec(rs, (n) => n >= 10))],
       ["year (9)", ...groups.map(([, rs]) => prec(rs, (n) => n === 9))],
@@ -278,7 +276,7 @@ function main() {
 
   h("G. Spotlights: focus areas by era");
   const spotEras: [string, number, number][] = [["1000 to 501 BCE", -1000, -501], ["500 to 300 BCE", -500, -300], ["299 to 1 BCE", -299, -1], ["1 to 500", 1, 500], ["1001 to 1500", 1001, 1500]];
-  out.push("Cells: events / settlement foundings / structures and sites / births.\n");
+  out.push(`Cells: ${groupNames.map((n) => n.toLowerCase()).join(" / ")}.\n`);
   out.push(table(
     ["Area", ...spotEras.map((e) => e[0])],
     SPOTLIGHTS.map((b) => [b.name, ...spotEras.map(([, a, z]) => groups.map(([, rs]) => rs.filter((r) => inBox(r, b) && overlapsYears(r, a, z)).length).join(" / "))]),
@@ -297,6 +295,11 @@ function main() {
   out.push(table(hdr, top(structures, 10).map(row)));
   out.push("\nBirths:\n");
   out.push(table(hdr, top(births, 10).map(row)));
+
+  h("H2. Discoveries: top items worldwide by sitelinks");
+  out.push("Dated by time of discovery (P575) and placed at the location of discovery (P189), never the current location. Check that museum pieces sit at their find spot.\n");
+  const topDisc = [...discoveries].sort((a, b) => b.sitelinks - a.sitelinks).slice(0, 15);
+  out.push(table(["Label", "QID", "Discovered", "Lat, lon", "Region", "Sitelinks"], topDisc.map((r) => [r.label, r.qid, formatYear(r.startYear), `${r.lat.toFixed(2)}, ${r.lon.toFixed(2)}`, region(r.lat, r.lon), r.sitelinks])));
 
   h("I. Spot checks (year convention end to end)");
   const allRecords = new Map<string, EventRecord>();

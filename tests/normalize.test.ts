@@ -9,11 +9,12 @@ const battle: ClassConfig = {
   qid: "Q178561",
   label: "battle",
   category: "conflict",
+  kind: "event",
   dateProps: ["P585", "P580", "P582"],
   locProps: ["P625", "P276", "P131"],
   minSitelinks: 1,
 };
-const birth: ClassConfig = { ...battle, key: "birth", category: "culture", dateProps: ["P569"], locProps: ["P19"] };
+const birth: ClassConfig = { ...battle, key: "birth", kind: "birth", category: "culture", dateProps: ["P569"], locProps: ["P19"] };
 
 const facts = collectFacts(rows.items as Binding[], rows.meta as Binding[], rows.dates as Binding[], rows.locs as Binding[]);
 const record = (qid: string) => {

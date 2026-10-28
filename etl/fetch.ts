@@ -10,7 +10,7 @@
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { facetQuery, FACETS, membershipQuery, type ClassConfig, type Facet } from "./queries.ts";
+import { facetQuery, FACETS, membershipQuery, type ClassConfig, type Facet, type Kind } from "./queries.ts";
 import { query, type Binding, type EndpointName } from "./sparql.ts";
 
 export const RAW_DIR = join(import.meta.dirname, "..", "data", "raw");
@@ -30,6 +30,7 @@ export type Config = {
   classes: ClassConfig[];
   locationStoplist: { qid: string; label: string }[];
   categoryPriority: string[];
+  kindPriority: Kind[];
 };
 
 export function loadConfig(): Config {
