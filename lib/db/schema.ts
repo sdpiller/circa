@@ -26,13 +26,22 @@ CREATE TABLE events (
   loc_confidence TEXT NOT NULL,    -- exact | inherited
   loc_source TEXT,                 -- P625 | P276 | P131 | P19 | P189
   sitelinks INTEGER NOT NULL,      -- notability proxy
-  wikipedia_title TEXT
+  wikipedia_title TEXT,
+  -- H3 cell ids at the four grid resolutions (decisions.md entry 28), filled by the loader.
+  h3_r2 TEXT NOT NULL,
+  h3_r3 TEXT NOT NULL,
+  h3_r4 TEXT NOT NULL,
+  h3_r5 TEXT NOT NULL
 );
 CREATE INDEX idx_events_years ON events(start_year, end_year);
 CREATE INDEX idx_events_geo ON events(lat, lon);
 -- Covering index for "top N of one kind in a viewport and range" (decisions.md entry 25).
 -- Walks a kind in sitelinks order and filters years and bbox without touching the table.
 CREATE INDEX idx_events_kind_rank ON events(kind, sitelinks DESC, start_year, end_year, lat, lon);
+CREATE INDEX idx_events_r2 ON events(h3_r2);
+CREATE INDEX idx_events_r3 ON events(h3_r3);
+CREATE INDEX idx_events_r4 ON events(h3_r4);
+CREATE INDEX idx_events_r5 ON events(h3_r5);
 
 CREATE TABLE narratives (
   cache_key TEXT PRIMARY KEY,

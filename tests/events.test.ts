@@ -1,40 +1,8 @@
-import Database from "better-sqlite3";
 import { beforeEach, describe, expect, it } from "vitest";
 import { EventsQuery, KIND_WEIGHTS, lonRanges, queryEvents, quotasForZoom, ZOOM_BANDS, type EventsQueryInput } from "../lib/db/events.ts";
-import { KINDS, SCHEMA_SQL, type EventRow } from "../lib/db/schema.ts";
+import { KINDS } from "../lib/db/schema.ts";
 import { effectiveInterval, PRECISION } from "../lib/time/index.ts";
-
-let n = 0;
-const row = (over: Partial<EventRow>): EventRow => ({
-  qid: `Q${++n}`,
-  label: "Test",
-  label_lang: "en",
-  description: null,
-  kind: "event",
-  category: "conflict",
-  class_key: "battle",
-  start_year: -490,
-  end_year: -490,
-  orig_year: -490,
-  year_precision: 9,
-  lat: 38,
-  lon: 23,
-  loc_confidence: "exact",
-  loc_source: "P625",
-  sitelinks: 3,
-  wikipedia_title: null,
-  ...over,
-});
-
-function makeDb(rows: EventRow[]): Database.Database {
-  const db = new Database(":memory:");
-  db.exec(SCHEMA_SQL);
-  const insert = db.prepare(`INSERT INTO events VALUES (@qid, @label, @label_lang, @description, @kind, @category, @class_key,
-    @start_year, @end_year, @orig_year, @year_precision, @lat, @lon, @loc_confidence, @loc_source, @sitelinks, @wikipedia_title)`);
-  for (const r of rows) insert.run(r);
-  db.exec("ANALYZE");
-  return db;
-}
+import { makeDb, resetRowCounter, row } from "./helpers.ts";
 
 const world = { west: -180, south: -90, east: 180, north: 90, from: -3500, to: 2026, zoom: 0 };
 
@@ -131,7 +99,7 @@ describe("EventsQuery", () => {
 
 describe("queryEvents", () => {
   beforeEach(() => {
-    n = 0;
+    resetRowCounter();
   });
 
   it("finds events on both sides of the antimeridian and nothing in between", () => {

@@ -12,6 +12,7 @@ import Database from "better-sqlite3";
 import { existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
 import { dirname } from "node:path";
 import { formatYear } from "../lib/time/index.ts";
+import { cellsForPoint } from "../lib/cells.ts";
 import { DB_PATH, EventRow, SCHEMA_SQL } from "../lib/db/schema.ts";
 import { buildDataset } from "./build.ts";
 import { loadConfig } from "./fetch.ts";
@@ -46,12 +47,14 @@ export function writeDatabase(path: string, rows: EventRow[], info: Record<strin
     db.pragma("journal_mode = DELETE"); // single file, nothing left beside it after close
     db.exec(SCHEMA_SQL);
     const insert = db.prepare(`INSERT INTO events (qid, label, label_lang, description, kind, category, class_key,
-      start_year, end_year, orig_year, year_precision, lat, lon, loc_confidence, loc_source, sitelinks, wikipedia_title)
+      start_year, end_year, orig_year, year_precision, lat, lon, loc_confidence, loc_source, sitelinks, wikipedia_title,
+      h3_r2, h3_r3, h3_r4, h3_r5)
       VALUES (@qid, @label, @label_lang, @description, @kind, @category, @class_key,
-      @start_year, @end_year, @orig_year, @year_precision, @lat, @lon, @loc_confidence, @loc_source, @sitelinks, @wikipedia_title)`);
+      @start_year, @end_year, @orig_year, @year_precision, @lat, @lon, @loc_confidence, @loc_source, @sitelinks, @wikipedia_title,
+      @h3_r2, @h3_r3, @h3_r4, @h3_r5)`);
     const setInfo = db.prepare("INSERT INTO build_info (key, value) VALUES (?, ?)");
     db.transaction(() => {
-      for (const row of rows) insert.run(row);
+      for (const row of rows) insert.run({ ...row, ...cellsForPoint(row.lat, row.lon) });
       for (const [k, v] of Object.entries(info)) setInfo.run(k, v);
     })();
     if (previous && existsSync(previous)) {

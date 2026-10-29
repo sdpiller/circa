@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { dedupe, isTooWide } from "../etl/build.ts";
 import { runSpotChecks, SPOT_CHECKS, toRow, writeDatabase } from "../etl/load.ts";
 import type { EventRecord } from "../etl/normalize.ts";
+import { cellsForPoint } from "../lib/cells.ts";
 import { effectiveInterval } from "../lib/time/index.ts";
 
 const rec = (over: Partial<EventRecord>): EventRecord => ({
@@ -98,6 +99,21 @@ describe("writeDatabase", () => {
     expect(overlap.all({ from: -420, to: -300 }).map((r) => (r as { qid: string }).qid)).toEqual(["Q2"]); // only the century item reaches -420
     expect(overlap.all({ from: -495, to: -485 }).map((r) => (r as { qid: string }).qid)).toEqual(["Q1", "Q2"]);
     expect(db.prepare("SELECT value FROM build_info WHERE key = 'built_at'").get()).toEqual({ value: "test" });
+    db.close();
+  });
+
+  it("stores H3 cells r2 to r5 per row and indexes them", () => {
+    const path = join(dir, "cells.db");
+    const athens = toRow(rec({ qid: "Q1", lat: 37.98, lon: 23.72 }));
+    const fiji = toRow(rec({ qid: "Q2", lat: -17.7, lon: 179.95 }));
+    writeDatabase(path, [athens, fiji], {});
+    const db = new Database(path, { readonly: true });
+    for (const r of [athens, fiji]) {
+      const stored = db.prepare("SELECT h3_r2, h3_r3, h3_r4, h3_r5 FROM events WHERE qid = ?").get(r.qid);
+      expect(stored).toEqual(cellsForPoint(r.lat, r.lon));
+    }
+    const indexes = (db.prepare("PRAGMA index_list(events)").all() as { name: string }[]).map((i) => i.name);
+    expect(indexes).toEqual(expect.arrayContaining(["idx_events_r2", "idx_events_r3", "idx_events_r4", "idx_events_r5"]));
     db.close();
   });
 
