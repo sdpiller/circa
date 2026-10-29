@@ -13,6 +13,10 @@
 export type Interval = { start: number; end: number };
 export type YearRange = { from: number; to: number };
 
+/** The year window the data set covers, and the only years the API accepts. */
+export const MIN_YEAR = -3500;
+export const MAX_YEAR = 2026;
+
 /** Wikidata time precision codes we understand. 9 = year; finer codes collapse to a year. */
 export const PRECISION = { millennium: 6, century: 7, decade: 8, year: 9 } as const;
 
@@ -75,6 +79,11 @@ export function effectiveInterval(year: number, precision: number): Interval {
   }
   // For BCE, the larger absolute value is the earlier year.
   return sign > 0 ? { start: lo, end: hi } : { start: -hi, end: -lo };
+}
+
+/** A year a user may ask for: an integer inside the data window, and never year 0. */
+export function isQueryableYear(year: number): boolean {
+  return Number.isInteger(year) && year !== 0 && year >= MIN_YEAR && year <= MAX_YEAR;
 }
 
 /** Range filtering uses overlap, not containment. Mirrors the SQL filter. */

@@ -30,6 +30,9 @@ CREATE TABLE events (
 );
 CREATE INDEX idx_events_years ON events(start_year, end_year);
 CREATE INDEX idx_events_geo ON events(lat, lon);
+-- Covering index for "top N of one kind in a viewport and range" (decisions.md entry 25).
+-- Walks a kind in sitelinks order and filters years and bbox without touching the table.
+CREATE INDEX idx_events_kind_rank ON events(kind, sitelinks DESC, start_year, end_year, lat, lon);
 
 CREATE TABLE narratives (
   cache_key TEXT PRIMARY KEY,

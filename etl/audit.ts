@@ -8,7 +8,8 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { formatYear } from "../lib/time/index.ts";
-import { buildDataset, MAX_INTERVAL_YEARS, MAX_YEAR, MIN_YEAR } from "./build.ts";
+import { MAX_YEAR, MIN_YEAR } from "../lib/time/index.ts";
+import { buildDataset, MAX_INTERVAL_YEARS } from "./build.ts";
 import { loadConfig } from "./fetch.ts";
 import type { EventRecord, Rejection } from "./normalize.ts";
 import type { Kind } from "./queries.ts";

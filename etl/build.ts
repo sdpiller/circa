@@ -4,13 +4,11 @@
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { overlaps } from "../lib/time/index.ts";
+import { MAX_YEAR, MIN_YEAR, overlaps } from "../lib/time/index.ts";
 import { RAW_DIR, type Config, type RawFile } from "./fetch.ts";
 import { collectFacts, normalize, type EventRecord, type Rejection } from "./normalize.ts";
 import type { ClassConfig } from "./queries.ts";
 
-export const MIN_YEAR = -3500;
-export const MAX_YEAR = 2026;
 /**
  * Items whose effective interval is wider than this match nearly every range query under the
  * overlap rule (for example "100000 BCE to 1 BCE"), so they are dropped. A millennium-precision

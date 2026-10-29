@@ -13,7 +13,8 @@
     "etl:fetch": "node --env-file-if-exists=.env.local etl/fetch.ts",
     "audit": "node etl/audit.ts",
     "etl:load": "node etl/load.ts",
-    "etl": "npm run etl:fetch && npm run etl:load"
+    "etl": "npm run etl:fetch && npm run etl:load",
+    "bench:events": "node etl/bench-events.ts"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
