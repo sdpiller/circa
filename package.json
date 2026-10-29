@@ -16,7 +16,9 @@
     "etl": "npm run etl:fetch && npm run etl:load",
     "bench:events": "node etl/bench-events.ts",
     "bench:cells": "node etl/bench-cells.ts",
-    "story:input": "node --env-file-if-exists=.env.local etl/story-input.ts"
+    "story:input": "node --env-file-if-exists=.env.local etl/story-input.ts",
+    "story:publish": "node etl/story-publish.ts",
+    "story:check": "node etl/story-check.ts"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",

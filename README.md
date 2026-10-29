@@ -42,6 +42,8 @@ Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since P
 | `npm run etl` | Fetch whatever is missing, then build the database. One command from nothing to `data/chronoglobe.db`. |
 | `npm run etl:fetch` | Download event data from Wikidata into `data/raw/`. See below. |
 | `npm run etl:load` | Build `data/chronoglobe.db` from `data/raw/` (about 7 seconds). |
+| `npm run story:publish` | Check every story against its frozen input and write `stories/published.json`. |
+| `npm run story:check` | Run after `etl:load`: reports published stories whose cited items changed (stale, exit 1) and areas whose top items drifted. |
 | `npm run audit` | Rebuild the tables in `docs/data-audit.md` from `data/raw/`. |
 | `npm run bench:events` | Time events API queries against the real database, per zoom band. |
 | `npm run dev` | Start the Next.js dev server on http://localhost:3000. |
