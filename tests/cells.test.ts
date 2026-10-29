@@ -9,6 +9,7 @@ import {
   isGridCell,
   RESOLUTIONS,
   resolutionForZoom,
+  zoomForRes,
 } from "../lib/cells.ts";
 
 const span = (ring: [number, number][]) => {
@@ -99,5 +100,11 @@ describe("groundSelection", () => {
       kind: "cell",
       cell: latLngToCell(ATHENS.lat, ATHENS.lng, 5),
     });
+  });
+});
+
+describe("zoomForRes", () => {
+  it("lands inside the band of each resolution", () => {
+    for (const res of RESOLUTIONS) expect(resolutionForZoom(zoomForRes(res))).toBe(res);
   });
 });

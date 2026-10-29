@@ -28,6 +28,12 @@ export function resolutionForZoom(zoom: number): Res | null {
   return res;
 }
 
+/** A zoom comfortably inside the band for `res` (0.6 above its start), so the grid draws that resolution. */
+export function zoomForRes(res: Res): number {
+  const band = RES_BANDS.find((b) => b.res === res);
+  return (band?.minZoom ?? GRID_MIN_ZOOM) + 0.6;
+}
+
 export type CellColumns = { h3_r2: string; h3_r3: string; h3_r4: string; h3_r5: string };
 
 export function cellsForPoint(lat: number, lon: number): CellColumns {
