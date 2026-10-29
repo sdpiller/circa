@@ -113,7 +113,7 @@ describe("writeDatabase", () => {
       expect(stored).toEqual(cellsForPoint(r.lat, r.lon));
     }
     const indexes = (db.prepare("PRAGMA index_list(events)").all() as { name: string }[]).map((i) => i.name);
-    expect(indexes).toEqual(expect.arrayContaining(["idx_events_r2", "idx_events_r3", "idx_events_r4", "idx_events_r5"]));
+    expect(indexes).toEqual(expect.arrayContaining(["idx_events_r2", "idx_events_r3", "idx_events_r4", "idx_events_r5", "idx_events_cells_r2", "idx_events_cells_r3", "idx_events_cells_r4", "idx_events_cells_r5"]));
     db.close();
   });
 

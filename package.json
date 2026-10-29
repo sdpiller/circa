@@ -14,7 +14,8 @@
     "audit": "node etl/audit.ts",
     "etl:load": "node etl/load.ts",
     "etl": "npm run etl:fetch && npm run etl:load",
-    "bench:events": "node etl/bench-events.ts"
+    "bench:events": "node etl/bench-events.ts",
+    "bench:cells": "node etl/bench-cells.ts"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
