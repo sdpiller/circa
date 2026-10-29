@@ -55,7 +55,7 @@ function statementsFor(db: Database.Database, res: Res, group: "events" | "other
     const where = `h3_r${res} = @cell AND start_year <= @to AND end_year >= @from`;
     const kinds = group === "events" ? EVENT_KINDS : OTHER_KINDS;
     s = {
-      list: db.prepare(`SELECT ${COLUMNS} FROM events WHERE ${where} AND ${kinds} ORDER BY sitelinks DESC LIMIT @limit`),
+      list: db.prepare(`SELECT ${COLUMNS} FROM events WHERE ${where} AND ${kinds} ORDER BY sitelinks DESC, qid LIMIT @limit`),
       count: db.prepare(`SELECT COUNT(*) AS n FROM events WHERE ${where} AND ${kinds}`),
       one: db.prepare(`SELECT ${COLUMNS} FROM events WHERE ${where} AND ${kinds} AND qid = @qid`),
     };
@@ -75,12 +75,15 @@ function section(db: Database.Database, res: Res, group: "events" | "others", p:
   return { items, total };
 }
 
+/** Ties in sitelinks go by qid, compared like SQLite's default BINARY collation, so the order is stable. */
+const byQid = (a: AreaItem, b: AreaItem) => (a.qid < b.qid ? -1 : a.qid > b.qid ? 1 : 0);
+
 export function queryArea(db: Database.Database, q: AreaQueryInput): AreaResult {
   const res = getResolution(q.cell) as Res;
   const p = { cell: q.cell, from: q.from, to: q.to };
   const ev = section(db, res, "events", p, q.eventsLimit, q.focus);
   const ot = section(db, res, "others", p, q.othersLimit, q.focus);
-  ev.items.sort((a, b) => a.start_year - b.start_year || b.sitelinks - a.sitelinks);
-  ot.items.sort((a, b) => b.sitelinks - a.sitelinks);
+  ev.items.sort((a, b) => a.start_year - b.start_year || b.sitelinks - a.sitelinks || byQid(a, b));
+  ot.items.sort((a, b) => b.sitelinks - a.sitelinks || byQid(a, b));
   return { cell: q.cell, res, acrossKm: cellAcrossKm(res), events: ev.items, eventsTotal: ev.total, others: ot.items, othersTotal: ot.total };
 }

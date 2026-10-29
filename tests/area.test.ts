@@ -87,6 +87,24 @@ describe("queryArea", () => {
     expect(queryArea(db, { ...q, focus: find("elsewhere") }).others).toHaveLength(1);
   });
 
+  it("breaks sitelink ties by qid, so equal rows come back in a stable order", () => {
+    // Inserted out of qid order, so insertion (rowid) order would give a different answer.
+    const db = makeDb([
+      row({ ...ATHENS, qid: "Q30", sitelinks: 5 }),
+      row({ ...ATHENS, qid: "Q10", sitelinks: 5 }),
+      row({ ...ATHENS, qid: "Q20", sitelinks: 5 }),
+      row({ ...ATHENS, qid: "Q31", kind: "birth", sitelinks: 5 }),
+      row({ ...ATHENS, qid: "Q11", kind: "birth", sitelinks: 5 }),
+      row({ ...ATHENS, qid: "Q21", kind: "birth", sitelinks: 5 }),
+    ]);
+    const r = queryArea(db, { ...base, eventsLimit: 2, othersLimit: 2 });
+    expect(r.events.map((e) => e.qid)).toEqual(["Q10", "Q20"]);
+    expect(r.others.map((o) => o.qid)).toEqual(["Q11", "Q21"]);
+    const all = queryArea(db, base);
+    expect(all.events.map((e) => e.qid)).toEqual(["Q10", "Q20", "Q30"]);
+    expect(all.others.map((o) => o.qid)).toEqual(["Q11", "Q21", "Q31"]);
+  });
+
   it("does not duplicate a focus item already in the list", () => {
     const db = makeDb([row({ ...ATHENS, kind: "event" })]);
     const qid = (db.prepare("SELECT qid FROM events").get() as { qid: string }).qid;
