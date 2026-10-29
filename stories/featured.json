@@ -1,0 +1,22 @@
+[
+  { "id": "babylon", "place": "Babylon", "from": -2500, "to": -500, "cell": "832ca2fffffffff" },
+  { "id": "carthage", "place": "Carthage", "from": -800, "to": -100, "cell": "83386efffffffff" },
+  { "id": "athens", "place": "Athens", "from": -500, "to": -300, "cell": "851eda77fffffff" },
+  { "id": "rome", "place": "Rome", "from": -100, "to": 100, "cell": "851e8053fffffff" },
+  { "id": "jerusalem", "place": "Jerusalem", "from": 1, "to": 150, "cell": "832db2fffffffff" },
+  { "id": "medina", "place": "Medina", "from": 570, "to": 700, "cell": "835311fffffffff" },
+  { "id": "lhasa", "place": "Lhasa", "from": 600, "to": 1950, "cell": "853c7277fffffff" },
+  { "id": "baghdad", "place": "Baghdad", "from": 750, "to": 1260, "cell": "842ca2bffffffff" },
+  { "id": "tenochtitlan", "place": "Tenochtitlan", "from": 1300, "to": 1600, "cell": "854995bbfffffff" },
+  { "id": "seoul", "place": "Seoul", "from": 1390, "to": 1910, "cell": "8430e1dffffffff" },
+  { "id": "constantinople", "place": "Constantinople", "from": 1400, "to": 1500, "cell": "851ec903fffffff" },
+  { "id": "cusco", "place": "Cusco", "from": 1400, "to": 1600, "cell": "838b61fffffffff" },
+  { "id": "kyoto", "place": "Kyoto", "from": 1450, "to": 1650, "cell": "842e615ffffffff" },
+  { "id": "mombasa", "place": "Mombasa", "from": 1490, "to": 1900, "cell": "837b59fffffffff" },
+  { "id": "panipat", "place": "Panipat", "from": 1500, "to": 1800, "cell": "853d12cffffffff" },
+  { "id": "port-au-prince", "place": "Port-au-Prince", "from": 1750, "to": 1810, "cell": "836725fffffffff" },
+  { "id": "paris", "place": "Paris", "from": 1789, "to": 1815, "cell": "851fb467fffffff" },
+  { "id": "isandlwana", "place": "Isandlwana", "from": 1870, "to": 1900, "cell": "83bcf1fffffffff" },
+  { "id": "beijing", "place": "Beijing", "from": 1900, "to": 1990, "cell": "8531aa43fffffff" },
+  { "id": "gallipoli", "place": "Gallipoli", "from": 1914, "to": 1918, "cell": "831ecafffffffff" }
+]
