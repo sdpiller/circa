@@ -49,21 +49,25 @@ type Expr = Extract<NonNullable<CircleLayerSpecification["paint"]>["circle-opaci
 const groupColor = ["match", ["get", "group"], ...DOT_GROUPS.flatMap((g) => [g.key, g.color]), "#ffffff"] as unknown as Expr;
 const isContext: Expr = ["==", ["get", "group"], "context"];
 
-// Fill opacity tops out at 0.06: the dataviz validator needs all four dot colours at 3:1 against the
-// composited fill over both basemap backgrounds (decisions.md entry 29). Both grid layers fade in
-// between zoom 3 and 3.5.
+// Fill shading by events in the cell. With dots hidden the fill can be strong. With dots shown it tops
+// out at 0.06: the dataviz validator needs all four dot colours at 3:1 against the composited fill over
+// both basemap backgrounds (decisions.md entry 29). Both grid layers fade in between zoom 3 and 3.5.
+const FILL_STOPS = {
+  plain: [0, 0.03, 1, 0.07, 10, 0.13, 50, 0.2],
+  underDots: [0, 0.02, 1, 0.03, 10, 0.045, 50, 0.06],
+};
+function gridFillOpacity(dotsShown: boolean) {
+  return [
+    "interpolate", ["linear"], ["zoom"],
+    GRID_MIN_ZOOM, 0,
+    GRID_MIN_ZOOM + 0.5, ["interpolate", ["linear"], ["get", "events"], ...(dotsShown ? FILL_STOPS.underDots : FILL_STOPS.plain)],
+  ] as unknown as Expr;
+}
 const GRID_FILL_LAYER: FillLayerSpecification = {
   id: "grid-fill",
   type: "fill",
   source: "grid",
-  paint: {
-    "fill-color": GRID_COLOR,
-    "fill-opacity": [
-      "interpolate", ["linear"], ["zoom"],
-      GRID_MIN_ZOOM, 0,
-      GRID_MIN_ZOOM + 0.5, ["interpolate", ["linear"], ["get", "events"], 0, 0.02, 1, 0.03, 10, 0.045, 50, 0.06],
-    ],
-  },
+  paint: { "fill-color": GRID_COLOR, "fill-opacity": gridFillOpacity(false) },
 };
 const GRID_LINE_LAYER: LineLayerSpecification = {
   id: "grid-line",
@@ -151,10 +155,72 @@ export function GlobeMap({
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // What the legend shows: the latest answer from each endpoint.
   const resultRef = useRef({ cells: 0, counts: zeroCounts() });
+  const dotsReadyRef = useRef(false); // true once the events answer for the current view and toggle is in
 
   const report = useCallback((zoomedOut: boolean) => {
+    // With dots on, say "loading" until their answer arrives, so stale or zero counts never read as "nothing here".
+    if (!zoomedOut && showDotsRef.current && !dotsReadyRef.current) {
+      onStatusRef.current({ state: "loading", zoomedOut });
+      return;
+    }
     onStatusRef.current({ state: "ready", zoomedOut, counts: resultRef.current.counts, cells: resultRef.current.cells });
   }, []);
+
+  // A fetch is current until its controller is aborted: a newer fetch to the same endpoint, a zoom-out
+  // below the grid, dots toggled off, or unmount all abort it, so a superseded answer is never applied.
+  const loadCells = useCallback(
+    async (map: MapLibreMap, params: string) => {
+      lastCellsQueryRef.current = params;
+      cellsAbortRef.current?.abort();
+      const controller = new AbortController();
+      cellsAbortRef.current = controller;
+      try {
+        const res = await fetch(`/api/cells?${params}`, { signal: controller.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = (await res.json()) as CellsResult;
+        if (controller.signal.aborted) return;
+        (map.getSource("grid") as GeoJSONSource | undefined)?.setData({
+          type: "FeatureCollection",
+          features: data.cells.map((c) => cellFeature(c.cell, { cell: c.cell, items: c.items, events: c.events })),
+        } as never);
+        resultRef.current = { ...resultRef.current, cells: data.cells.length };
+        report(false);
+      } catch (err) {
+        if ((err as Error).name === "AbortError" || controller.signal.aborted) return;
+        lastCellsQueryRef.current = ""; // let the same view retry
+        onStatusRef.current({ state: "error", zoomedOut: false });
+      }
+    },
+    [report],
+  );
+
+  const loadDots = useCallback(
+    async (map: MapLibreMap, params: string) => {
+      lastDotsQueryRef.current = params;
+      dotsReadyRef.current = false;
+      dotsAbortRef.current?.abort();
+      const controller = new AbortController();
+      dotsAbortRef.current = controller;
+      try {
+        const res = await fetch(`/api/events?${params}`, { signal: controller.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = (await res.json()) as EventsResult;
+        if (controller.signal.aborted) return;
+        const fc = toFeatureCollection(data.events);
+        (map.getSource("dots") as GeoJSONSource | undefined)?.setData(fc);
+        const counts = zeroCounts();
+        for (const f of fc.features) counts[f.properties.group]++;
+        resultRef.current = { ...resultRef.current, counts };
+        dotsReadyRef.current = true;
+        report(false);
+      } catch (err) {
+        if ((err as Error).name === "AbortError" || controller.signal.aborted) return;
+        lastDotsQueryRef.current = "";
+        onStatusRef.current({ state: "error", zoomedOut: false });
+      }
+    },
+    [report],
+  );
 
   const load = useCallback(async () => {
     const map = mapRef.current;
@@ -167,6 +233,7 @@ export function GlobeMap({
       dotsAbortRef.current?.abort();
       lastCellsQueryRef.current = "";
       lastDotsQueryRef.current = "";
+      dotsReadyRef.current = false;
       source("grid")?.setData(EMPTY as never);
       source("dots")?.setData(EMPTY as never);
       resultRef.current = { cells: 0, counts: zeroCounts() };
@@ -184,57 +251,14 @@ export function GlobeMap({
       zoom: v.zoom.toFixed(2),
     }).toString();
 
-    // MapLibre fires extra moveend events (after the projection switch, at the end of zoom animations).
-    if (params !== lastCellsQueryRef.current) {
-      lastCellsQueryRef.current = params;
-      cellsAbortRef.current?.abort();
-      const controller = new AbortController();
-      cellsAbortRef.current = controller;
-      try {
-        const res = await fetch(`/api/cells?${params}`, { signal: controller.signal });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = (await res.json()) as CellsResult;
-        source("grid")?.setData({
-          type: "FeatureCollection",
-          features: data.cells.map((c) => cellFeature(c.cell, { cell: c.cell, items: c.items, events: c.events })),
-        } as never);
-        resultRef.current = { ...resultRef.current, cells: data.cells.length };
-        report(false);
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") {
-          lastCellsQueryRef.current = ""; // let the same view retry
-          onStatusRef.current({ state: "error", zoomedOut: false });
-        }
-      }
-    }
-
-    if (!showDotsRef.current) {
-      lastDotsQueryRef.current = ""; // when dots come on, the same view must fetch
-      return;
-    }
-    if (params !== lastDotsQueryRef.current) {
-      lastDotsQueryRef.current = params;
-      dotsAbortRef.current?.abort();
-      const controller = new AbortController();
-      dotsAbortRef.current = controller;
-      try {
-        const res = await fetch(`/api/events?${params}`, { signal: controller.signal });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = (await res.json()) as EventsResult;
-        const fc = toFeatureCollection(data.events);
-        source("dots")?.setData(fc);
-        const counts = zeroCounts();
-        for (const f of fc.features) counts[f.properties.group]++;
-        resultRef.current = { ...resultRef.current, counts };
-        report(false);
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") {
-          lastDotsQueryRef.current = "";
-          onStatusRef.current({ state: "error", zoomedOut: false });
-        }
-      }
-    }
-  }, [report]);
+    // MapLibre fires extra moveend events (after the projection switch, at the end of zoom animations),
+    // so a query identical to the last one is skipped.
+    const jobs: Promise<void>[] = [];
+    if (params !== lastCellsQueryRef.current) jobs.push(loadCells(map, params));
+    if (showDotsRef.current && params !== lastDotsQueryRef.current) jobs.push(loadDots(map, params));
+    if (jobs.length > 0) report(false); // shows "loading" if dots are now pending
+    await Promise.all(jobs);
+  }, [report, loadCells, loadDots]);
 
   const schedule = useCallback(() => {
     clearTimeout(timerRef.current);
@@ -256,9 +280,19 @@ export function GlobeMap({
     const map = mapRef.current;
     if (map && readyRef.current) {
       map.setLayoutProperty("dots", "visibility", showDots ? "visible" : "none");
+      map.setPaintProperty("grid-fill", "fill-opacity", gridFillOpacity(showDots));
+      if (!showDots) {
+        // Drop the old dots now, so they never flash on the next toggle-on.
+        dotsAbortRef.current?.abort();
+        lastDotsQueryRef.current = "";
+        dotsReadyRef.current = false;
+        resultRef.current = { ...resultRef.current, counts: zeroCounts() };
+        (map.getSource("dots") as GeoJSONSource | undefined)?.setData(EMPTY as never);
+      }
+      report(map.getZoom() < GRID_MIN_ZOOM); // "loading" right away when dots come on, not after the debounce
       schedule();
     }
-  }, [showDots, schedule]);
+  }, [showDots, schedule, report]);
 
   useEffect(() => {
     selectedRef.current = selectedCell;
@@ -286,7 +320,7 @@ export function GlobeMap({
         map!.addSource("grid", { type: "geojson", data: EMPTY as never });
         map!.addSource("selected", { type: "geojson", data: selectedGeoJson(selectedRef.current) as never });
         map!.addSource("dots", { type: "geojson", data: EMPTY as never });
-        map!.addLayer(GRID_FILL_LAYER);
+        map!.addLayer({ ...GRID_FILL_LAYER, paint: { ...GRID_FILL_LAYER.paint, "fill-opacity": gridFillOpacity(showDotsRef.current) } });
         map!.addLayer(GRID_LINE_LAYER);
         map!.addLayer(SELECTED_LAYER);
         map!.addLayer({ ...DOT_LAYER, layout: { ...DOT_LAYER.layout, visibility: showDotsRef.current ? "visible" : "none" } });
@@ -337,6 +371,7 @@ export function GlobeMap({
       mapRef.current = null;
       lastCellsQueryRef.current = ""; // a new map starts empty, so it must fetch even an identical view
       lastDotsQueryRef.current = "";
+      dotsReadyRef.current = false;
     };
   }, [styleUrl, schedule]);
 
