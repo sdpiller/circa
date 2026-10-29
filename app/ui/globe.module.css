@@ -391,6 +391,7 @@
   right: 52px;
   width: 360px;
   max-height: calc(100% - 226px); /* clears the year range panel below */
+  z-index: 1; /* a hover card hanging below the box draws over the year range panel */
   display: flex;
   flex-direction: column;
 }
@@ -547,9 +548,9 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* People and places: a wrapping list of names. The list positions the hover card. */
+/* People and places: a wrapping list of names. Neither the list nor the scroller is positioned, so
+   a hover card is placed against the box itself and the scroller does not clip it. */
 .names {
-  position: relative;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
@@ -579,9 +580,7 @@
 }
 
 .hoverCard {
-  position: absolute;
-  left: 0;
-  right: 0;
+  position: absolute; /* left, width, and top or bottom come from cardPlacement */
   z-index: 1;
   display: flex;
   gap: 10px;

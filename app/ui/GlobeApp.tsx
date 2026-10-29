@@ -85,6 +85,16 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
     setSelection(null);
   }, []);
 
+  // "Nothing documented here" was decided for the range of the click; a new range has not been
+  // checked there, so the line goes rather than claim something untested.
+  const changeRange = useCallback((r: YearRange) => {
+    setRange(r);
+    setSelection((s) => (s?.kind === "empty" ? null : s));
+  }, []);
+
+  // Where the area box starts, measured, so the map can keep the selected cell out from under it.
+  const occluderLeft = useCallback(() => selectionRef.current?.firstElementChild?.getBoundingClientRect().left ?? null, []);
+
   return (
     <main className={styles.app}>
       <GlobeMap styleUrl={styleUrl} range={range}
@@ -92,6 +102,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
         selectedCell={selection?.kind === "cell" ? selection.cell : null}
         onSelect={setSelection}
         onStatus={setStatus}
+        occluderLeft={occluderLeft}
       />
 
       <div ref={selectionRef} className={styles.slot}>
@@ -106,7 +117,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
       </aside>
 
       <section className={`${styles.panel} ${styles.rangePanel}`} aria-label="Year range">
-        <RangeControl range={range} onChange={setRange} />
+        <RangeControl range={range} onChange={changeRange} />
       </section>
 
       <footer className={styles.footer}>

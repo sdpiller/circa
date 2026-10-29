@@ -16,6 +16,7 @@ import type {
   Map as MapLibreMap,
   SymbolLayerSpecification,
 } from "maplibre-gl";
+import { panToClear } from "../../lib/box.ts";
 import { GRID_MIN_ZOOM, cellPolygon, resolutionForZoom, type Res } from "../../lib/cells.ts";
 import type { CellsResult } from "../../lib/db/cells.ts";
 import type { EventsResult } from "../../lib/db/events.ts";
@@ -194,6 +195,9 @@ async function stackMembers(map: MapLibreMap, clusterId: number) {
   });
 }
 
+/** How far left of the area box a selected cell's right edge must sit. */
+const SELECTED_CLEARANCE_PX = 24;
+
 const zeroCounts = () => Object.fromEntries(DOT_GROUPS.map((g) => [g.key, 0])) as Record<GroupKey, number>;
 
 export function GlobeMap({
@@ -203,6 +207,7 @@ export function GlobeMap({
   selectedCell,
   onSelect,
   onStatus,
+  occluderLeft,
 }: {
   styleUrl: string;
   range: YearRange;
@@ -210,6 +215,8 @@ export function GlobeMap({
   selectedCell: string | null;
   onSelect: (s: Selection) => void;
   onStatus: (s: MapStatus) => void;
+  /** Viewport x where a panel over the map's right side begins (the area box), or null when none is open. */
+  occluderLeft?: () => number | null;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -219,6 +226,7 @@ export function GlobeMap({
   const selectedRef = useRef(selectedCell);
   const onSelectRef = useRef(onSelect);
   const onStatusRef = useRef(onStatus);
+  const occluderLeftRef = useRef(occluderLeft);
   // One controller and one last-query per endpoint, so a slow dots answer never cancels the grid.
   const cellsAbortRef = useRef<AbortController | null>(null);
   const dotsAbortRef = useRef<AbortController | null>(null);
@@ -428,7 +436,8 @@ export function GlobeMap({
   useEffect(() => {
     onStatusRef.current = onStatus;
     onSelectRef.current = onSelect;
-  }, [onStatus, onSelect]);
+    occluderLeftRef.current = occluderLeft;
+  }, [onStatus, onSelect, occluderLeft]);
 
   useEffect(() => {
     rangeRef.current = range;
@@ -469,6 +478,18 @@ export function GlobeMap({
     const map = mapRef.current;
     if (map && readyRef.current) {
       (map.getSource("selected") as GeoJSONSource | undefined)?.setData(selectedGeoJson(selectedCell) as never);
+      // A newly selected cell under the box: pan left just enough that the whole cell (its easternmost
+      // corner on screen) clears the box. The centre alone would leave half the outline hidden.
+      // The box is already in the DOM here (same commit), so it is measured, not assumed.
+      const left = selectedCell ? occluderLeftRef.current?.() : null;
+      if (selectedCell && left != null && container.current) {
+        const x = Math.max(...cellPolygon(selectedCell).map((c) => map.project(c).x));
+        const dx = panToClear(x, left - container.current.getBoundingClientRect().left, SELECTED_CLEARANCE_PX);
+        if (dx > 0) {
+          const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          map.panBy([dx, 0], { duration: still ? 0 : 300 });
+        }
+      }
     }
   }, [selectedCell]);
 

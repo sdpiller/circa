@@ -3,11 +3,12 @@
  * A person or place name in the area box, and the small card it opens: picture, what the date means,
  * a description, and the first two sentences of the Wikipedia article. Pointer hover opens it after
  * HOVER_INTENT_MS, so sweeping across the list fetches nothing; keyboard focus opens it at once.
- * The card sits inside the name's list item, right below the name, so the pointer can move onto it
- * and Tab reaches its link before the next name.
+ * The card sits inside the name's list item, touching the name, so the pointer can move onto it and
+ * Tab reaches its link before the next name. It is positioned against the area box, not the scrolling
+ * list, so the list's scroll area never clips it.
  */
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { firstSentences, wikidataUrl } from "../../lib/box.ts";
+import { cardPlacement, firstSentences, wikidataUrl } from "../../lib/box.ts";
 import type { AreaItem } from "../../lib/db/area.ts";
 import { dotMeta, what } from "../../lib/dots.ts";
 import { formatRange } from "../../lib/time/index.ts";
@@ -32,23 +33,33 @@ export function NameWithCard({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [place, setPlace] = useState<CSSProperties>({ top: 0 });
+  const onCloseRef = useRef(onClose);
 
   useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
-  // The card spans the list's width, touching this name: below it, or above it when the name sits in
-  // the lower half of the scrolling box. The list is the card's positioning parent.
   const show = () => {
-    const b = buttonRef.current;
-    const list = b?.offsetParent as HTMLElement | null | undefined;
-    const scroller = list?.parentElement;
-    if (b && list && scroller) {
-      const r = b.getBoundingClientRect();
-      const s = scroller.getBoundingClientRect();
-      const below = r.top - s.top < s.height / 2;
-      setPlace(below ? { top: b.offsetTop + b.offsetHeight } : { bottom: list.offsetHeight - b.offsetTop });
-    }
+    const p = placeCard(buttonRef.current);
+    if (p) setPlace(p);
     onOpen();
   };
+
+  // The card does not scroll with the list: follow the name while the list scrolls (a keyboard
+  // focus scrolls it into view after the card opened), and close once the name leaves the view.
+  useEffect(() => {
+    if (!open) return;
+    const scroller = buttonRef.current?.closest("[data-scroller]");
+    if (!scroller) return;
+    const onScroll = () => {
+      const p = placeCard(buttonRef.current);
+      if (p) setPlace(p);
+      else onCloseRef.current();
+    };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => scroller.removeEventListener("scroll", onScroll);
+  }, [open]);
 
   const cardId = `card-${item.qid}`;
   return (
@@ -85,6 +96,25 @@ export function NameWithCard({
       {open && <HoverCard id={cardId} item={item} place={place} />}
     </li>
   );
+}
+
+/**
+ * The card's place in the area box's padding box (the button's offsetParent; the list and scroller
+ * are not positioned), or null when the name is scrolled out of the list's view.
+ */
+function placeCard(b: HTMLElement | null): CSSProperties | null {
+  const box = b?.offsetParent as HTMLElement | null | undefined;
+  const list = b?.closest("ul");
+  const scroller = b?.closest("[data-scroller]");
+  if (!b || !box || !list || !scroller) return null;
+  const r = b.getBoundingClientRect();
+  const s = scroller.getBoundingClientRect();
+  if (r.bottom <= s.top || r.top >= s.bottom) return null;
+  const outer = box.getBoundingClientRect();
+  const top = outer.top + box.clientTop;
+  const left = outer.left + box.clientLeft;
+  const inner = { top, bottom: top + box.clientHeight, left, width: box.clientWidth };
+  return cardPlacement(r, inner, list.getBoundingClientRect(), window.innerHeight);
 }
 
 function HoverCard({ id, item, place }: { id: string; item: AreaItem; place: CSSProperties }) {

@@ -118,7 +118,7 @@ export function AreaBox({ cell, focus, range, onClose }: { cell: string; focus?:
         </button>
       </header>
 
-      <div ref={bodyRef} className={styles.boxBody} aria-busy={pending}>
+      <div ref={bodyRef} className={styles.boxBody} aria-busy={pending} data-scroller>
         {!shown ? (
           <p className={styles.muted} role="status">
             Loading

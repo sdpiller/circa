@@ -71,3 +71,30 @@ export function firstSentences(text: string, n = 2): string {
   }
   return t;
 }
+
+/**
+ * How far to pan the map left (positive px) so a point at map x `x` sits `margin` px left of a
+ * panel starting at map x `panelLeft`. Zero when it is already clear, or when the panel leaves no
+ * room for it at all.
+ */
+export function panToClear(x: number, panelLeft: number, margin: number): number {
+  const limit = panelLeft - margin;
+  return limit > 0 && x > limit ? x - limit : 0;
+}
+
+export type Rect = { top: number; bottom: number; left: number; width: number };
+/** Room a hover card needs below its name before it opens above instead (about its usual height). */
+export const CARD_ROOM_PX = 240;
+
+/**
+ * Where a hover card goes, in the area box's coordinates (its padding box): across the list's width,
+ * touching the name, below it when the viewport has room there (or more room than above), else above.
+ * The box does not clip the card, so the viewport is the limit that matters.
+ */
+export function cardPlacement(name: Rect, box: Rect, list: Rect, viewportHeight: number): { left: number; width: number; top?: number; bottom?: number } {
+  const across = { left: list.left - box.left, width: list.width };
+  const roomBelow = viewportHeight - name.bottom;
+  return roomBelow >= CARD_ROOM_PX || roomBelow >= name.top
+    ? { ...across, top: name.bottom - box.top }
+    : { ...across, bottom: box.bottom - name.top };
+}
