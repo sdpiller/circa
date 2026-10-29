@@ -16,38 +16,58 @@ export type Failure = {
 const MIN_WORDS = 60;
 const MAX_WORDS = 250;
 
-const NUMBER_WORDS: Record<string, string> = {
-  one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
-  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17",
-  eighteen: "18", nineteen: "19", twenty: "20", dozen: "12",
+const UNITS: Record<string, number> = {
+  one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+  eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17,
+  eighteen: 18, nineteen: 19, twenty: 20, dozen: 12,
 };
-const BIG_WORDS = ["hundred", "thousand", "million"];
+const TENS: Record<string, number> = { thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+const COMPOUND_TENS: Record<string, number> = { twenty: 20, ...TENS };
+const ORDINAL_UNITS: Record<string, number> = {
+  first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10,
+  eleventh: 11, twelfth: 12, thirteenth: 13, fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17,
+  eighteenth: 18, nineteenth: 19, twentieth: 20,
+  thirtieth: 30, fortieth: 40, fiftieth: 50, sixtieth: 60, seventieth: 70, eightieth: 80, ninetieth: 90,
+};
+/** Must appear as these words in the cited text (a plural may stand for its singular, except dozens and scores). */
+const BIG_WORDS = /^(?:hundreds?|thousands?|millions?|billions?)$/;
+const EXACT_WORDS = new Set(["dozens", "scores"]);
 
-/** Whitespace is one space, curly apostrophes are straight, thousands commas and eras are normalised. */
+/**
+ * Whitespace is one space, text is NFC, curly apostrophes are straight, thousands commas are removed,
+ * and eras are canonical: BCE, CE, or AD (written any case, dotted or not). AD n becomes n CE.
+ */
 function normalise(s: string): string {
   return s
+    .normalize("NFC")
     .replace(/\s+/g, " ")
     .replace(/’/g, "'")
     .replace(/(?<=\d),(?=\d{3}(?!\d))/g, "")
-    .replace(/\bBC\b/g, "BCE")
-    .replace(/\bAD (\d+)/g, "$1 CE")
-    .replace(/(\d+) AD\b/g, "$1 CE");
+    .replace(/(?<![\p{L}\p{N}.])(b\.c\.e\.|b\.c\.|c\.e\.|a\.d\.|bce|bc|ce|ad)(?![\p{L}\p{N}])/giu, (m) => {
+      const e = m.replace(/\./g, "").toUpperCase();
+      return e === "BC" ? "BCE" : e;
+    })
+    .replace(/\bAD (\d+(?:\.\d+)?)/g, "$1 CE")
+    .replace(/\bAD\b/g, "CE");
 }
 
-type SourceNumbers = { plain: Set<string>; withEra: Set<string> };
-
 const NUM = String.raw`\d+(?:\.\d+)?`;
+/** A number, its ordinal or decade suffix, and an optional "century" or "millennium" after it. */
+const NUMBER_PART = String.raw`(${NUM})(?:st|nd|rd|th|s)?(?: (?:centur(?:y|ies)|millenni(?:um|a)))?`;
+/** "n", "n to m", "n-m" or "n<en dash>m", then an optional era that binds to every number in the run. */
+const NUMBER_RUN = new RegExp(`${NUMBER_PART}(?: ?(?:to|-|\u2013) ?${NUMBER_PART})?(?: (BCE|CE)\\b)?`, "g");
 
-function sourceNumbers(text: string): SourceNumbers {
-  const plain = new Set<string>();
-  const withEra = new Set<string>();
-  for (const m of text.matchAll(new RegExp(NUM, "g"))) plain.add(m[0]);
-  // "430 BCE", "430 to 426 BCE": both numbers of a range carry the era that closes it.
-  for (const m of text.matchAll(new RegExp(`(${NUM})(?: to (${NUM}))? (BCE|CE)\\b`, "g"))) {
-    withEra.add(`${m[1]} ${m[3]}`);
-    if (m[2]) withEra.add(`${m[2]} ${m[3]}`);
+type Found = { n: string; era: string | null; text: string };
+
+/** One pass, used on the story and the source alike, so both bind eras the same way. */
+function findNumbers(text: string): Found[] {
+  const out: Found[] = [];
+  for (const m of text.matchAll(NUMBER_RUN)) {
+    const era = m[3] ?? null;
+    out.push({ n: m[1], era, text: m[0] });
+    if (m[2]) out.push({ n: m[2], era, text: m[0] });
   }
-  return { plain, withEra };
+  return out;
 }
 
 function escapeRe(s: string): string {
@@ -60,20 +80,37 @@ function hasWord(text: string, word: string): boolean {
 
 function checkNumbers(sentence: string, source: string): string[] {
   const bad: string[] = [];
-  const { plain, withEra } = sourceNumbers(source);
-  for (const m of sentence.matchAll(new RegExp(`(${NUM})(?: (BCE|CE)\\b)?`, "g"))) {
-    const ok = m[2] ? withEra.has(`${m[1]} ${m[2]}`) : plain.has(m[1]);
-    if (!ok) bad.push(m[0]);
+  const plain = new Set<string>();
+  const withEra = new Set<string>();
+  for (const f of findNumbers(source)) {
+    plain.add(f.n);
+    if (f.era) withEra.add(`${f.n} ${f.era}`);
   }
-  for (const m of sentence.matchAll(/\b[A-Za-z]+\b/g)) {
-    const w = m[0].toLowerCase();
-    const digits = NUMBER_WORDS[w];
-    if (digits !== undefined) {
-      if (!plain.has(digits) && !hasWord(source, w)) bad.push(m[0]);
+  for (const f of findNumbers(sentence)) {
+    const ok = f.era ? withEra.has(`${f.n} ${f.era}`) : plain.has(f.n);
+    if (!ok) bad.push(f.era ? `${f.n} ${f.era}` : f.n);
+  }
+
+  // Spelled-out numbers are read as digits. A compound ("twenty-five") is one number, never its parts.
+  const spelled = (value: number, word: string, alt: string[]) => plain.has(String(value)) || [word, ...alt].some((w) => hasWord(source, w));
+  for (const m of sentence.matchAll(/[A-Za-z]+(?:-[A-Za-z]+)*/g)) {
+    const token = m[0].toLowerCase();
+    const parts = token.split("-");
+    if (parts.length === 2 && parts[0] in COMPOUND_TENS && (parts[1] in UNITS || parts[1] in ORDINAL_UNITS) && (UNITS[parts[1]] ?? ORDINAL_UNITS[parts[1]]) < 10) {
+      const value = COMPOUND_TENS[parts[0]] + (UNITS[parts[1]] ?? ORDINAL_UNITS[parts[1]]);
+      if (!spelled(value, token, [`${parts[0]} ${parts[1]}`])) bad.push(m[0]);
       continue;
     }
-    const big = BIG_WORDS.find((b) => w === b || w === `${b}s`);
-    if (big && !new RegExp(`\\b${big}s?\\b`, "i").test(source)) bad.push(m[0]);
+    for (const w of parts) {
+      const value = UNITS[w] ?? TENS[w] ?? ORDINAL_UNITS[w];
+      if (value !== undefined) {
+        if (!spelled(value, w, [])) bad.push(w);
+      } else if (BIG_WORDS.test(w)) {
+        if (!new RegExp(`\\b${w.replace(/s$/, "")}s?\\b`, "i").test(source)) bad.push(w);
+      } else if (EXACT_WORDS.has(w)) {
+        if (!hasWord(source, w)) bad.push(w);
+      }
+    }
   }
   return bad;
 }

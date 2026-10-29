@@ -287,4 +287,88 @@ describe("checkStory", () => {
       expect(codes(withSentence("Few events are documented here: 13 events.", ["C"]))).toEqual(["number"]);
     });
   });
+
+  describe("era binding", () => {
+    const withExtra = (extra: string) => inputWithE1Extra(extra);
+    it("fails 'the 5th century BCE' against '5th century AD'", () => {
+      const input = withExtra("It was rebuilt in the 5th century AD.");
+      expect(codes(withSentence("It was rebuilt in the 5th century BCE.", ["E1"], input))).toEqual(["number"]);
+      expect(withSentence("It was rebuilt in the 5th century CE.", ["E1"], input)).toEqual([]);
+    });
+    it("fails 'the 430s BCE' against a CE-only source", () => {
+      const input = withExtra("It fell in the 430s CE.");
+      expect(codes(withSentence("It fell in the 430s BCE.", ["E1"], input))).toEqual(["number"]);
+      expect(withSentence("It fell in the 430s CE.", ["E1"], input)).toEqual([]);
+    });
+    it("reads eras case-insensitively and dotted", () => {
+      const input = withExtra("It fell in AD 430.");
+      expect(codes(withSentence("It fell in 430 bce.", ["E1"], input))).toEqual(["number"]);
+      expect(codes(withSentence("It fell in 430 B.C.E.", ["E1"], input))).toEqual(["number"]);
+      expect(withSentence("It fell in 430 ce.", ["E1"], input)).toEqual([]);
+      expect(withSentence("It fell in 430 a.d.", ["E1"], input)).toEqual([]);
+      const bc = withExtra("It fell in 430 b.c.");
+      expect(withSentence("It fell in 430 BCE.", ["E1"], bc)).toEqual([]);
+    });
+    it("does not read a lone 'c.' (circa) as an era", () => {
+      const input = withExtra("It fell in c. 430 BCE.");
+      expect(withSentence("It fell in 430 BCE.", ["E1"], input)).toEqual([]);
+      expect(codes(withSentence("It fell in 430 CE.", ["E1"], input))).toEqual(["number"]);
+    });
+    it("carries a range's era to both story numbers", () => {
+      const input = withExtra("It fell in AD 430.");
+      expect(codes(withSentence("It fell from 430 to 428 BCE.", ["E1"], input)).sort()).toEqual(["number", "number"]);
+    });
+    it("accepts an en dash range in the source for both numbers", () => {
+      const input = withExtra("The war ran 431\u2013404 BC.");
+      expect(withSentence("The war began in 431 BCE.", ["E1"], input)).toEqual([]);
+      expect(withSentence("The war ended in 404 BCE.", ["E1"], input)).toEqual([]);
+      expect(codes(withSentence("The war began in 431 CE.", ["E1"], input))).toEqual(["number"]);
+      const hyphen = withExtra("The war ran 431-404 BC.");
+      expect(withSentence("The war began in 431 BCE.", ["E1"], hyphen)).toEqual([]);
+    });
+  });
+
+  describe("more spelled-out numbers", () => {
+    it("reads thirty to ninety as digits", () => {
+      expect(codes(withSentence("About forty men came.", ["E1"]))).toEqual(["number"]);
+      const input = inputWithE1Extra("About 40 men came.");
+      expect(withSentence("About forty men came.", ["E1"], input)).toEqual([]);
+    });
+    it("fails 'forty thousand' against 'Thousands'", () => {
+      expect(codes(withSentence("Some forty thousand men took part.", ["E2"]))).toEqual(["number"]);
+    });
+    it("treats a compound as one number", () => {
+      const stray = inputWithE1Extra("Twenty ships sailed in the 5th year.");
+      expect(codes(withSentence("Some twenty-five ships sailed.", ["E1"], stray))).toEqual(["number"]);
+      expect(withSentence("Some twenty-five ships sailed.", ["E1"], inputWithE1Extra("25 ships sailed."))).toEqual([]);
+      expect(withSentence("Some twenty-five ships sailed.", ["E1"], inputWithE1Extra("Some twenty-five ships sailed."))).toEqual([]);
+      expect(withSentence("Some twenty-five ships sailed.", ["E1"], inputWithE1Extra("Twenty five ships sailed."))).toEqual([]);
+    });
+    it("reads ordinal words and accepts the word, the ordinal digits or the bare number", () => {
+      expect(codes(withSentence("The fifth siege failed.", ["E1"]))).toEqual(["number"]);
+      expect(withSentence("The fifth siege failed.", ["E1"], inputWithE1Extra("The fifth siege failed."))).toEqual([]);
+      expect(withSentence("The fifth siege failed.", ["E1"], inputWithE1Extra("The 5th siege failed."))).toEqual([]);
+      expect(withSentence("The fifth siege failed.", ["E1"], inputWithE1Extra("5 sieges failed."))).toEqual([]);
+      expect(codes(withSentence("The twenty-first siege failed.", ["E1"]))).toEqual(["number"]);
+    });
+    it("requires dozens, scores and billions as words, case-insensitively", () => {
+      expect(codes(withSentence("Many dozens fled.", ["E1"]))).toEqual(["number"]);
+      expect(codes(withSentence("Many scores fled.", ["E1"]))).toEqual(["number"]);
+      expect(codes(withSentence("Many billions fled.", ["E1"]))).toEqual(["number"]);
+      expect(withSentence("Many DOZENS fled.", ["E1"], inputWithE1Extra("Dozens fled."))).toEqual([]);
+    });
+    it("matches number words case-insensitively", () => {
+      expect(codes(withSentence("THREE armies met.", ["E2"])).sort()).toEqual(["name", "number"]);
+    });
+  });
+
+  describe("unicode", () => {
+    it("matches a composed name against decomposed source text", () => {
+      const nfd = `Herna${String.fromCharCode(0x301)}n met envoys.`;
+      const input = inputWithE1Extra(nfd);
+      expect(withSentence("Hernán met envoys.", ["E1"], input)).toEqual([]);
+      const input2 = inputWithE1Extra("Hernán met envoys.");
+      expect(withSentence(nfd, ["E1"], input2)).toEqual([]);
+    });
+  });
 });
