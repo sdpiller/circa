@@ -22,8 +22,8 @@ export function groupOf(d: Pick<Dot, "kind" | "category">): GroupKey {
   return d.kind === "discovery" ? "society" : "context";
 }
 
-/** What the dot's date means, for the tooltip. */
-function what(d: Dot): string {
+/** What an item's date means, for the dot tooltip and the area box's hover card. */
+export function what(d: Pick<Dot, "kind" | "category">): string {
   switch (d.kind) {
     case "event":
       return d.category;

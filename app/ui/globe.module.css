@@ -4,7 +4,8 @@
   overflow: hidden;
 }
 
-.map {
+/* Two classes, so MapLibre's own `.maplibregl-map { position: relative }` never wins on stylesheet order. */
+.app > .map {
   position: absolute;
   inset: 0;
 }
@@ -380,11 +381,269 @@
   margin-top: 2px;
 }
 
+/* The area box, top right: below the zoom buttons' column, above the year range, off the map's centre. */
+.slot {
+  display: contents;
+}
+
+.box {
+  top: 16px;
+  right: 52px;
+  width: 360px;
+  max-height: calc(100% - 226px); /* clears the year range panel below */
+  display: flex;
+  flex-direction: column;
+}
+
+.nothing {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 10px 12px 16px;
+}
+
+.nothing p {
+  flex: 1;
+  padding-top: 3px;
+}
+
+.boxHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 10px 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.boxTitle {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  padding-top: 3px;
+}
+
+.close {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  font: 20px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text-secondary);
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.boxBody {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 16px 12px;
+}
+
+.boxSection {
+  margin: 12px 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.events {
+  list-style: none;
+  display: grid;
+  gap: 2px;
+}
+
+.eventRow {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 6px 6px 4px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.eventRow:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.eventRow .swatch {
+  margin-top: 4px;
+}
+
+.swatchApprox {
+  border: 1.5px solid;
+  background: transparent;
+}
+
+.eventYears,
+.eventApprox {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.eventName {
+  display: block;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.eventDesc {
+  display: block;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* The item a dot click asked for. */
+.focused > button {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 3px 0 0 var(--text-primary);
+}
+
+.summary {
+  display: grid;
+  gap: 6px;
+  margin: 2px 6px 8px 24px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.summary a {
+  justify-self: start;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.more {
+  margin-top: 6px;
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.more:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* People and places: a wrapping list of names. The list positions the hover card. */
+.names {
+  position: relative;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.nameButton {
+  padding: 2px 8px;
+  font: inherit;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: default;
+}
+
+.nameButton:hover,
+.nameButton[aria-expanded="true"] {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.focused > .nameButton {
+  box-shadow: none;
+  color: var(--surface);
+  background: var(--text-primary);
+}
+
+.hoverCard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #1a1a19;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  line-height: 1.4;
+}
+
+.hoverCard > div {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 0;
+}
+
+.hoverCard a {
+  justify-self: start;
+}
+
+.cardImage {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.cardName {
+  font-weight: 600;
+}
+
+.cardDesc {
+  color: var(--text-secondary);
+}
+
+.cardExtract {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.boxFooter {
+  padding: 8px 16px 10px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .webBackdrop,
   .webLine,
   .webLeg {
     animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .box {
+    width: 300px;
   }
 }
 
