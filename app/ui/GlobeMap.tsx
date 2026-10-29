@@ -1,11 +1,12 @@
 "use client";
 /**
- * The MapLibre globe, its H3 grid, and its optional dots. Refetches /api/cells (and /api/events when
- * dots are on) when the camera stops moving or the year range changes, debounced, and aborts a stale
- * request so an old answer never overwrites a new one. Below GRID_MIN_ZOOM the globe is plain.
+ * The MapLibre globe, its H3 grid, and its optional dots (overlapping dots merge into stacks, which
+ * open a web of their members on hover). Refetches /api/cells (and /api/events when dots are on)
+ * when the camera stops moving or the year range changes, debounced, and aborts a stale request so
+ * an old answer never overwrites a new one. Below GRID_MIN_ZOOM the globe is plain.
  */
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { latLngToCell } from "h3-js";
 import type {
   CircleLayerSpecification,
@@ -13,12 +14,15 @@ import type {
   GeoJSONSource,
   LineLayerSpecification,
   Map as MapLibreMap,
+  SymbolLayerSpecification,
 } from "maplibre-gl";
 import { GRID_MIN_ZOOM, cellPolygon, resolutionForZoom } from "../../lib/cells.ts";
 import type { CellsResult } from "../../lib/db/cells.ts";
 import type { EventsResult } from "../../lib/db/events.ts";
-import { DOT_GROUPS, toFeatureCollection, type DotProperties, type GroupKey } from "../../lib/dots.ts";
+import { DOT_GROUPS, dotMeta, toFeatureCollection, type DotProperties, type GroupKey } from "../../lib/dots.ts";
 import type { YearRange } from "../../lib/time/index.ts";
+import { pickLegs } from "../../lib/web.ts";
+import { DotWeb, WEB_HOLD_RADIUS_PX } from "./DotWeb.tsx";
 import styles from "./globe.module.css";
 
 /** Only results are reported, so the legend keeps the last counts while the next request is in flight. */
@@ -34,6 +38,12 @@ const FETCH_DEBOUNCE_MS = 200;
 /** Below this zoom the globe fills the view; matches the API's globe band, so ask for the whole world. */
 const WHOLE_WORLD_BELOW_ZOOM = 3;
 const GRID_COLOR = "#e6e6e6";
+/** MapLibre's default maximum, set explicitly because stacks must stay merged all the way to it. */
+const MAP_MAX_ZOOM = 22;
+/** Dots closer than this many pixels merge into a stack: about one dot diameter (13 px at zoom 8). */
+const STACK_RADIUS_PX = 12;
+/** How long the pointer must rest on a stack before its web opens. */
+const WEB_HOVER_INTENT_MS = 120;
 
 type Fc = { type: "FeatureCollection"; features: object[] };
 const EMPTY: Fc = { type: "FeatureCollection", features: [] };
@@ -48,6 +58,7 @@ type Expr = Extract<NonNullable<CircleLayerSpecification["paint"]>["circle-opaci
 // Built from the legend's list, so TypeScript cannot see it as a fixed-length expression tuple.
 const groupColor = ["match", ["get", "group"], ...DOT_GROUPS.flatMap((g) => [g.key, g.color]), "#ffffff"] as unknown as Expr;
 const isContext: Expr = ["==", ["get", "group"], "context"];
+const isStack: Expr = ["has", "point_count"]; // a cluster feature, not a single dot
 
 // Fill shading by events in the cell. With dots hidden the fill can be strong. With dots shown it tops
 // out at 0.06: the dataviz validator needs all four dot colours at 3:1 against the composited fill over
@@ -93,6 +104,7 @@ const DOT_LAYER: CircleLayerSpecification = {
   type: "circle",
   source: "dots",
   minzoom: GRID_MIN_ZOOM,
+  filter: ["!", isStack] as never,
   layout: { visibility: "none", "circle-sort-key": ["get", "sortKey"] },
   paint: {
     "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, ["case", isContext, 3, 4], 8, ["case", isContext, 4.5, 6.5]],
@@ -101,6 +113,53 @@ const DOT_LAYER: CircleLayerSpecification = {
     "circle-stroke-color": ["case", ["get", "approx"], groupColor, "#0c0c0c"],
     "circle-stroke-width": ["case", ["get", "approx"], 1.5, 1],
   },
+};
+
+// A stack is a near-white disc (the UI's primary text colour), a little larger than a dot, with its
+// member count in dark text. Near-white is no group's colour, so it never claims a mixed stack is one
+// kind. dataviz validator: contrast 15:1 on both basemaps, Delta E 24 or more from every dot colour
+// under normal vision and simulated colour blindness.
+const STACK_LAYER: CircleLayerSpecification = {
+  id: "stacks",
+  type: "circle",
+  source: "dots",
+  minzoom: GRID_MIN_ZOOM,
+  filter: isStack as never,
+  layout: { visibility: "none" },
+  paint: {
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, ["step", ["get", "point_count"], 6, 100, 7.5], 8, ["step", ["get", "point_count"], 9, 100, 11]],
+    "circle-color": "#f0efec",
+    "circle-opacity": 0.95,
+    "circle-stroke-color": "#0c0c0c",
+    "circle-stroke-width": 1,
+  },
+};
+const STACK_COUNT_LAYER: SymbolLayerSpecification = {
+  id: "stack-count",
+  type: "symbol",
+  source: "dots",
+  minzoom: GRID_MIN_ZOOM,
+  filter: isStack as never,
+  layout: {
+    visibility: "none",
+    "text-field": ["get", "point_count_abbreviated"],
+    "text-font": ["Noto Sans Bold"],
+    "text-size": ["interpolate", ["linear"], ["zoom"], 1, 8, 8, 10],
+    "text-allow-overlap": true,
+    "text-ignore-placement": true,
+  },
+  paint: { "text-color": "#0c0c0c" },
+};
+const DOT_LAYER_IDS = ["dots", "stacks", "stack-count"] as const;
+
+/** An open web: the stack it belongs to, where it is, and which members got legs. */
+type Web = {
+  clusterId: number;
+  center: { x: number; y: number };
+  lngLat: [number, number];
+  legs: DotProperties[];
+  more: number;
+  coords: Record<string, [number, number]>; // leg qid to [lon, lat], for the leg's own cell
 };
 
 function viewport(map: MapLibreMap) {
@@ -117,7 +176,7 @@ function tooltip(p: DotProperties): HTMLElement {
   const title = document.createElement("strong");
   title.textContent = p.label;
   const meta = document.createElement("div");
-  meta.textContent = [p.years, p.what, p.approx ? "approximate location" : null].filter(Boolean).join(" · ");
+  meta.textContent = dotMeta(p);
   el.append(title, meta);
   return el;
 }
@@ -156,6 +215,69 @@ export function GlobeMap({
   // What the legend shows: the latest answer from each endpoint.
   const resultRef = useRef({ cells: 0, counts: zeroCounts() });
   const dotsReadyRef = useRef(false); // true once the events answer for the current view and toggle is in
+  // The hovered stack's web. The ref mirrors the state for handlers registered once.
+  const [web, setWeb] = useState<Web | null>(null);
+  const webRef = useRef<Web | null>(null);
+  // Stack members load asynchronously; a newer hover or a close aborts the old request.
+  const webAbortRef = useRef<{ controller: AbortController; clusterId: number } | null>(null);
+
+  const closeWeb = useCallback(() => {
+    webAbortRef.current?.controller.abort();
+    webAbortRef.current = null;
+    if (webRef.current === null) return;
+    webRef.current = null;
+    setWeb(null);
+  }, []);
+
+  const openWeb = useCallback(async (map: MapLibreMap, clusterId: number, lngLat: [number, number]) => {
+    if (webRef.current?.clusterId === clusterId || webAbortRef.current?.clusterId === clusterId) return;
+    webAbortRef.current?.controller.abort();
+    const controller = new AbortController();
+    webAbortRef.current = { controller, clusterId };
+    try {
+      // Hover intent: a pointer crossing a stack on its way somewhere else does not open a web.
+      await new Promise((resolve) => setTimeout(resolve, WEB_HOVER_INTENT_MS));
+      const source = map.getSource("dots") as GeoJSONSource | undefined;
+      if (controller.signal.aborted || !source) return;
+      const leaves = await source.getClusterLeaves(clusterId, Infinity, 0);
+      if (controller.signal.aborted) return;
+      const coords: Web["coords"] = {};
+      const members: DotProperties[] = [];
+      for (const f of leaves) {
+        if (f.geometry.type !== "Point") continue;
+        const p = f.properties as DotProperties;
+        coords[p.qid] = f.geometry.coordinates as [number, number];
+        members.push(p);
+      }
+      const { legs, more } = pickLegs(members);
+      const { x, y } = map.project(lngLat);
+      webRef.current = { clusterId, center: { x, y }, lngLat, legs, more, coords };
+      setWeb(webRef.current);
+    } catch {
+      // The cluster vanished (new data or zoom) before its members arrived: leave the web closed.
+    } finally {
+      if (webAbortRef.current?.controller === controller) webAbortRef.current = null;
+    }
+  }, []);
+
+  /** A pointer inside the open web's hold circle belongs to the web, not to dots or stacks beneath it. */
+  const insideWeb = useCallback((point: { x: number; y: number }) => {
+    const w = webRef.current;
+    return w !== null && Math.hypot(point.x - w.center.x, point.y - w.center.y) <= WEB_HOLD_RADIUS_PX;
+  }, []);
+
+  /** Select the cell around a point at the current zoom's resolution, from a leg, "+N more", or a stack. */
+  const selectAt = useCallback(
+    (at: [number, number] | undefined, focus?: string) => {
+      const map = mapRef.current;
+      const res = map ? resolutionForZoom(map.getZoom()) : null;
+      if (!at || res === null) return;
+      closeWeb();
+      const cell = latLngToCell(at[1], at[0], res);
+      onSelectRef.current(focus ? { kind: "cell", cell, focus } : { kind: "cell", cell });
+    },
+    [closeWeb],
+  );
 
   const report = useCallback((zoomedOut: boolean) => {
     // With dots on, say "loading" until their answer arrives, so stale or zero counts never read as "nothing here".
@@ -207,6 +329,7 @@ export function GlobeMap({
         const data = (await res.json()) as EventsResult;
         if (controller.signal.aborted) return;
         const fc = toFeatureCollection(data.events);
+        closeWeb(); // new data makes new clusters, so an open web would describe a stack that is gone
         (map.getSource("dots") as GeoJSONSource | undefined)?.setData(fc);
         const counts = zeroCounts();
         for (const f of fc.features) counts[f.properties.group]++;
@@ -219,7 +342,7 @@ export function GlobeMap({
         onStatusRef.current({ state: "error", zoomedOut: false });
       }
     },
-    [report],
+    [report, closeWeb],
   );
 
   const load = useCallback(async () => {
@@ -279,9 +402,10 @@ export function GlobeMap({
     showDotsRef.current = showDots;
     const map = mapRef.current;
     if (map && readyRef.current) {
-      map.setLayoutProperty("dots", "visibility", showDots ? "visible" : "none");
+      for (const id of DOT_LAYER_IDS) map.setLayoutProperty(id, "visibility", showDots ? "visible" : "none");
       map.setPaintProperty("grid-fill", "fill-opacity", gridFillOpacity(showDots));
       if (!showDots) {
+        closeWeb();
         // Drop the old dots now, so they never flash on the next toggle-on.
         dotsAbortRef.current?.abort();
         lastDotsQueryRef.current = "";
@@ -292,7 +416,16 @@ export function GlobeMap({
       report(map.getZoom() < GRID_MIN_ZOOM); // "loading" right away when dots come on, not after the debounce
       schedule();
     }
-  }, [showDots, schedule, report]);
+  }, [showDots, schedule, report, closeWeb]);
+
+  useEffect(() => {
+    if (!web) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeWeb();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [web, closeWeb]);
 
   useEffect(() => {
     selectedRef.current = selectedCell;
@@ -310,7 +443,14 @@ export function GlobeMap({
       if (cancelled || !container.current) return;
       // MapLibre looks for its worker beside its own module, which the bundle moves. Point it at the file.
       maplibregl.setWorkerUrl(new URL("../../node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs", import.meta.url).href);
-      map = new maplibregl.Map({ container: container.current, style: styleUrl, center: [20, 30], zoom: 1.6, attributionControl: { compact: true } });
+      map = new maplibregl.Map({
+        container: container.current,
+        style: styleUrl,
+        center: [20, 30],
+        zoom: 1.6,
+        maxZoom: MAP_MAX_ZOOM,
+        attributionControl: { compact: true },
+      });
       mapRef.current = map;
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
       const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 10, className: styles.tooltip });
@@ -319,18 +459,39 @@ export function GlobeMap({
         map!.setProjection({ type: "globe" });
         map!.addSource("grid", { type: "geojson", data: EMPTY as never });
         map!.addSource("selected", { type: "geojson", data: selectedGeoJson(selectedRef.current) as never });
-        map!.addSource("dots", { type: "geojson", data: EMPTY as never });
+        // Clustered so overlapping dots become one stack. Clusters are computed per integer zoom up to
+        // clusterMaxZoom, so it sits at the map's maximum: points at identical coordinates (every birth
+        // in one city) never split into dots drawn on top of each other. MapLibre warns unless the
+        // source's maxzoom is above clusterMaxZoom, hence one more.
+        map!.addSource("dots", {
+          type: "geojson",
+          data: EMPTY as never,
+          cluster: true,
+          clusterRadius: STACK_RADIUS_PX,
+          clusterMaxZoom: MAP_MAX_ZOOM,
+          maxzoom: MAP_MAX_ZOOM + 1,
+        });
         map!.addLayer({ ...GRID_FILL_LAYER, paint: { ...GRID_FILL_LAYER.paint, "fill-opacity": gridFillOpacity(showDotsRef.current) } });
         map!.addLayer(GRID_LINE_LAYER);
         map!.addLayer(SELECTED_LAYER);
-        map!.addLayer({ ...DOT_LAYER, layout: { ...DOT_LAYER.layout, visibility: showDotsRef.current ? "visible" : "none" } });
+        const visibility = showDotsRef.current ? "visible" : "none";
+        map!.addLayer({ ...DOT_LAYER, layout: { ...DOT_LAYER.layout, visibility } });
+        map!.addLayer({ ...STACK_LAYER, layout: { ...STACK_LAYER.layout, visibility } });
+        map!.addLayer({ ...STACK_COUNT_LAYER, layout: { ...STACK_COUNT_LAYER.layout, visibility } });
         readyRef.current = true;
         schedule();
       });
       map.on("moveend", schedule);
+      map.on("movestart", closeWeb);
       map.on("mousemove", "dots", (e) => {
         const f = e.features?.[0];
         if (!f || f.geometry.type !== "Point") return;
+        if (insideWeb(e.point)) {
+          // A dot dimmed beneath the web's lines is not reachable until the web closes.
+          map!.getCanvas().style.cursor = "";
+          popup.remove();
+          return;
+        }
         map!.getCanvas().style.cursor = "pointer";
         popup.setLngLat(f.geometry.coordinates as [number, number]).setDOMContent(tooltip(f.properties as DotProperties)).addTo(map!);
       });
@@ -338,18 +499,44 @@ export function GlobeMap({
         map!.getCanvas().style.cursor = "";
         popup.remove();
       });
-      // A dot (Task 7 adds stacks to this slot) wins over a grid cell; empty ground is only clickable on the grid.
+      map.on("mousemove", "stacks", (e) => {
+        const f = e.features?.[0];
+        if (!f || f.geometry.type !== "Point") return;
+        map!.getCanvas().style.cursor = "pointer";
+        const clusterId = f.properties?.cluster_id;
+        // A neighbouring stack under the open web's lines must not steal it on the way to a leg.
+        if (typeof clusterId !== "number" || (webRef.current?.clusterId !== clusterId && insideWeb(e.point))) return;
+        void openWeb(map!, clusterId, f.geometry.coordinates as [number, number]);
+      });
+      map.on("mouseleave", "stacks", () => {
+        map!.getCanvas().style.cursor = "";
+        // Cancel a web still waiting on hover intent or its members; an open web stays open.
+        webAbortRef.current?.controller.abort();
+        webAbortRef.current = null;
+      });
+      // A dot, then a stack, wins over a grid cell; empty ground is only clickable on the grid.
       map.on("click", (e) => {
         const m = map!;
         const zoom = m.getZoom();
         const res = resolutionForZoom(zoom);
         if (res === null) return;
+        // Inside an open web only its centre is clickable (legs are buttons above the map); a click
+        // anywhere else in its dimmed circle just closes it.
+        if (insideWeb(e.point)) {
+          const own = m.queryRenderedFeatures(e.point, { layers: ["stacks"] })[0];
+          if (own && own.geometry.type === "Point" && own.properties?.cluster_id === webRef.current?.clusterId) {
+            selectAt(own.geometry.coordinates as [number, number]);
+          } else closeWeb();
+          return;
+        }
         if (showDotsRef.current) {
-          const dot = m.queryRenderedFeatures(e.point, { layers: ["dots"] })[0];
-          if (dot && dot.geometry.type === "Point") {
-            const [lon, lat] = dot.geometry.coordinates as [number, number];
-            const p = dot.properties as DotProperties;
-            onSelectRef.current({ kind: "cell", cell: latLngToCell(lat, lon, res), focus: p.qid });
+          // Topmost first: stacks draw above dots. A dot focuses its item; a stack's centre selects its
+          // cell with no item in focus.
+          const hit = m.queryRenderedFeatures(e.point, { layers: ["stacks", "dots"] })[0];
+          if (hit && hit.geometry.type === "Point") {
+            const at = hit.geometry.coordinates as [number, number];
+            if (hit.layer.id === "stacks") selectAt(at);
+            else onSelectRef.current({ kind: "cell", cell: latLngToCell(at[1], at[0], res), focus: (hit.properties as DotProperties).qid });
             return;
           }
         }
@@ -367,15 +554,31 @@ export function GlobeMap({
       clearTimeout(timerRef.current);
       cellsAbortRef.current?.abort();
       dotsAbortRef.current?.abort();
+      closeWeb();
       map?.remove();
       mapRef.current = null;
       lastCellsQueryRef.current = ""; // a new map starts empty, so it must fetch even an identical view
       lastDotsQueryRef.current = "";
       dotsReadyRef.current = false;
     };
-  }, [styleUrl, schedule]);
+  }, [styleUrl, schedule, closeWeb, openWeb, insideWeb, selectAt]);
 
-  return <div ref={container} className={styles.map} aria-label="Globe of historical events. Arrow keys pan, plus and minus zoom." />;
+  return (
+    <>
+      <div ref={container} className={styles.map} aria-label="Globe of historical events. Arrow keys pan, plus and minus zoom." />
+      {web && (
+        <DotWeb
+          key={web.clusterId}
+          center={web.center}
+          legs={web.legs}
+          more={web.more}
+          onPick={(qid) => selectAt(web.coords[qid], qid)}
+          onMore={() => selectAt(web.lngLat)}
+          onLeave={closeWeb}
+        />
+      )}
+    </>
+  );
 }
 
 function selectedGeoJson(cell: string | null): Fc {

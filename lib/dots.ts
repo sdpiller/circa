@@ -38,7 +38,21 @@ function what(d: Dot): string {
   }
 }
 
-export type DotProperties = { qid: string; label: string; group: GroupKey; approx: boolean; years: string; what: string; sortKey: number };
+export type DotProperties = {
+  qid: string;
+  label: string;
+  group: GroupKey;
+  approx: boolean;
+  years: string;
+  what: string;
+  sortKey: number;
+  sitelinks: number; // picks which members of a stack get a web leg
+};
+
+/** The tooltip's second line, shared by the map tooltip and the web's leg tooltip. */
+export function dotMeta(p: Pick<DotProperties, "years" | "what" | "approx">): string {
+  return [p.years, p.what, p.approx ? "approximate location" : null].filter(Boolean).join(" · ");
+}
 export type DotFeatureCollection = {
   type: "FeatureCollection";
   features: { type: "Feature"; geometry: { type: "Point"; coordinates: [number, number] }; properties: DotProperties }[];
@@ -63,6 +77,7 @@ export function toFeatureCollection(dots: Dot[]): DotFeatureCollection {
           years: formatRange(d.start_year, d.end_year),
           what: what(d),
           sortKey: (group === "context" ? 0 : EVENT_LAYER) + d.sitelinks,
+          sitelinks: d.sitelinks,
         },
       };
     }),

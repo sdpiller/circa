@@ -235,6 +235,159 @@
   display: none;
 }
 
+/* The web over a hovered stack. A zero-size box at the stack's centre; legs are placed by --x and --y. */
+.web {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.webGrowing .webLeg {
+  pointer-events: none;
+}
+
+/* Dims the map under the web, so dots beneath its lines do not compete with its legs. The hole at
+   the centre leaves the stack itself undimmed; the edge fades out at the hold radius. */
+.webBackdrop {
+  position: absolute;
+  left: calc(-1 * var(--hold));
+  top: calc(-1 * var(--hold));
+  width: calc(2 * var(--hold));
+  height: calc(2 * var(--hold));
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, transparent 12px, rgba(12, 12, 12, 0.75) 14px, rgba(12, 12, 12, 0.75) 78%, rgba(12, 12, 12, 0) 100%);
+  animation: webFade 250ms ease-out both;
+}
+
+@keyframes webFade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Lines and legs grow out from the centre. Near-white at 0.6 composites to #959492 on land (6.4:1). */
+.webLine {
+  position: absolute;
+  left: 0;
+  top: -0.5px;
+  width: var(--len);
+  height: 1px;
+  background: rgba(240, 239, 236, 0.6);
+  transform-origin: 0 50%;
+  transform: rotate(var(--a)) translateX(var(--r0));
+  animation: webLineGrow 250ms ease-out both;
+}
+
+@keyframes webLineGrow {
+  from {
+    transform: rotate(var(--a)) translateX(var(--r0)) scaleX(0);
+  }
+}
+
+/* A 24px hit target around a dot drawn like the map's: group colour, hollow when approximate. */
+.webLeg {
+  position: absolute;
+  left: -12px;
+  top: -12px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(var(--x), var(--y));
+  animation: webLegGrow 250ms ease-out both;
+}
+
+@keyframes webLegGrow {
+  from {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+}
+
+.webDot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--c);
+  border: 1px solid #0c0c0c;
+  opacity: 0.95;
+}
+
+.webDotContext {
+  width: 9px;
+  height: 9px;
+}
+
+.webDotApprox {
+  background: transparent;
+  border: 1.5px solid var(--c);
+  opacity: 1;
+}
+
+.webMore {
+  left: 0;
+  top: 0;
+  width: auto;
+  height: auto;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--text-primary);
+  font: 11px system-ui, -apple-system, "Segoe UI", sans-serif;
+  white-space: nowrap;
+  transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%));
+  animation-name: webMoreGrow;
+}
+
+@keyframes webMoreGrow {
+  from {
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+.webMore:hover {
+  border-color: var(--text-secondary);
+}
+
+/* Same look and content as the map's dot tooltip, above the hovered leg. */
+.webTip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max-content;
+  max-width: 280px;
+  transform: translate(calc(var(--x) - 50%), calc(var(--y) - 100% - 14px));
+  background: var(--panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: 13px system-ui, -apple-system, "Segoe UI", sans-serif;
+  pointer-events: none;
+}
+
+.webTip div {
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .webBackdrop,
+  .webLine,
+  .webLeg {
+    animation: none;
+  }
+}
+
 @media (max-width: 640px) {
   .legendPanel {
     width: calc(100% - 32px);

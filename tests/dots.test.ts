@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Dot } from "../lib/db/events.ts";
-import { DOT_GROUPS, groupOf, toFeatureCollection } from "../lib/dots.ts";
+import { DOT_GROUPS, dotMeta, groupOf, toFeatureCollection } from "../lib/dots.ts";
 
 const dot = (over: Partial<Dot>): Dot => ({
   qid: "Q31900",
@@ -41,8 +41,13 @@ describe("toFeatureCollection", () => {
     expect(fc.features[0]).toEqual({
       type: "Feature",
       geometry: { type: "Point", coordinates: [23.9, 38.1] },
-      properties: { qid: "Q31900", label: "Battle of Marathon", group: "conflict", approx: true, years: "490 BCE", what: "conflict", sortKey: 1_000_076 },
+      properties: { qid: "Q31900", label: "Battle of Marathon", group: "conflict", approx: true, years: "490 BCE", what: "conflict", sortKey: 1_000_076, sitelinks: 76 },
     });
+  });
+
+  it("writes the tooltip line from years, what, and location confidence", () => {
+    expect(dotMeta({ years: "490 BCE", what: "conflict", approx: true })).toBe("490 BCE · conflict · approximate location");
+    expect(dotMeta({ years: "1453", what: "founded", approx: false })).toBe("1453 · founded");
   });
 
   it("describes non-events by what the date means, and draws them beneath events", () => {
