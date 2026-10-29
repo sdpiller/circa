@@ -16,26 +16,33 @@ export type Failure = {
 const MIN_WORDS = 60;
 const MAX_WORDS = 250;
 
-const UNITS: Record<string, number> = {
-  one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
-  eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17,
-  eighteen: 18, nineteen: 19, twenty: 20, dozen: 12,
-};
-const TENS: Record<string, number> = { thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
-const COMPOUND_TENS: Record<string, number> = { twenty: 20, ...TENS };
-const ORDINAL_UNITS: Record<string, number> = {
-  first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10,
-  eleventh: 11, twelfth: 12, thirteenth: 13, fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17,
-  eighteenth: 18, nineteenth: 19, twentieth: 20,
-  thirtieth: 30, fortieth: 40, fiftieth: 50, sixtieth: 60, seventieth: 70, eightieth: 80, ninetieth: 90,
-};
-/** Must appear as these words in the cited text (a plural may stand for its singular, except dozens and scores). */
-const BIG_WORDS = /^(?:hundreds?|thousands?|millions?|billions?)$/;
-const EXACT_WORDS = new Set(["dozens", "scores"]);
+const WORD_VALUE = new Map<string, number>([
+  ["one", 1], ["two", 2], ["three", 3], ["four", 4], ["five", 5], ["six", 6], ["seven", 7], ["eight", 8], ["nine", 9],
+  ["ten", 10], ["eleven", 11], ["twelve", 12], ["thirteen", 13], ["fourteen", 14], ["fifteen", 15], ["sixteen", 16],
+  ["seventeen", 17], ["eighteen", 18], ["nineteen", 19], ["dozen", 12],
+  ["twenty", 20], ["thirty", 30], ["forty", 40], ["fifty", 50], ["sixty", 60], ["seventy", 70], ["eighty", 80], ["ninety", 90],
+  ["first", 1], ["second", 2], ["third", 3], ["fourth", 4], ["fifth", 5], ["sixth", 6], ["seventh", 7], ["eighth", 8],
+  ["ninth", 9], ["tenth", 10], ["eleventh", 11], ["twelfth", 12], ["thirteenth", 13], ["fourteenth", 14],
+  ["fifteenth", 15], ["sixteenth", 16], ["seventeenth", 17], ["eighteenth", 18], ["nineteenth", 19], ["twentieth", 20],
+  ["thirtieth", 30], ["fortieth", 40], ["fiftieth", 50], ["sixtieth", 60], ["seventieth", 70], ["eightieth", 80], ["ninetieth", 90],
+]);
+const COMPOUND_TENS = new Map<string, number>([
+  ["twenty", 20], ["thirty", 30], ["forty", 40], ["fifty", 50], ["sixty", 60], ["seventy", 70], ["eighty", 80], ["ninety", 90],
+]);
+const MAGNITUDE = new Map<string, number>([["hundred", 100], ["thousand", 1000], ["million", 1e6], ["billion", 1e9]]);
+/** These carry no value: the very same word must appear in the cited text. */
+const PLURAL_WORDS = new Set(["hundreds", "thousands", "millions", "billions", "dozens", "scores"]);
+const UNIT_WORDS = new Map<string, Unit>([
+  ["century", "century"], ["centuries", "century"], ["millennium", "millennium"], ["millennia", "millennium"],
+]);
+
+type Unit = "" | "century" | "millennium" | "decade";
+type Era = "" | "BCE" | "CE";
 
 /**
  * Whitespace is one space, text is NFC, curly apostrophes are straight, thousands commas are removed,
- * and eras are canonical: BCE, CE, or AD (written any case, dotted or not). AD n becomes n CE.
+ * and eras are canonical: BCE, CE, or AD (written any case, dotted or not, even glued to digits).
+ * AD n becomes n CE.
  */
 function normalise(s: string): string {
   return s
@@ -43,7 +50,7 @@ function normalise(s: string): string {
     .replace(/\s+/g, " ")
     .replace(/’/g, "'")
     .replace(/(?<=\d),(?=\d{3}(?!\d))/g, "")
-    .replace(/(?<![\p{L}\p{N}.])(b\.c\.e\.|b\.c\.|c\.e\.|a\.d\.|bce|bc|ce|ad)(?![\p{L}\p{N}])/giu, (m) => {
+    .replace(/(?<![\p{L}.])(b\.c\.e\.?|b\.c\.|bce|bc|c\.e\.?|ce|a\.d\.?|ad)(?![\p{L}\p{N}])/giu, (m) => {
       const e = m.replace(/\./g, "").toUpperCase();
       return e === "BC" ? "BCE" : e;
     })
@@ -51,21 +58,104 @@ function normalise(s: string): string {
     .replace(/\bAD\b/g, "CE");
 }
 
-const NUM = String.raw`\d+(?:\.\d+)?`;
-/** A number, its ordinal or decade suffix, and an optional "century" or "millennium" after it. */
-const NUMBER_PART = String.raw`(${NUM})(?:st|nd|rd|th|s)?(?: (?:centur(?:y|ies)|millenni(?:um|a)))?`;
-/** "n", "n to m", "n-m" or "n<en dash>m", then an optional era that binds to every number in the run. */
-const NUMBER_RUN = new RegExp(`${NUMBER_PART}(?: ?(?:to|-|\u2013) ?${NUMBER_PART})?(?: (BCE|CE)\\b)?`, "g");
+type Tok = { kind: "num" | "word" | "join" | "punct"; text: string; start: number; end: number; value: number; suffix: string };
 
-type Found = { n: string; era: string | null; text: string };
+function tokenise(text: string): Tok[] {
+  const re = /(\d+(?:\.\d+)?)(?:(st|nd|rd|th|s)(?![\p{L}]))?|([\p{L}\p{M}]+)|([-\u2013])|([^\s\p{L}\p{M}\d\-\u2013])/gu;
+  const out: Tok[] = [];
+  for (const m of text.matchAll(re)) {
+    const start = m.index ?? 0;
+    const end = start + m[0].length;
+    if (m[1] !== undefined) out.push({ kind: "num", text: m[0], start, end, value: Number(m[1]), suffix: m[2] ?? "" });
+    else if (m[3] !== undefined) out.push({ kind: "word", text: m[0], start, end, value: 0, suffix: "" });
+    else if (m[4] !== undefined) out.push({ kind: "join", text: m[0], start, end, value: 0, suffix: "" });
+    else out.push({ kind: "punct", text: m[0], start, end, value: 0, suffix: "" });
+  }
+  return out;
+}
 
-/** One pass, used on the story and the source alike, so both bind eras the same way. */
-function findNumbers(text: string): Found[] {
-  const out: Found[] = [];
-  for (const m of text.matchAll(NUMBER_RUN)) {
-    const era = m[3] ?? null;
-    out.push({ n: m[1], era, text: m[0] });
-    if (m[2]) out.push({ n: m[2], era, text: m[0] });
+type Phrase = { value: string; unit: Unit; era: Era; plural: boolean; text: string; first: number; last: number };
+
+/**
+ * Number phrases as units: value (digits, ordinals, number words, compounds, magnitudes), unit
+ * (century, millennium, decade) and era. Used on the story and the source alike.
+ */
+function findNumbers(text: string): Phrase[] {
+  const toks = tokenise(text);
+  const word = (i: number): string | undefined => (toks[i]?.kind === "word" ? toks[i].text.toLowerCase() : undefined);
+  const skipJoin = (i: number): number => (toks[i]?.kind === "join" ? i + 1 : i);
+  const out: Phrase[] = [];
+  let i = 0;
+  while (i < toks.length) {
+    const t = toks[i];
+    let value: number | undefined;
+    let unit: Unit = "";
+    let plural = false;
+    let j = i + 1;
+    if (t.kind === "num") {
+      value = t.value;
+      if (t.suffix === "s") unit = "decade";
+    } else if (t.kind === "word") {
+      const w = t.text.toLowerCase();
+      if (PLURAL_WORDS.has(w)) {
+        plural = true;
+        out.push({ value: w, unit: "", era: "", plural, text: t.text, first: i, last: i });
+        i = j;
+        continue;
+      }
+      const tens = COMPOUND_TENS.get(w);
+      const mag = MAGNITUDE.get(w);
+      if (tens !== undefined) {
+        value = tens;
+        const k = skipJoin(j);
+        const u = word(k);
+        const uv = u === undefined ? undefined : WORD_VALUE.get(u);
+        if (uv !== undefined && uv < 10) {
+          value += uv;
+          j = k + 1;
+        }
+      } else if (mag !== undefined) {
+        value = mag;
+      } else {
+        value = WORD_VALUE.get(w);
+      }
+    }
+    if (value === undefined) {
+      i++;
+      continue;
+    }
+    if (unit === "") {
+      for (;;) {
+        const k = skipJoin(j);
+        const m = MAGNITUDE.get(word(k) ?? "");
+        if (m === undefined) break;
+        value *= m;
+        j = k + 1;
+      }
+      const k = skipJoin(j);
+      const u = UNIT_WORDS.get(word(k) ?? "");
+      if (u) {
+        unit = u;
+        j = k + 1;
+      }
+    }
+    let era: Era = "";
+    if (toks[j]?.kind === "word" && (toks[j].text === "BCE" || toks[j].text === "CE")) {
+      era = toks[j].text as Era;
+      j++;
+    }
+    out.push({ value: String(value), unit, era, plural, text: text.slice(t.start, toks[j - 1].end), first: i, last: j - 1 });
+    i = j;
+  }
+  // "n to m ERA", "n-m ERA": the closing era and unit bind to the opening number too.
+  for (let x = out.length - 2; x >= 0; x--) {
+    const p = out[x];
+    const q = out[x + 1];
+    if (p.plural || q.plural || q.first !== p.last + 2) continue;
+    const between = toks[p.last + 1];
+    if (!(between.kind === "join" || (between.kind === "word" && between.text.toLowerCase() === "to"))) continue;
+    if (p.era === "") p.era = q.era;
+    if (p.unit === "" && q.unit !== "decade") p.unit = q.unit;
   }
   return out;
 }
@@ -79,38 +169,26 @@ function hasWord(text: string, word: string): boolean {
 }
 
 function checkNumbers(sentence: string, source: string): string[] {
-  const bad: string[] = [];
-  const plain = new Set<string>();
-  const withEra = new Set<string>();
-  for (const f of findNumbers(source)) {
-    plain.add(f.n);
-    if (f.era) withEra.add(`${f.n} ${f.era}`);
-  }
-  for (const f of findNumbers(sentence)) {
-    const ok = f.era ? withEra.has(`${f.n} ${f.era}`) : plain.has(f.n);
-    if (!ok) bad.push(f.era ? `${f.n} ${f.era}` : f.n);
-  }
-
-  // Spelled-out numbers are read as digits. A compound ("twenty-five") is one number, never its parts.
-  const spelled = (value: number, word: string, alt: string[]) => plain.has(String(value)) || [word, ...alt].some((w) => hasWord(source, w));
-  for (const m of sentence.matchAll(/[A-Za-z]+(?:-[A-Za-z]+)*/g)) {
-    const token = m[0].toLowerCase();
-    const parts = token.split("-");
-    if (parts.length === 2 && parts[0] in COMPOUND_TENS && (parts[1] in UNITS || parts[1] in ORDINAL_UNITS) && (UNITS[parts[1]] ?? ORDINAL_UNITS[parts[1]]) < 10) {
-      const value = COMPOUND_TENS[parts[0]] + (UNITS[parts[1]] ?? ORDINAL_UNITS[parts[1]]);
-      if (!spelled(value, token, [`${parts[0]} ${parts[1]}`])) bad.push(m[0]);
+  const keys = new Set<string>();
+  const valueUnit = new Set<string>();
+  const values = new Set<string>();
+  for (const p of findNumbers(source)) {
+    if (p.plural) {
+      keys.add(`plural:${p.value}`);
       continue;
     }
-    for (const w of parts) {
-      const value = UNITS[w] ?? TENS[w] ?? ORDINAL_UNITS[w];
-      if (value !== undefined) {
-        if (!spelled(value, w, [])) bad.push(w);
-      } else if (BIG_WORDS.test(w)) {
-        if (!new RegExp(`\\b${w.replace(/s$/, "")}s?\\b`, "i").test(source)) bad.push(w);
-      } else if (EXACT_WORDS.has(w)) {
-        if (!hasWord(source, w)) bad.push(w);
-      }
-    }
+    keys.add(`${p.value}|${p.unit}|${p.era}`);
+    valueUnit.add(`${p.value}|${p.unit}`);
+    values.add(p.value);
+  }
+  const bad: string[] = [];
+  for (const p of findNumbers(sentence)) {
+    let ok: boolean;
+    if (p.plural) ok = keys.has(`plural:${p.value}`);
+    else if (p.era) ok = keys.has(`${p.value}|${p.unit}|${p.era}`);
+    else if (p.unit) ok = valueUnit.has(`${p.value}|${p.unit}`);
+    else ok = values.has(p.value);
+    if (!ok) bad.push(p.text);
   }
   return bad;
 }

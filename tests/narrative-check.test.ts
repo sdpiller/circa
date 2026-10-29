@@ -371,4 +371,45 @@ describe("checkStory", () => {
       expect(withSentence(nfd, ["E1"], input2)).toEqual([]);
     });
   });
+
+  describe("number phrases as units", () => {
+    const fails = (extra: string, text: string) => codes(withSentence(text, ["E1"], inputWithE1Extra(extra)));
+    const passes = (extra: string, text: string) => withSentence(text, ["E1"], inputWithE1Extra(extra));
+    it("does not take 'twenty-five' inside 'twenty-five-year' from stray parts", () => {
+      expect(fails("Twenty ships sailed in the 5th year.", "A twenty-five-year truce followed.")).toEqual(["number"]);
+      expect(passes("A 25-year truce followed.", "A twenty-five-year truce followed.")).toEqual([]);
+    });
+    it("fails '5th-century BCE' against '5th century AD'", () => {
+      expect(fails("It was rebuilt in the 5th century AD.", "It was a 5th-century BCE temple.")).toEqual(["number"]);
+    });
+    it("fails 'fifth century BCE' against '5th century AD' and 'fifth century AD'", () => {
+      expect(fails("It was rebuilt in the 5th century AD.", "It was rebuilt in the fifth century BCE.")).toEqual(["number"]);
+      expect(fails("It was rebuilt in the fifth century AD.", "It was rebuilt in the fifth century BCE.")).toEqual(["number"]);
+    });
+    it("fails eras glued to digits or dotted, against AD 430", () => {
+      for (const t of ["It fell in 430BC.", "It fell in 430BCE.", "It fell in 430 B.C.E, in a raid."]) {
+        expect(fails("It fell in AD 430.", t)).toEqual(["number"]);
+      }
+      expect(passes("It fell in AD 430.", "It fell in 430CE.")).toEqual([]);
+    });
+    it("keeps millennium and century apart, and a unit apart from a bare number", () => {
+      expect(fails("It rose in the 5th century BCE.", "It rose in the 5th millennium BCE.")).toEqual(["number"]);
+      expect(fails("It rose in 5 BCE.", "It rose in the 5th century BCE.")).toEqual(["number"]);
+    });
+    it("reads magnitude words with the number before them", () => {
+      expect(fails("40 ships sailed. Thousands of men came.", "Some forty thousand men took part.")).toEqual(["number"]);
+      expect(passes("About 40,000 men took part.", "Some forty thousand men took part.")).toEqual([]);
+      expect(passes("About 2000000 men took part.", "Some two million men took part.")).toEqual([]);
+    });
+    it("matches ordinal words and digits, with or without a hyphen, and BC against BCE", () => {
+      expect(passes("It was rebuilt in the 5th century BC.", "It was rebuilt in the fifth century BCE.")).toEqual([]);
+      expect(passes("It was rebuilt in the fifth century BC.", "It was a 5th-century BCE temple.")).toEqual([]);
+    });
+    it("fails 'twenty five' (spaced) against stray Twenty and 5th", () => {
+      expect(fails("Twenty ships sailed in the 5th year.", "Some twenty five ships sailed.")).toEqual(["number"]);
+    });
+    it("is not fooled by words that merely look like keys, such as 'constructor'", () => {
+      expect(passes("Nothing here.", "The constructor of ships arrived.")).toEqual([]);
+    });
+  });
 });
