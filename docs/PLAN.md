@@ -50,7 +50,7 @@ Acceptance: one command rebuilds the DB from scratch. Row counts match the audit
 ### Phase 2: Events API with level of detail
 `GET /api/events?west&south&east&north&from&to&zoom`
 - Validate params with zod.
-- Handle bounding boxes that cross the antimeridian (split into two queries).
+- Handle bounding boxes that cross the antimeridian (done as one query with two longitude ranges, not two queries; see decisions.md entry 25).
 - Filter by overlap, order by `sitelinks` descending, limit N by zoom band (starting guess: about 150 at world scale to about 600 at city scale; tune by eye).
 - Return minimal fields for dots.
 
