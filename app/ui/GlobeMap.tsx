@@ -584,6 +584,8 @@ export function GlobeMap({
       // A dot, then a stack, wins over a grid cell; empty ground is only clickable on the grid.
       // Empty ground reads "nothing documented" only against a current grid (groundSelection).
       map.on("click", (e) => {
+        // Every click supersedes a stack click still loading its members, so an older click never wins.
+        stackClickAbortRef.current?.abort();
         const m = map!;
         const zoom = m.getZoom();
         const res = resolutionForZoom(zoom);
