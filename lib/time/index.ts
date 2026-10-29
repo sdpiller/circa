@@ -94,3 +94,39 @@ export function overlaps(event: Interval, range: YearRange): boolean {
 export function formatYear(year: number): string {
   return year < 0 ? `${-year} BCE` : `${year} CE`;
 }
+
+export function formatRange(start: number, end: number): string {
+  return start === end ? formatYear(start) : `${formatYear(start)} to ${formatYear(end)}`;
+}
+
+/**
+ * The range slider's non-linear scale: integer positions 0..SLIDER_STEPS, piecewise linear between
+ * anchors, so recent centuries get more resolution than deep antiquity (about 12.5 years per step
+ * before 1000 BCE, about 1.6 after 1700). Interpolation runs in astronomical numbering, which has
+ * a year 0, and converts back at the end, so the slider can never produce year 0.
+ */
+export const SLIDER_STEPS = 1000;
+const SLIDER_ANCHORS: [position: number, year: number][] = [
+  [0, MIN_YEAR],
+  [200, -1000],
+  [400, 1],
+  [600, 1000],
+  [800, 1700],
+  [1000, MAX_YEAR],
+].map(([p, y]) => [p, historicalToAstronomical(y)]);
+
+export function sliderToYear(position: number): number {
+  const p = Math.min(Math.max(position, 0), SLIDER_STEPS);
+  const i = SLIDER_ANCHORS.findIndex(([ap], k) => k > 0 && p <= ap);
+  const [p0, y0] = SLIDER_ANCHORS[i - 1];
+  const [p1, y1] = SLIDER_ANCHORS[i];
+  return astronomicalToHistorical(Math.round(y0 + ((p - p0) / (p1 - p0)) * (y1 - y0)));
+}
+
+export function yearToSlider(year: number): number {
+  const a = Math.min(Math.max(historicalToAstronomical(year), SLIDER_ANCHORS[0][1]), SLIDER_ANCHORS.at(-1)![1]);
+  const i = SLIDER_ANCHORS.findIndex(([, ay], k) => k > 0 && a <= ay);
+  const [p0, y0] = SLIDER_ANCHORS[i - 1];
+  const [p1, y1] = SLIDER_ANCHORS[i];
+  return Math.round(p0 + ((a - y0) / (y1 - y0)) * (p1 - p0));
+}

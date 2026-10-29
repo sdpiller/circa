@@ -1,0 +1,237 @@
+.app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+.panel {
+  position: absolute;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+}
+
+/* Legend, top left */
+.legendPanel {
+  top: 16px;
+  left: 16px;
+  width: 260px;
+  padding: 14px 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.legend {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.legend li {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.hollow {
+  border: 1.5px solid var(--text-secondary);
+}
+
+.count {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  margin-top: 10px;
+  color: var(--text-primary);
+}
+
+.caption {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Year range, bottom centre */
+.rangePanel {
+  left: 50%;
+  bottom: 36px;
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 32px));
+  padding: 12px 18px 14px;
+}
+
+.rangeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.rangeLabel {
+  color: var(--text-muted);
+}
+
+.rangeValue {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Two range inputs stacked on one track; only the thumbs take pointer events. */
+.slider {
+  position: relative;
+  height: 28px;
+}
+
+.track,
+.trackFill {
+  position: absolute;
+  top: 12px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.track {
+  left: 0;
+  right: 0;
+  background: #383835;
+}
+
+.trackFill {
+  background: var(--text-secondary);
+}
+
+.slider input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 28px;
+  appearance: none;
+  background: none;
+  pointer-events: none;
+}
+
+.slider input::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  border: 2px solid var(--surface);
+  cursor: grab;
+}
+
+.slider input::-moz-range-thumb {
+  pointer-events: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  border: 2px solid var(--surface);
+  cursor: grab;
+}
+
+.ticks {
+  position: relative;
+  height: 16px;
+  margin: 0 9px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.presets button {
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.presets button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.presets button[aria-pressed="true"] {
+  color: var(--surface);
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+.footer {
+  position: absolute;
+  left: 12px;
+  bottom: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.footer a {
+  color: var(--text-muted);
+}
+
+/* MapLibre popup, restyled for the dark theme. :global reaches MapLibre's own class names. */
+.tooltip :global(.maplibregl-popup-content) {
+  background: var(--panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: 13px system-ui, -apple-system, "Segoe UI", sans-serif;
+  max-width: 280px;
+}
+
+.tooltip :global(.maplibregl-popup-content) div {
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.tooltip :global(.maplibregl-popup-tip) {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .legendPanel {
+    width: calc(100% - 32px);
+  }
+
+  .rangePanel {
+    bottom: 28px;
+  }
+}
