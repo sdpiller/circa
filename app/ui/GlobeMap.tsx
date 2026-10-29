@@ -16,12 +16,12 @@ import type {
   Map as MapLibreMap,
   SymbolLayerSpecification,
 } from "maplibre-gl";
-import { GRID_MIN_ZOOM, cellPolygon, resolutionForZoom } from "../../lib/cells.ts";
+import { GRID_MIN_ZOOM, cellPolygon, resolutionForZoom, type Res } from "../../lib/cells.ts";
 import type { CellsResult } from "../../lib/db/cells.ts";
 import type { EventsResult } from "../../lib/db/events.ts";
 import { DOT_GROUPS, dotMeta, toFeatureCollection, type DotProperties, type GroupKey } from "../../lib/dots.ts";
 import type { YearRange } from "../../lib/time/index.ts";
-import { pickLegs } from "../../lib/web.ts";
+import { pickLegs, stackCell } from "../../lib/web.ts";
 import { DotWeb, WEB_HOLD_RADIUS_PX } from "./DotWeb.tsx";
 import styles from "./globe.module.css";
 
@@ -152,11 +152,11 @@ const STACK_COUNT_LAYER: SymbolLayerSpecification = {
 };
 const DOT_LAYER_IDS = ["dots", "stacks", "stack-count"] as const;
 
-/** An open web: the stack it belongs to, where it is, and which members got legs. */
+/** An open web: the stack it belongs to, where it is, its cell, and which members got legs. */
 type Web = {
   clusterId: number;
   center: { x: number; y: number };
-  lngLat: [number, number];
+  cell: string; // the cell holding most members (stackCell), for the centre and "+N more"
   legs: DotProperties[];
   more: number;
   coords: Record<string, [number, number]>; // leg qid to [lon, lat], for the leg's own cell
@@ -179,6 +179,19 @@ function tooltip(p: DotProperties): HTMLElement {
   meta.textContent = dotMeta(p);
   el.append(title, meta);
   return el;
+}
+
+/** A stack's members with their own coordinates. Rejects if the cluster is gone (new data or zoom). */
+async function stackMembers(map: MapLibreMap, clusterId: number) {
+  const source = map.getSource("dots") as GeoJSONSource | undefined;
+  if (!source) return [];
+  const leaves = await source.getClusterLeaves(clusterId, Infinity, 0);
+  return leaves.flatMap((f) => {
+    if (f.geometry.type !== "Point") return [];
+    const p = f.properties as DotProperties;
+    const [lon, lat] = f.geometry.coordinates as [number, number];
+    return [{ p, lon, lat, sitelinks: p.sitelinks }];
+  });
 }
 
 const zeroCounts = () => Object.fromEntries(DOT_GROUPS.map((g) => [g.key, 0])) as Record<GroupKey, number>;
@@ -220,6 +233,8 @@ export function GlobeMap({
   const webRef = useRef<Web | null>(null);
   // Stack members load asynchronously; a newer hover or a close aborts the old request.
   const webAbortRef = useRef<{ controller: AbortController; clusterId: number } | null>(null);
+  // A click on a stack with no web open also loads its members, to find its cell.
+  const stackClickAbortRef = useRef<AbortController | null>(null);
 
   const closeWeb = useCallback(() => {
     webAbortRef.current?.controller.abort();
@@ -237,21 +252,17 @@ export function GlobeMap({
     try {
       // Hover intent: a pointer crossing a stack on its way somewhere else does not open a web.
       await new Promise((resolve) => setTimeout(resolve, WEB_HOVER_INTENT_MS));
-      const source = map.getSource("dots") as GeoJSONSource | undefined;
-      if (controller.signal.aborted || !source) return;
-      const leaves = await source.getClusterLeaves(clusterId, Infinity, 0);
       if (controller.signal.aborted) return;
+      const members = await stackMembers(map, clusterId);
+      // Every camera "move" aborts a pending web, but one can start mid-move (scroll-zoom easing,
+      // inertia): never pin a web to a position the map is still leaving.
+      const res = resolutionForZoom(map.getZoom());
+      if (controller.signal.aborted || map.isMoving() || res === null || members.length === 0) return;
       const coords: Web["coords"] = {};
-      const members: DotProperties[] = [];
-      for (const f of leaves) {
-        if (f.geometry.type !== "Point") continue;
-        const p = f.properties as DotProperties;
-        coords[p.qid] = f.geometry.coordinates as [number, number];
-        members.push(p);
-      }
-      const { legs, more } = pickLegs(members);
+      for (const m of members) coords[m.p.qid] = [m.lon, m.lat];
+      const { legs, more } = pickLegs(members.map((m) => m.p));
       const { x, y } = map.project(lngLat);
-      webRef.current = { clusterId, center: { x, y }, lngLat, legs, more, coords };
+      webRef.current = { clusterId, center: { x, y }, cell: stackCell(members, res), legs, more, coords };
       setWeb(webRef.current);
     } catch {
       // The cluster vanished (new data or zoom) before its members arrived: leave the web closed.
@@ -266,17 +277,43 @@ export function GlobeMap({
     return w !== null && Math.hypot(point.x - w.center.x, point.y - w.center.y) <= WEB_HOLD_RADIUS_PX;
   }, []);
 
-  /** Select the cell around a point at the current zoom's resolution, from a leg, "+N more", or a stack. */
-  const selectAt = useCallback(
-    (at: [number, number] | undefined, focus?: string) => {
-      const map = mapRef.current;
-      const res = map ? resolutionForZoom(map.getZoom()) : null;
-      if (!at || res === null) return;
+  const selectCell = useCallback(
+    (cell: string, focus?: string) => {
       closeWeb();
-      const cell = latLngToCell(at[1], at[0], res);
       onSelectRef.current(focus ? { kind: "cell", cell, focus } : { kind: "cell", cell });
     },
     [closeWeb],
+  );
+
+  /** A leg: the cell around the item's own position at the current zoom's resolution, item in focus. */
+  const selectLeg = useCallback(
+    (at: [number, number] | undefined, qid: string) => {
+      const map = mapRef.current;
+      const res = map ? resolutionForZoom(map.getZoom()) : null;
+      if (at && res !== null) selectCell(latLngToCell(at[1], at[0], res), qid);
+    },
+    [selectCell],
+  );
+
+  /** A stack clicked with no web open: load its members to find its cell, as the web would have. */
+  const selectStack = useCallback(
+    async (map: MapLibreMap, clusterId: number, centroid: [number, number], res: Res) => {
+      stackClickAbortRef.current?.abort();
+      const controller = new AbortController();
+      stackClickAbortRef.current = controller;
+      const fallback = () => latLngToCell(centroid[1], centroid[0], res);
+      let cell: string;
+      try {
+        const members = await stackMembers(map, clusterId);
+        if (controller.signal.aborted) return;
+        cell = members.length > 0 ? stackCell(members, res) : fallback();
+      } catch {
+        if (controller.signal.aborted) return;
+        cell = fallback(); // the cluster is gone (new data): its position is the best left
+      }
+      selectCell(cell);
+    },
+    [selectCell],
   );
 
   const report = useCallback((zoomedOut: boolean) => {
@@ -482,7 +519,7 @@ export function GlobeMap({
         schedule();
       });
       map.on("moveend", schedule);
-      map.on("movestart", closeWeb);
+      map.on("move", closeWeb); // every frame, so no web is left behind or opened by a moving camera
       map.on("mousemove", "dots", (e) => {
         const f = e.features?.[0];
         if (!f || f.geometry.type !== "Point") return;
@@ -524,18 +561,18 @@ export function GlobeMap({
         // anywhere else in its dimmed circle just closes it.
         if (insideWeb(e.point)) {
           const own = m.queryRenderedFeatures(e.point, { layers: ["stacks"] })[0];
-          if (own && own.geometry.type === "Point" && own.properties?.cluster_id === webRef.current?.clusterId) {
-            selectAt(own.geometry.coordinates as [number, number]);
-          } else closeWeb();
+          const w = webRef.current;
+          if (w && own?.properties?.cluster_id === w.clusterId) selectCell(w.cell);
+          else closeWeb();
           return;
         }
         if (showDotsRef.current) {
-          // Topmost first: stacks draw above dots. A dot focuses its item; a stack's centre selects its
-          // cell with no item in focus.
+          // Topmost first: stacks draw above dots. A dot focuses its item; a stack selects the cell
+          // holding most of its members, with no item in focus.
           const hit = m.queryRenderedFeatures(e.point, { layers: ["stacks", "dots"] })[0];
           if (hit && hit.geometry.type === "Point") {
             const at = hit.geometry.coordinates as [number, number];
-            if (hit.layer.id === "stacks") selectAt(at);
+            if (hit.layer.id === "stacks") void selectStack(m, hit.properties?.cluster_id as number, at, res);
             else onSelectRef.current({ kind: "cell", cell: latLngToCell(at[1], at[0], res), focus: (hit.properties as DotProperties).qid });
             return;
           }
@@ -554,6 +591,7 @@ export function GlobeMap({
       clearTimeout(timerRef.current);
       cellsAbortRef.current?.abort();
       dotsAbortRef.current?.abort();
+      stackClickAbortRef.current?.abort();
       closeWeb();
       map?.remove();
       mapRef.current = null;
@@ -561,7 +599,7 @@ export function GlobeMap({
       lastDotsQueryRef.current = "";
       dotsReadyRef.current = false;
     };
-  }, [styleUrl, schedule, closeWeb, openWeb, insideWeb, selectAt]);
+  }, [styleUrl, schedule, closeWeb, openWeb, insideWeb, selectCell, selectStack]);
 
   return (
     <>
@@ -572,8 +610,8 @@ export function GlobeMap({
           center={web.center}
           legs={web.legs}
           more={web.more}
-          onPick={(qid) => selectAt(web.coords[qid], qid)}
-          onMore={() => selectAt(web.lngLat)}
+          onPick={(qid) => selectLeg(web.coords[qid], qid)}
+          onMore={() => selectCell(web.cell)}
           onLeave={closeWeb}
         />
       )}
