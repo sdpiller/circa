@@ -66,7 +66,7 @@ How it works, briefly:
 
 ## Building the database
 
-`npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 70 MB). It normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
+`npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 180 MB). It normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
 
 On Windows, stop the dev server before rebuilding: the final rename fails while another process has the database open. Check that it really stopped: killing `npm run dev` can leave Next's worker process running, still holding the file.
 

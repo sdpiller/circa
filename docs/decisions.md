@@ -156,7 +156,7 @@ The owner redesigned exploration before Phase 4 was built. Full design: `docs/su
 - **Grid, not a guessed area.** From about zoom 3 the globe shows H3 cells that hold items in the selected range; clicking one opens its box. The clicked area is the outlined area, which answers "what does near here mean" visibly and removes the edge effect of querying a hidden hexagon. Empty land is visibly empty, so the widening fallback ladder in CLAUDE.md is retired: widening would describe an area the user did not select.
 - **Finest cell r5 (about 20 km across).** 42% of events and every birth borrow the coordinates of a city or region (inherited location). Finer cells would pile them into one downtown cell and claim precision the data lacks. The map still zooms to the provider's maximum; cells just grow on screen.
 - **Dots optional and never from orbit.** Off by default; when on, overlapping dots merge into a stack that fans out into a web on hover (owner's sketch), at most 8 legs plus "+N more". Every click on a dot opens its cell's box, so there is one box model and one story cache key.
-- **Text sources.** Event one-liners from Wikidata descriptions, expanded paragraphs and hover cards from the English Wikipedia page summary, fetched server-side and cached in a `summaries` table that `etl/load.ts` carries across rebuilds like `narratives`. Nothing is written from memory. Wikipedia's opening paragraph varies in length; accepted over having Claude rewrite every article.
+- **Text sources.** Event one-liners from Wikidata descriptions, expanded paragraphs and hover cards from the English Wikipedia page summary, fetched server-side and cached in a `summaries` table that `etl/load.ts` carries across rebuilds like `narratives` (superseded by entry 29: the cache is its own file, `data/cache.db`, which needs no carry-over). Nothing is written from memory. Wikipedia's opening paragraph varies in length; accepted over having Claude rewrite every article.
 - **The story was briefly cut, then restored** at the top of the box (Phase 5). Recorded because the cut was considered: without the story the product is close to existing marker-and-slider maps.
 
 ## 29. Phase 4 as built: bands, benchmarks, colours, and deviations (2026-10-29, Phase 4)
@@ -178,6 +178,7 @@ The owner redesigned exploration before Phase 4 was built. Full design: `docs/su
 
 **Controller rulings.**
 - **The summaries cache is `data/cache.db`, not a table in `chronoglobe.db`** (deviation from entry 28). The app opens `chronoglobe.db` read-only, and an open handle blocks `etl:load`'s rename on Windows. A separate writable file needs no carry-over on rebuild.
+- **`/api/summary` takes a qid, not a title**, and looks up the item's stored `wikipedia_title`, so it cannot be used as an open proxy to Wikipedia under the owner's contact or to fill `cache.db` with arbitrary titles.
 - **A stack's centre and "+N more" open the cell holding most of its members** (ties go to the cell of its most-linked member), not the cell under the cluster centroid, which may hold none of them.
 - **Event rows with no Wikidata description show only the name.** The spec's fallback to the Wikipedia description was not built: it would need up to 25 summary fetches per box.
 
