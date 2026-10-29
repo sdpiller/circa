@@ -154,7 +154,31 @@ The owner chose: three vivid colours for events (conflict, disaster, and politic
 The owner redesigned exploration before Phase 4 was built. Full design: `docs/superpowers/specs/2026-10-29-area-panel-design.md`.
 
 - **Grid, not a guessed area.** From about zoom 3 the globe shows H3 cells that hold items in the selected range; clicking one opens its box. The clicked area is the outlined area, which answers "what does near here mean" visibly and removes the edge effect of querying a hidden hexagon. Empty land is visibly empty, so the widening fallback ladder in CLAUDE.md is retired: widening would describe an area the user did not select.
-- **Finest cell r5 (about 17 km across).** 42% of events and every birth borrow the coordinates of a city or region (inherited location). Finer cells would pile them into one downtown cell and claim precision the data lacks. The map still zooms to the provider's maximum; cells just grow on screen.
+- **Finest cell r5 (about 20 km across).** 42% of events and every birth borrow the coordinates of a city or region (inherited location). Finer cells would pile them into one downtown cell and claim precision the data lacks. The map still zooms to the provider's maximum; cells just grow on screen.
 - **Dots optional and never from orbit.** Off by default; when on, overlapping dots merge into a stack that fans out into a web on hover (owner's sketch), at most 8 legs plus "+N more". Every click on a dot opens its cell's box, so there is one box model and one story cache key.
 - **Text sources.** Event one-liners from Wikidata descriptions, expanded paragraphs and hover cards from the English Wikipedia page summary, fetched server-side and cached in a `summaries` table that `etl/load.ts` carries across rebuilds like `narratives`. Nothing is written from memory. Wikipedia's opening paragraph varies in length; accepted over having Claude rewrite every article.
 - **The story was briefly cut, then restored** at the top of the box (Phase 5). Recorded because the cut was considered: without the story the product is close to existing marker-and-slider maps.
+
+## 29. Phase 4 as built: bands, benchmarks, colours, and deviations (2026-10-29, Phase 4)
+**Resolution bands** (`RES_BANDS` in `lib/cells.ts`, unchanged from the first guess): r2 from zoom 3, r3 from 4.3, r4 from 5.6, r5 from 7, none finer. On screen at 1280 by 800 a cell is about 42 to 150 px across in each band, judged fine by eye. `cellAcrossKm` uses h3-js's real average values (r2 365, r3 138, r4 52, r5 20 km). The design's "about 17 km" for r5 was low and is corrected to about 20 km in entry 28 and in the spec.
+
+**Cell query, measured** (`npm run bench:cells`, 300 seeded viewports per zoom, 255,475 rows, ms, p50 / p95 / max):
+
+- Planner's choice with the existing indexes: zoom 3 14.6 / 451 / 465, zoom 4.3 3.5 / 488 / 541, zoom 5.6 1.7 / 488 / 500, zoom 7 1.6 / 491 / 505. It scans a whole `h3_rN` index for GROUP BY regardless of viewport.
+- Forcing `idx_events_geo`: max 415, 350, 127, 35 ms. Still too slow when zoomed out, because every row costs a table lookup.
+- One wide covering index (years, lat, lon, kind, r2 to r5): max 101, 91, 61, 13 ms; database 146 MB.
+- Chosen: one covering index per resolution, `(lat, lon, start_year, end_year, kind, h3_rN)`, with `INDEXED BY`, the same approach as entry 25. Final p50 / p95 / max: zoom 3 11.3 / 65.4 / 68.4, zoom 4.3 9.0 / 52.3 / 57.8, zoom 5.6 4.5 / 14.0 / 26.2, zoom 7 1.8 / 6.8 / 9.0. Worst cases are all-time ranges zoomed out. A cold page cache will be slower than these warmed runs. The wide index (about 100 ms worst case) is the fallback if size matters.
+- Area query (the box), worst band zoom 3: p50 0.4 / p95 4.1 / max 43 ms (an r2 cell), under the 100 ms bar, so no further index.
+
+**Database size.** 70.4 MB after Phase 2, 115.5 MB with the `h3_r2` to `h3_r5` columns, 179.9 MB with the four covering indexes. That is 2.5 times the Phase 2 size and matters for the Phase 7 deploy. `idx_events_geo` (7 MB) is probably unused now and was not dropped.
+
+**Grid fill colours.** Fill is `#e6e6e6` at low opacity. The dataviz validator checked it as a composite over the land (`#0c0c0c`) and water (`#1b1b1d`) colours, under the four dot colours. At 0.20 some dots fall to a contrast of 1.97 to 2.97 (fail), 0.12 and 0.07 still fail on green, and 0.06 passes (all dots at least 3:1). So the fill has two stop sets: while dots are hidden, 0.03 / 0.07 / 0.13 / 0.2 for 0, 1, 10, and 50 or more events; while dots are visible, the validated 0.02 / 0.03 / 0.045 / 0.06. The check only constrains the background under dots, so the stronger stops are used when there are none. Shading is therefore subtle with dots on, and the grid lines carry the look.
+
+**Stack look.** A near-white disc `#f0efec` (the UI's text colour, belonging to no group, so a mixed stack never claims one kind) with a `#0c0c0c` count in "Noto Sans Bold". Validator on all five colours: worst colour-blind pair is still 8.1 (gray and magenta, unchanged from entry 26), stack contrast 17.0 on land and 15.0 on water. Cluster radius 12 px (8 let a small stack sit on top of the big one and take the pointer), `clusterMaxZoom` 22, source `maxzoom` 23. The web opens after a 120 ms hover intent so passing over a small stack does not open the wrong web.
+
+**Controller rulings.**
+- **The summaries cache is `data/cache.db`, not a table in `chronoglobe.db`** (deviation from entry 28). The app opens `chronoglobe.db` read-only, and an open handle blocks `etl:load`'s rename on Windows. A separate writable file needs no carry-over on rebuild.
+- **A stack's centre and "+N more" open the cell holding most of its members** (ties go to the cell of its most-linked member), not the cell under the cluster centroid, which may hold none of them.
+- **Event rows with no Wikidata description show only the name.** The spec's fallback to the Wikipedia description was not built: it would need up to 25 summary fetches per box.
+
+**Known gaps.** There is no keyboard path to open a dot web (the legs are focusable once it is open). Stack counts need the basemap font "Noto Sans Bold" (OpenFreeMap serves it; another style may not). The database grew from 70 MB to 180 MB, relevant to Phase 7.

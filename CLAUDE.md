@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 4 in progress (2026-10-29): owner approved the redesigned grid view and area box, `docs/superpowers/specs/2026-10-29-area-panel-design.md` (decisions.md entry 28). Phase 3 is complete (entries 26 and 27). (Update this line at every phase gate.)
+Phase 4 complete, at the gate (2026-10-29): H3 grid view from zoom 3 (finest cell r5), optional dots with stacks and a hover web, and an area box with Wikidata one-liners, Wikipedia paragraphs and hover cards (decisions.md entries 28 and 29). Awaiting the owner's go-ahead for Phase 5 (grounded narrative). (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 

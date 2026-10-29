@@ -23,11 +23,11 @@ npm ci
 cp .env.example .env.local
 ```
 
-Then edit `.env.local`. For the current phase only `WIKIMEDIA_CONTACT` is needed, and only to fetch data:
+Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since Phase 4, to load Wikipedia summaries in the area box (without it `/api/summary` returns 503):
 
 | Variable | Needed for | Notes |
 | --- | --- | --- |
-| `WIKIMEDIA_CONTACT` | Data fetch | An email or URL. Wikimedia's User-Agent policy requires a contact on every request. |
+| `WIKIMEDIA_CONTACT` | Data fetch, area box | An email or URL. Wikimedia's User-Agent policy requires a contact on every request. |
 | `ANTHROPIC_API_KEY` | Narratives (later phase) | Never commit it. |
 | `ANTHROPIC_MODEL` | Narratives (later phase) | Defaults to `claude-sonnet-5-5`. |
 | `BASEMAP_STYLE_URL` | Globe (optional) | Defaults to OpenFreeMap's dark style (free, no key). Read at build time. Do not use the public OpenStreetMap tile servers. |
