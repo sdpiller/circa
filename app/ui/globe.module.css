@@ -655,3 +655,51 @@
     bottom: 28px;
   }
 }
+
+/* Featured story: prose at the top of the box, with small numbered citation markers. */
+.story {
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+.story p {
+  margin: 0 0 10px;
+}
+
+.cite {
+  margin: 0 1px 0 2px;
+  padding: 0 4px;
+  font: inherit;
+  font-size: 10px;
+  line-height: 1.5;
+  vertical-align: super;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cite:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.cite:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 1px;
+}
+
+.story .storyCredit {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.storyCredit a {
+  color: var(--text-muted);
+}

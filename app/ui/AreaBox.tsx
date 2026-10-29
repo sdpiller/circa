@@ -2,7 +2,7 @@
 /**
  * The area box: what is documented in one grid cell for the selected years. Events (by year, each
  * expandable to Wikipedia's opening paragraph), then people and places (names with hover cards).
- * The Phase 5 story goes between the header and the events.
+ * A featured story, when one matches this cell and range exactly, goes between the header and the events.
  */
 import { getResolution } from "h3-js";
 import { useEffect, useRef, useState } from "react";
@@ -10,8 +10,10 @@ import { EVENTS_STEP, OTHERS_STEP, areaUrl, moreControl } from "../../lib/box.ts
 import { cellAcrossKm, type Res } from "../../lib/cells.ts";
 import type { AreaItem, AreaResult } from "../../lib/db/area.ts";
 import { DOT_GROUPS, groupOf } from "../../lib/dots.ts";
+import { missingCites, storyFor } from "../../lib/stories/catalog.ts";
 import { formatRange, type YearRange } from "../../lib/time/index.ts";
 import { NameWithCard } from "./HoverCard.tsx";
+import { Story } from "./Story.tsx";
 import { SummaryText } from "./SummaryText.tsx";
 import styles from "./globe.module.css";
 
@@ -29,6 +31,9 @@ export function AreaBox({ cell, focus, range, onClose }: { cell: string; focus?:
   const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
   const [card, setCard] = useState<string | null>(null);
   const [answer, setAnswer] = useState<Answer | null>(null);
+  const [cited, setCited] = useState<{ base: string; qid: string | null } | null>(null);
+  const eventsHeadingRef = useRef<HTMLHeadingElement>(null);
+  const warnedRef = useRef(new Set<string>());
   const bodyRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef("");
   // After a keyboard "show more", focus goes to the first new item, since the button may vanish.
@@ -61,6 +66,24 @@ export function AreaBox({ cell, focus, range, onClose }: { cell: string; focus?:
   const shown = answer && (answer.url === url || answer.base === base) ? answer : null;
   const pending = answer?.url !== url;
   const result = shown?.result;
+  // The featured story for exactly this box, shown only if every item it cites is still listed.
+  const story = result ? storyFor(cell, range.from, range.to) : null;
+  const missing = story && result ? missingCites(story, result) : [];
+  const showStory = story !== null && missing.length === 0;
+  const missingKey = story && missing.length > 0 ? `${story.entry.id} ${missing.join(",")}` : "";
+  useEffect(() => {
+    if (!missingKey || warnedRef.current.has(missingKey)) return;
+    warnedRef.current.add(missingKey);
+    console.warn(`Featured story hidden, cited items missing from the box: ${missingKey}`);
+  }, [missingKey]);
+  // A new cell or range starts with no cited item highlighted.
+  const citedQid = cited?.base === base ? cited.qid : null;
+  const onCite = (qid: string | null) => {
+    setCited({ base, qid });
+    if (qid === null) eventsHeadingRef.current?.scrollIntoView({ block: "start" });
+    else bodyRef.current?.querySelector(`[data-qid="${qid}"]`)?.scrollIntoView({ block: "center" });
+  };
+
   // A card whose name left the list (new range) is closed, so Escape never closes an invisible card.
   const openCard = card !== null && result?.others.some((i) => i.qid === card) ? card : null;
 
@@ -129,12 +152,15 @@ export function AreaBox({ cell, focus, range, onClose }: { cell: string; focus?:
           <p role="status">Nothing documented here for {rangeText}</p>
         ) : (
           <>
+            {showStory && story && <Story story={story} onCite={onCite} />}
             {result.events.length > 0 && (
               <>
-                <h3 className={styles.boxSection}>Events</h3>
+                <h3 ref={eventsHeadingRef} className={styles.boxSection}>
+                  Events
+                </h3>
                 <ul className={styles.events} data-list="events">
                   {result.events.map((item) => (
-                    <EventRow key={item.qid} item={item} open={expanded.has(item.qid)} focused={item.qid === focus} onToggle={() => toggle(item.qid)} />
+                    <EventRow key={item.qid} item={item} open={expanded.has(item.qid)} focused={item.qid === focus || item.qid === citedQid} onToggle={() => toggle(item.qid)} />
                   ))}
                 </ul>
                 <More shown={result.events.length} total={result.eventsTotal} limit={eventsLimit} step={EVENTS_STEP} pending={pending} onMore={(next, kb) => showMore("events", next, kb)} />
@@ -149,7 +175,7 @@ export function AreaBox({ cell, focus, range, onClose }: { cell: string; focus?:
                       key={item.qid}
                       item={item}
                       open={openCard === item.qid}
-                      focused={item.qid === focus}
+                      focused={item.qid === focus || item.qid === citedQid}
                       onOpen={() => setCard(item.qid)}
                       onClose={() => setCard((c) => (c === item.qid ? null : c))}
                     />
