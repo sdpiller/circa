@@ -118,7 +118,7 @@ function placeCard(b: HTMLElement | null): CSSProperties | null {
 }
 
 function HoverCard({ id, item, place }: { id: string; item: AreaItem; place: CSSProperties }) {
-  const s = useSummary(item.wikipedia_title, item.wikipedia_title !== null);
+  const s = useSummary(item.qid, item.wikipedia_title !== null);
   const summary = s.state === "ok" ? s.summary : null;
   const description = summary?.description ?? item.description;
   const meta = dotMeta({ years: formatRange(item.start_year, item.end_year), what: what(item), approx: item.loc_confidence === "inherited" });

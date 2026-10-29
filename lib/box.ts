@@ -22,8 +22,9 @@ export function areaUrl(q: AreaRequest): string {
   return `/api/area?${p}`;
 }
 
-export function summaryApiUrl(title: string): string {
-  return `/api/summary?${new URLSearchParams({ title })}`;
+/** By Wikidata item: the server looks up the item's own Wikipedia title. */
+export function summaryApiUrl(qid: string): string {
+  return `/api/summary?${new URLSearchParams({ qid })}`;
 }
 
 export function wikidataUrl(qid: string): string {

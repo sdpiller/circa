@@ -21,9 +21,8 @@ describe("areaUrl", () => {
 });
 
 describe("summaryApiUrl and wikidataUrl", () => {
-  it("encodes the title", () => {
-    expect(summaryApiUrl("Battle of Marathon")).toBe("/api/summary?title=Battle+of+Marathon");
-    expect(summaryApiUrl("AC/DC & Co?")).toBe("/api/summary?title=AC%2FDC+%26+Co%3F");
+  it("asks for a summary by Wikidata item, never by title", () => {
+    expect(summaryApiUrl("Q31900")).toBe("/api/summary?qid=Q31900");
   });
 
   it("links a Wikidata item", () => {

@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import Database from "better-sqlite3";
 import { describe, expect, it, vi } from "vitest";
 import { sqliteSummaryCache } from "../lib/db/cache.ts";
-import { getSummary, parseSummary, summaryUrl, type Summary, type SummaryCache } from "../lib/wiki/summary.ts";
+import { getSummary, parseSummary, summaryResponse, summaryUrl, type Summary, type SummaryCache } from "../lib/wiki/summary.ts";
+import { makeDb, row } from "./helpers.ts";
 
 const load = (name: string) => JSON.parse(readFileSync(`tests/fixtures/wikipedia/${name}`, "utf8"));
 const marathon = load("summary-battle-of-marathon.json");
@@ -139,5 +140,72 @@ describe("sqliteSummaryCache", () => {
     expect(cache.get("B")).toBeUndefined();
     now += 23 * DAY;
     expect(cache.get("A")).toBeUndefined();
+  });
+});
+
+describe("summaryResponse (GET /api/summary)", () => {
+  const contact = "me@example.com";
+  const db = makeDb([
+    row({ qid: "Q31900", wikipedia_title: "Battle of Marathon" }),
+    row({ qid: "Q777", wikipedia_title: null }),
+  ]);
+  const deps = (fetchFn: ReturnType<typeof vi.fn>, over: { contact?: string | undefined } = {}) => ({
+    db,
+    cache: memoryCache(),
+    fetch: fetchFn as unknown as typeof fetch,
+    contact: "contact" in over ? over.contact : contact,
+  });
+
+  it.each([[null], [""], ["Battle of Marathon"], ["Q"], ["q31900"], ["Q31900x"], ["../../x"]])(
+    "rejects qid %j with 400 and no fetch",
+    async (qid) => {
+      const fetchFn = vi.fn();
+      const res = await summaryResponse(qid, deps(fetchFn));
+      expect(res.status).toBe(400);
+      expect(fetchFn).not.toHaveBeenCalled();
+    },
+  );
+
+  it("answers 404 missing with no fetch for an unknown qid", async () => {
+    const fetchFn = vi.fn();
+    const res = await summaryResponse("Q999999", deps(fetchFn));
+    expect(res.status).toBe(404);
+    expect(await res.json()).toEqual({ missing: true });
+    expect(fetchFn).not.toHaveBeenCalled();
+  });
+
+  it("answers 404 missing with no fetch for an item without a Wikipedia title", async () => {
+    const fetchFn = vi.fn();
+    const res = await summaryResponse("Q777", deps(fetchFn));
+    expect(res.status).toBe(404);
+    expect(await res.json()).toEqual({ missing: true });
+    expect(fetchFn).not.toHaveBeenCalled();
+  });
+
+  it("answers 503 with no fetch when WIKIMEDIA_CONTACT is unset", async () => {
+    const fetchFn = vi.fn();
+    const res = await summaryResponse("Q31900", deps(fetchFn, { contact: undefined }));
+    expect(res.status).toBe(503);
+    expect(fetchFn).not.toHaveBeenCalled();
+  });
+
+  it("fetches the stored title and caches it under that title", async () => {
+    const fetchFn = vi.fn(async () => json(marathon));
+    const d = deps(fetchFn);
+    const res = await summaryResponse("Q31900", d);
+    expect(res.status).toBe(200);
+    expect(((await res.json()) as Summary).title).toBe("Battle of Marathon");
+    expect((fetchFn.mock.calls[0] as unknown as [string])[0]).toBe(summaryUrl("Battle of Marathon"));
+    expect(d.cache.store.has("Battle of Marathon")).toBe(true);
+  });
+
+  it("answers 502 with a generic message, never the upstream error text", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const fetchFn = vi.fn(() => Promise.reject(new Error("secret internal detail")));
+    const res = await summaryResponse("Q31900", deps(fetchFn));
+    expect(res.status).toBe(502);
+    expect(JSON.stringify(await res.json())).not.toContain("secret");
+    expect(log).toHaveBeenCalledOnce(); // the detail goes to the server log instead
+    log.mockRestore();
   });
 });

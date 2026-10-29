@@ -6,7 +6,7 @@ import styles from "./globe.module.css";
 import { useSummary } from "./useSummary.ts";
 
 export function SummaryText({ item }: { item: Pick<AreaItem, "qid" | "wikipedia_title"> }) {
-  const summary = useSummary(item.wikipedia_title, item.wikipedia_title !== null);
+  const summary = useSummary(item.qid, item.wikipedia_title !== null);
   if (item.wikipedia_title === null || summary.state === "missing") {
     return (
       <div className={styles.summary}>

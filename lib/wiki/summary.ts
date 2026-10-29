@@ -3,6 +3,7 @@
  * Text is plain text only (extract, never extract_html). A thumbnail is kept only when it is
  * hosted on Commons, which holds only freely licensed files.
  */
+import type Database from "better-sqlite3";
 import { z } from "zod";
 
 export type Summary = {
@@ -52,7 +53,7 @@ const inFlight = new Map<string, Promise<SummaryResult | { status: "error"; reas
 
 export async function getSummary(
   title: string,
-  deps: { cache: SummaryCache; fetch: typeof fetch; contact: string | undefined; now?: () => number },
+  deps: { cache: SummaryCache; fetch: typeof fetch; contact: string | undefined },
 ): Promise<SummaryResult | { status: "error"; reason: string }> {
   const hit = deps.cache.get(title);
   if (hit) return hit;
@@ -84,4 +85,34 @@ export async function getSummary(
   })();
   inFlight.set(title, run);
   return run;
+}
+
+const Qid = z.string().regex(/^Q\d+$/);
+const CACHE_HEADERS = { "Cache-Control": "public, max-age=86400" };
+
+/**
+ * GET /api/summary?qid=Q123, as a testable function. The title comes from the events database, never
+ * from the request, so the route cannot be used to fetch (or cache) arbitrary pages under our contact.
+ * 200 Summary, 400 bad qid, 404 { missing: true } (unknown item, no English title, or no article),
+ * 502 upstream failure (generic message), 503 when WIKIMEDIA_CONTACT is unset.
+ */
+export async function summaryResponse(
+  qid: string | null,
+  deps: { db: Database.Database; cache: SummaryCache; fetch: typeof fetch; contact: string | undefined },
+): Promise<Response> {
+  const parsed = Qid.safeParse(qid);
+  if (!parsed.success) return Response.json({ error: "qid must look like Q123" }, { status: 400 });
+  if (!deps.contact) return Response.json({ error: "WIKIMEDIA_CONTACT is not set" }, { status: 503 });
+
+  const found = deps.db.prepare("SELECT wikipedia_title FROM events WHERE qid = ?").get(parsed.data) as
+    | { wikipedia_title: string | null }
+    | undefined;
+  const title = found?.wikipedia_title;
+  if (!title) return Response.json({ missing: true }, { status: 404, headers: CACHE_HEADERS });
+
+  const result = await getSummary(title, { cache: deps.cache, fetch: deps.fetch, contact: deps.contact });
+  if (result.status === "ok") return Response.json(result.summary, { headers: CACHE_HEADERS });
+  if (result.status === "missing") return Response.json({ missing: true }, { status: 404, headers: CACHE_HEADERS });
+  console.error(`/api/summary ${parsed.data} (${title}): ${result.reason}`);
+  return Response.json({ error: "Could not load from Wikipedia" }, { status: 502 });
 }
