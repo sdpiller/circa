@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 3 complete, at the gate (2026-10-28): MapLibre globe with dots in four colour-blind-safe groups (decisions.md entries 26 and 27), non-linear range slider with presets, legend, bias caption, attributions. Awaiting the owner's go-ahead for Phase 4 (area panel). (Update this line at every phase gate.)
+Phase 4 in progress (2026-10-29): owner approved the redesigned grid view and area box, `docs/superpowers/specs/2026-10-29-area-panel-design.md` (decisions.md entry 28). Phase 3 is complete (entries 26 and 27). (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
@@ -37,7 +37,7 @@ Accounts, editing or crowdsourcing, historical borders, real-time data, mobile a
 ## Known risks and required responses
 
 - **Wikidata coverage bias.** The Mediterranean, Europe, and East Asia will be dense; pre-colonial Americas and much of Africa will look sparse. This reflects documentation, not history. Do not hide it: show a caption ("documented history is not the same as history; coverage is uneven worldwide").
-- **Emptiness.** A random click often has no events. Required fallback ladder: widen the area stepwise (coarser H3 cell), then regional, ALWAYS showing the scale actually used ("showing events within about X km"). If still nothing, say so plainly. Never pad.
+- **Emptiness.** The grid only draws cells with documented items in the range, so empty land is visibly empty. Clicking elsewhere says so plainly. Always show the scale of the selected cell. Never pad. (The earlier widening fallback ladder was retired on 2026-10-29, decisions.md entry 28: widening would describe an area the user did not select.)
 - **Fuzzy dates.** Many items are precise only to a decade or century, and BCE has a year-zero trap. See conventions.
 - **Imprecise locations.** Many events have no coordinates. See location confidence.
 - **Hallucinated narratives.** Mitigated by grounded prompting, citation validation, and an eval set (Phase 5 in `docs/PLAN.md`). This is mandatory, not optional.

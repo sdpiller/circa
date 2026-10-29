@@ -64,16 +64,14 @@ Acceptance: query time well under 100 ms in the largest zoom band. Tests include
 
 Acceptance: spinning, zooming, scrubbing feel smooth. Zooming into Greece for 500 to 300 BCE shows plausible events. No console errors.
 
-### Phase 4: Area panel
-On click:
-1. Determine the area as an H3 cell with resolution chosen from zoom.
-2. Fetch events in that cell and range, ranked by sitelinks.
-3. Fallback ladder (see "Known risks" in `CLAUDE.md`). If fewer than 3 events, widen up to a fixed number of steps. Always show the actual scale used. If nothing, say so plainly.
-4. Show list with year, category, location confidence, and Wikipedia link. Fetch Wikipedia summaries lazily with caching and attribution (verify the current summary endpoint in docs).
+### Phase 4: Grid view and area box (revised 2026-10-29)
+Redesigned with the owner; the full design is `docs/superpowers/specs/2026-10-29-area-panel-design.md` (decisions.md entry 28). In short: a plain globe from orbit; from about zoom 3 an H3 grid of cells that hold items in the range, finest cell r5; dots optional, never from orbit, overlapping dots merge into a stack that fans out into a web on hover; clicking a cell or dot opens a box with events (Wikidata one-liner, Wikipedia paragraph on expand) and then people and places (names, hover card with picture). Wikipedia summaries are fetched server-side and cached in SQLite. The old widening fallback ladder is retired.
 
-Acceptance: clicking empty ocean, a dense area (Athens), and a sparse area each give sensible, honest output.
+Acceptance: (a) zooming from orbit to city scale shows a plain globe, then a grid that refines smoothly and stops at r5; (b) clicking the Athens cell for 500 to 300 BCE shows plausible events and people with descriptions, expandable paragraphs, and hover cards with attribution; (c) clicking bare ocean gives a plain "nothing documented" line; (d) a sparse cell (for example in the Sahel or the Amazon basin) shows its few items honestly; (e) stacked dots fan out into a web and each leg opens its item; (f) no console errors; (g) cell and area queries measured and logged.
 
 ### Phase 5: Grounded narrative
+Shown at the top of the area box. Changes from the 2026-10-29 design (section 3.3 of the spec): input is the cell's top about 12 events plus top about 5 people and places; the server fetches any missing Wikipedia extracts before writing; no story below 3 events; the story credits Wikipedia and Wikidata. The cache key is the H3 cell id (it encodes resolution) + range + `prompt_version` + model.
+
 Build `/lib/narrative`:
 - Input: top about 15 events (id, label, years, category, location confidence, short Wikipedia extract), the range, and the scale used.
 - Prompt rules for Claude:
@@ -91,7 +89,7 @@ Acceptance: eval passes. Repeat clicks hit the cache. Sparse areas yield a candi
 
 ### Phase 6: Visual polish
 - Play button: the range window sweeps through time; events fade in and out as it passes; pause and speed controls. This is the highest-value visual.
-- Density heat layer by era (toggle).
+- Density heat layer by era (toggle). Largely covered by the grid's shading since the 2026-10-29 redesign; keep only if the owner still wants it after seeing the grid.
 - Smooth fly-to when selecting an area; loading and error states.
 
 Acceptance: playback runs without jank.
