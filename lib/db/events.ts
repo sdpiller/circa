@@ -62,7 +62,7 @@ export function lonRanges(west: number, east: number): [number, number][] {
 /** A required numeric query parameter. Missing or empty is an error, never a silent 0. */
 const num = z.string().trim().min(1, "required").pipe(z.coerce.number());
 const lat = num.pipe(z.number().min(-90).max(90));
-const year = num.pipe(z.number().refine(isQueryableYear, `must be a whole year from ${MIN_YEAR} to ${MAX_YEAR}, and never 0`));
+export const year = num.pipe(z.number().refine(isQueryableYear, `must be a whole year from ${MIN_YEAR} to ${MAX_YEAR}, and never 0`));
 
 /** Query string of GET /api/events. Years use historical numbering (1 BCE = -1). */
 export const EventsQuery = z

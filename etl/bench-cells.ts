@@ -5,6 +5,7 @@
  * Seeded, so runs are comparable. Usage: npm run bench:cells
  */
 import Database from "better-sqlite3";
+import { queryArea } from "../lib/db/area.ts";
 import { queryCells, type CellsQueryInput } from "../lib/db/cells.ts";
 import { DB_PATH } from "../lib/db/schema.ts";
 import { MAX_YEAR, MIN_YEAR } from "../lib/time/index.ts";
@@ -44,10 +45,12 @@ function report(label: string, zoom: number, samples: Sample[]) {
 }
 
 const cellSamples = new Map<number, Sample[]>();
+const areaSamples = new Map<number, Sample[]>();
 for (const zoom of ZOOMS) {
   const lonSpan = (360 * WIDTH) / (512 * 2 ** zoom);
   const latSpan = lonSpan * (HEIGHT / WIDTH);
   const samples: Sample[] = [];
+  areaSamples.set(zoom, []);
   for (let i = 0; i < SAMPLES; i++) {
     const c = centres[Math.floor(r() * centres.length)];
     const [a, b] = [randomYear(r), randomYear(r)];
@@ -61,6 +64,14 @@ for (const zoom of ZOOMS) {
     const t0 = performance.now();
     const { cells } = queryCells(db, q);
     samples.push({ ms: performance.now() - t0, q, n: cells.length });
+    if (cells.length > 0) {
+      // The click that follows: one random returned cell, default limits.
+      const aq = { cell: cells[Math.floor(r() * cells.length)].cell, ...range, eventsLimit: 25, othersLimit: 30 };
+      queryArea(db, aq);
+      const t1 = performance.now();
+      const a = queryArea(db, aq);
+      areaSamples.get(zoom)!.push({ ms: performance.now() - t1, q: { ...q, ...range }, n: a.eventsTotal + a.othersTotal });
+    }
   }
   cellSamples.set(zoom, samples);
 }
@@ -68,5 +79,6 @@ for (const zoom of ZOOMS) {
 console.log(`${SAMPLES} random viewports per band, 1440x900 window\n`);
 console.log("queryCells        zoom   p50 ms   p95 ms   max ms   slowest case (cells returned)");
 for (const zoom of ZOOMS) report("cells", zoom, cellSamples.get(zoom)!);
-// Task 4 adds a queryArea section here, timing one random returned cell per viewport.
+console.log("\nqueryArea        zoom   p50 ms   p95 ms   max ms   slowest case (rows matched)");
+for (const zoom of ZOOMS) report("area", zoom, areaSamples.get(zoom)!);
 db.close();
