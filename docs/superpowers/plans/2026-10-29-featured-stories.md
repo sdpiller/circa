@@ -254,6 +254,6 @@ Story writing dispatches subagents, so the main session runs Tasks 8 and 9 itsel
 
 - [ ] **Step 1:** Make the doc changes listed in spec section 7, and add decisions.md entry 30 with the content listed there, plus: the checker's measured outcome (how many writer revisions and reviewer findings across the twenty), the publish step (why `published.json` exists), and any replaced picks.
 - [ ] **Step 2:** Update the CLAUDE.md status line: Phase 5 complete, at the gate, with the date and entry number.
-- [ ] **Step 3:** Run tests, typecheck, lint, `npm run build`. Expected: all pass. A search for U+2014 and U+2013 across docs, stories, app, lib, etl, CLAUDE.md, and README.md finds nothing (for example `grep -rnP "\x{2014}|\x{2013}" ...`).\|–" docs stories app lib etl CLAUDE.md README.md` prints nothing.
+- [ ] **Step 3:** Run tests, typecheck, lint, `npm run build`. Expected: all pass. A search for U+2014 and U+2013 across docs, stories, app, lib, etl, CLAUDE.md, and README.md finds nothing (for example `grep -rnP "\x{2014}|\x{2013}" docs stories app lib etl CLAUDE.md README.md` prints nothing).
 - [ ] **Step 4:** Commit: "Record Phase 5 as built".
 - [ ] **Step 5:** Gate report to the owner: acceptance items 1 to 9 with results, the reviewer findings per story, the coverage gaps, anything that failed. Stop for the go-ahead.
