@@ -1,0 +1,22 @@
+{
+  "id": "panipat",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "Only 3 events and 1 place are documented here, so this account is short.", "cites": ["C"] },
+      { "text": "The First Battle of Panipat, on 21 April 1526, was fought between the invading forces of Babur and Ibrahim Khan Lodi, the Sultan of Delhi.", "cites": ["E1"] },
+      { "text": "Babur's forces, employing gunpowder firearms and cannons, defeated Ibrahim in one of the earliest battles involving gunpowder arms on the Indian subcontinent.", "cites": ["E1"] },
+      { "text": "The victory marked the beginning of Mughal rule in India.", "cites": ["E1"] },
+      { "text": "The Kabuli Bagh Mosque in Panipat was built in 1527 by the emperor Babur to mark that victory, and it is named after Kabuli Begum, Babur's wife.", "cites": ["P1"] }
+    ],
+    [
+      { "text": "The Second Battle of Panipat was fought on 5 November 1556, between the Mughals under Akbar and king Hemu, titularly known as Hemchandra Vikramaditya.", "cites": ["E2"] },
+      { "text": "A few weeks earlier, Hemchandra had conquered Delhi and Agra by defeating Mughal forces under Tardi Beg Khan in the Battle of Delhi.", "cites": ["E2"] },
+      { "text": "The Third Battle of Panipat took place on 14 January 1761, in and around the city of Panipat, between the Maratha Empire and the invading army of the Durrani Empire.", "cites": ["E3"] },
+      { "text": "The Afghans were supported by three key allies in India: Najib-ud-Daula, elements of the declining Mughal Empire, and the Oudh State under Shuja-ud-Daula.", "cites": ["E3"] },
+      { "text": "The Maratha army was led by Sadashivrao Bhau, third-highest authority of the Maratha Confederacy after the Chhatrapati and the Peshwa.", "cites": ["E3"] }
+    ]
+  ]
+}

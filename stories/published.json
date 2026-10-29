@@ -1,1 +1,488 @@
-[]
+[
+  {
+    "entry": {
+      "id": "athens",
+      "place": "Athens",
+      "from": -500,
+      "to": -300,
+      "cell": "851eda77fffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 8 events are documented here, with 59 people and places; 5 of the 8 have approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Sophocles was born here in 496 BCE and Pericles in 494 BCE, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q7235",
+              "label": "Sophocles"
+            },
+            {
+              "ref": "P5",
+              "qid": "Q80398",
+              "label": "Pericles"
+            }
+          ]
+        },
+        {
+          "text": "In 480 BCE the Achaemenid Empire captured Athens, then razed the Acropolis, the Old Temple of Athena, and the Older Parthenon.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q60188600",
+              "label": "Persian destruction of Athens"
+            }
+          ]
+        },
+        {
+          "text": "One year later, the Greek coalition retook Athens.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q60188600",
+              "label": "Persian destruction of Athens"
+            }
+          ]
+        },
+        {
+          "text": "Socrates was born here in 470 BCE, placed approximately.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q913",
+              "label": "Socrates"
+            }
+          ]
+        },
+        {
+          "text": "Pericles led Athens as its preeminent orator and statesman roughly from 461 to 429 BCE.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q80398",
+              "label": "Pericles"
+            }
+          ]
+        },
+        {
+          "text": "Aristophanes was born here in 445 BCE, also placed approximately.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q43353",
+              "label": "Aristophanes"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Spartan invasions of Attica ran from 431 BCE to 425 BCE, and the Plague of Athens from 430 BCE to 426 BCE, both placed approximately.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q9009077",
+              "label": "Spartan invasions of Attica during the Archidamian War"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q758173",
+              "label": "Plague of Athens"
+            }
+          ]
+        },
+        {
+          "text": "The plague killed an estimated 75,000 to 100,000 people, around 25% of the population.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q758173",
+              "label": "Plague of Athens"
+            }
+          ]
+        },
+        {
+          "text": "Plato was born here between 429 BCE and 420 BCE, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q859",
+              "label": "Plato"
+            }
+          ]
+        },
+        {
+          "text": "In 420 BCE an earthquake disrupted the Athenian assembly, also placed approximately.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q12884361",
+              "label": "420 BC Athens earthquake"
+            }
+          ]
+        },
+        {
+          "text": "In 404 BCE came the Siege of Athens.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q20434659",
+              "label": "Siege of Athens"
+            }
+          ]
+        },
+        {
+          "text": "At the Battle of Munichia, exiles under Thrasybulus held a hill in Piraeus, and the defeated Thirty Tyrants fled to Eleusis.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q4871830",
+              "label": "Battle of Munichia"
+            }
+          ]
+        },
+        {
+          "text": "In 403 BCE, at the Battle of Piraeus, placed approximately, a Spartan force narrowly defeated the exiles, and a settlement then allowed the reestablishment of democratic government in Athens.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q4872053",
+              "label": "Battle of Piraeus"
+            }
+          ]
+        },
+        {
+          "text": "In 399 BCE Socrates was accused of impiety and corrupting the youth and sentenced to death.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q913",
+              "label": "Socrates"
+            }
+          ]
+        },
+        {
+          "text": "The Athenian-Macedonian War followed from 340 BCE to 338 BCE, also placed approximately.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q16912790",
+              "label": "Athenian-Macedonian War (340–338 BC)"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "kyoto",
+      "place": "Kyoto",
+      "from": 1450,
+      "to": 1650,
+      "cell": "842e615ffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "This account draws on the most notable of the 27 documented events here.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Ginkaku-ji, a Zen temple in Kyoto's Sakyo ward, is dated to 1465.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q257473",
+              "label": "Ginkaku-ji Temple"
+            }
+          ]
+        },
+        {
+          "text": "The Ōnin War, a civil war from 1467 to 1477, grew from a dispute between Hosokawa Katsumoto and Yamana Sōzen.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q385676",
+              "label": "Ōnin War"
+            }
+          ]
+        },
+        {
+          "text": "The Battle of Goryō is recorded here in 1467.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q11489355",
+              "label": "Battle of Goryō"
+            }
+          ]
+        },
+        {
+          "text": "After that war weakened the Ashikaga shogunate, local samurai and peasants in Yamashiro Province rose up in 1485 and demanded the withdrawal of two rival warlord armies.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q10951611",
+              "label": "Yamashiro ikki"
+            }
+          ]
+        },
+        {
+          "text": "Their league, placed only approximately, operated until 1493, when a new invasion forced its members to reaccept the shogunate's authority.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q10951611",
+              "label": "Yamashiro ikki"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The Eiroku Incident, a 1565 battle, has an approximate location, and the Battle of Yasugawara is recorded in 1570.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q5365420",
+              "label": "Eiroku Incident"
+            },
+            {
+              "ref": "E6",
+              "qid": "Q11645800",
+              "label": "Battle of Yasugawara"
+            }
+          ]
+        },
+        {
+          "text": "In 1571 Oda Nobunaga fought the sōhei of Enryaku-ji on Mount Hiei near Kyoto.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q10748887",
+              "label": "Siege of Mount Hiei"
+            }
+          ]
+        },
+        {
+          "text": "The Siege of Makishima Castle, a 1573 battle, is also placed approximately.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q11120677",
+              "label": "Siege of Makishima Castle"
+            }
+          ]
+        },
+        {
+          "text": "In 1582 Nobunaga died by seppuku at Honnō-ji in Kyoto in the rebellion of his vassal Akechi Mitsuhide.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q169598",
+              "label": "Honnō-ji Incident"
+            }
+          ]
+        },
+        {
+          "text": "The Battle of Yamazaki, between the forces of Akechi Mitsuhide and Toyotomi Hideyoshi, was fought in 1582.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q39040",
+              "label": "Battle of Yamazaki"
+            }
+          ]
+        },
+        {
+          "text": "Emperor Go-Mizunoo was born here in 1596, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q320229",
+              "label": "Emperor Go-Mizunoo"
+            }
+          ]
+        },
+        {
+          "text": "In 1600 Fushimi Castle, defended by Torii Mototada for Tokugawa Ieyasu, fell in a battle leading up to the decisive Battle of Sekigahara.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q3275284",
+              "label": "Siege of Fushimi"
+            }
+          ]
+        },
+        {
+          "text": "That year Kyōgoku Takatsugu held Ōtsu castle for the Tokugawa.",
+          "cites": [
+            {
+              "ref": "E12",
+              "qid": "Q7510547",
+              "label": "Siege of Ōtsu"
+            }
+          ]
+        },
+        {
+          "text": "Empress Meishō was born here in 1624, Go-Kōmyō in 1633 and Go-Sai in 1638, all at approximate locations.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q120564",
+              "label": "Empress Meishō"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q329765",
+              "label": "Go-Kōmyō"
+            },
+            {
+              "ref": "P4",
+              "qid": "Q349414",
+              "label": "Go-Sai"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "panipat",
+      "place": "Panipat",
+      "from": 1500,
+      "to": 1800,
+      "cell": "853d12cffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 3 events and 1 place are documented here, so this account is short.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "The First Battle of Panipat, on 21 April 1526, was fought between the invading forces of Babur and Ibrahim Khan Lodi, the Sultan of Delhi.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q605321",
+              "label": "Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "Babur's forces, employing gunpowder firearms and cannons, defeated Ibrahim in one of the earliest battles involving gunpowder arms on the Indian subcontinent.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q605321",
+              "label": "Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "The victory marked the beginning of Mughal rule in India.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q605321",
+              "label": "Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "The Kabuli Bagh Mosque in Panipat was built in 1527 by the emperor Babur to mark that victory, and it is named after Kabuli Begum, Babur's wife.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q24938481",
+              "label": "Kabuli Bagh Mosque with enclosure wall"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The Second Battle of Panipat was fought on 5 November 1556, between the Mughals under Akbar and king Hemu, titularly known as Hemchandra Vikramaditya.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q233414",
+              "label": "Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "A few weeks earlier, Hemchandra had conquered Delhi and Agra by defeating Mughal forces under Tardi Beg Khan in the Battle of Delhi.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q233414",
+              "label": "Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "The Third Battle of Panipat took place on 14 January 1761, in and around the city of Panipat, between the Maratha Empire and the invading army of the Durrani Empire.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q1259218",
+              "label": "Third Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "The Afghans were supported by three key allies in India: Najib-ud-Daula, elements of the declining Mughal Empire, and the Oudh State under Shuja-ud-Daula.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q1259218",
+              "label": "Third Battle of Panipat"
+            }
+          ]
+        },
+        {
+          "text": "The Maratha army was led by Sadashivrao Bhau, third-highest authority of the Maratha Confederacy after the Chhatrapati and the Peshwa.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q1259218",
+              "label": "Third Battle of Panipat"
+            }
+          ]
+        }
+      ]
+    ]
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "entry": {
+    "id": "panipat",
+    "place": "Panipat",
+    "from": 1500,
+    "to": 1800,
+    "cell": "853d12cffffffff"
+  },
+  "generatedAt": "2026-10-29T23:53:49.173Z",
+  "dbRows": 255475,
+  "eventsTotal": 3,
+  "othersTotal": 1,
+  "context": {
+    "ref": "C",
+    "text": "This area has 3 documented events and 1 documented people and places in this range. 0 of these 3 events have approximate locations."
+  },
+  "items": [
+    {
+      "ref": "E1",
+      "qid": "Q605321",
+      "label": "Battle of Panipat",
+      "kind": "event",
+      "description": "1526 battle.",
+      "years": "1526 CE",
+      "start_year": 1526,
+      "end_year": 1526,
+      "loc_confidence": "exact",
+      "wikipedia_title": "First Battle of Panipat",
+      "extract": "The First Battle of Panipat, on 21 April 1526 was fought between the invading forces of Babur against Ibrahim Khan Lodi, the Sultan of Delhi, in North India. Babur's forces, employing gunpowder firearms and cannons, defeated Ibrahim. This was one of the earliest battles involving gunpowder arms on the Indian subcontinent. The victory marked the beginning of Mughal rule in India."
+    },
+    {
+      "ref": "E2",
+      "qid": "Q233414",
+      "label": "Battle of Panipat",
+      "kind": "event",
+      "description": "1556 battle",
+      "years": "1556 CE",
+      "start_year": 1556,
+      "end_year": 1556,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Second Battle of Panipat",
+      "extract": "The Second Battle of Panipat was fought on 5 November 1556, between the Mughals under Akbar and king Hemu, titularly known as Hemchandra Vikramaditya. Hemchandra had conquered Delhi and Agra a few weeks earlier by defeating Mughal forces under Tardi Beg Khan in the Battle of Delhi. He crowned himself Vikramaditya at Purana Quila in Delhi."
+    },
+    {
+      "ref": "E3",
+      "qid": "Q1259218",
+      "label": "Third Battle of Panipat",
+      "kind": "event",
+      "description": "1761 battle in India between the Durrani and Maratha empires",
+      "years": "1761 CE",
+      "start_year": 1761,
+      "end_year": 1761,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Third Battle of Panipat",
+      "extract": "The Third Battle of Panipat took place on 14 January 1761 between the Maratha Empire and the invading army of the Durrani Empire. The battle took place in and around the city of Panipat, approximately 97 kilometres (60 mi) north of Delhi. The Afghans were supported by three key allies in India: Najib-ud-Daula who persuaded the support of the Rohilla chiefs, elements of the declining Mughal Empire, and most prized the Oudh State under Shuja-ud-Daula. The Maratha army was led by Sadashivrao Bhau, who was third-highest authority of the Maratha Confederacy after the Chhatrapati and the Peshwa. The bulk of the Maratha army was stationed in the Deccan Plateau with the Peshwa."
+    },
+    {
+      "ref": "P1",
+      "qid": "Q24938481",
+      "label": "Kabuli Bagh Mosque with enclosure wall",
+      "kind": "structure",
+      "description": "mosque in India",
+      "years": "1527 CE",
+      "start_year": 1527,
+      "end_year": 1527,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Kabuli Bagh Mosque",
+      "extract": "The Kabuli Bagh Mosque is a mosque in Panipat, Haryana, India which was built in 1527 by the emperor Babur to mark his victory over Sultan Ibrahim Lodhi at the first Battle of Panipat in 1526. The mosque is named after Kabuli Begum, Babur's wife. The mosque and surrounding enclosure wall are a Monument of National Importance."
+    }
+  ]
+}
