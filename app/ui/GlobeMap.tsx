@@ -182,7 +182,7 @@ function tooltip(p: DotProperties): HTMLElement {
   return el;
 }
 
-/** A stack's members with their own coordinates. Rejects if the cluster is gone (new data or zoom). */
+/** A stack's members with their own exact coordinates. Rejects if the cluster is gone (new data or zoom). */
 async function stackMembers(map: MapLibreMap, clusterId: number) {
   const source = map.getSource("dots") as GeoJSONSource | undefined;
   if (!source) return [];
@@ -190,8 +190,7 @@ async function stackMembers(map: MapLibreMap, clusterId: number) {
   return leaves.flatMap((f) => {
     if (f.geometry.type !== "Point") return [];
     const p = f.properties as DotProperties;
-    const [lon, lat] = f.geometry.coordinates as [number, number];
-    return [{ p, lon, lat, sitelinks: p.sitelinks }];
+    return [{ p, lon: p.lon, lat: p.lat, sitelinks: p.sitelinks }];
   });
 }
 
@@ -592,9 +591,13 @@ export function GlobeMap({
           // holding most of its members, with no item in focus.
           const hit = m.queryRenderedFeatures(e.point, { layers: ["stacks", "dots"] })[0];
           if (hit && hit.geometry.type === "Point") {
-            const at = hit.geometry.coordinates as [number, number];
-            if (hit.layer.id === "stacks") void selectStack(m, hit.properties?.cluster_id as number, at, res);
-            else onSelectRef.current({ kind: "cell", cell: latLngToCell(at[1], at[0], res), focus: (hit.properties as DotProperties).qid });
+            if (hit.layer.id === "stacks") {
+              void selectStack(m, hit.properties?.cluster_id as number, hit.geometry.coordinates as [number, number], res);
+            } else {
+              // The dot's own exact position, not its rendered (tile-rounded) geometry.
+              const p = hit.properties as DotProperties;
+              onSelectRef.current({ kind: "cell", cell: latLngToCell(p.lat, p.lon, res), focus: p.qid });
+            }
             return;
           }
         }

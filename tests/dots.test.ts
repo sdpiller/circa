@@ -41,8 +41,14 @@ describe("toFeatureCollection", () => {
     expect(fc.features[0]).toEqual({
       type: "Feature",
       geometry: { type: "Point", coordinates: [23.9, 38.1] },
-      properties: { qid: "Q31900", label: "Battle of Marathon", group: "conflict", approx: true, years: "490 BCE", what: "conflict", sortKey: 1_000_076, sitelinks: 76 },
+      properties: { qid: "Q31900", label: "Battle of Marathon", group: "conflict", approx: true, years: "490 BCE", what: "conflict", sortKey: 1_000_076, sitelinks: 76, lon: 23.9, lat: 38.1 },
     });
+  });
+
+  it("carries the exact position in properties, since rendered geometry is rounded to the tile grid", () => {
+    const p = toFeatureCollection([dot({ lat: 37.123456789, lon: -122.987654321 })]).features[0].properties;
+    expect(p.lon).toBe(-122.987654321);
+    expect(p.lat).toBe(37.123456789);
   });
 
   it("writes the tooltip line from years, what, and location confidence", () => {

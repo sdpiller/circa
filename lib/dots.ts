@@ -47,6 +47,10 @@ export type DotProperties = {
   what: string;
   sortKey: number;
   sitelinks: number; // picks which members of a stack get a web leg
+  // The exact position. Rendered geometry from queryRenderedFeatures is rounded to the tile grid,
+  // which can put a point in the neighbouring H3 cell, so cells are computed from these.
+  lon: number;
+  lat: number;
 };
 
 /** The tooltip's second line, shared by the map tooltip and the web's leg tooltip. */
@@ -78,6 +82,8 @@ export function toFeatureCollection(dots: Dot[]): DotFeatureCollection {
           what: what(d),
           sortKey: (group === "context" ? 0 : EVENT_LAYER) + d.sitelinks,
           sitelinks: d.sitelinks,
+          lon: d.lon,
+          lat: d.lat,
         },
       };
     }),
