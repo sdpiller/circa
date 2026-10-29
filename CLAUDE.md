@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 0 complete; gate passed 2026-10-28 (structures, births, extra event classes, and discoveries added; see docs/decisions.md 18 and 19). Phase 1 (ETL load) next. (Update this line at every phase gate.)
+Phase 1 complete, at the gate (2026-10-28): `npm run etl` builds data/chronoglobe.db (255,475 rows); awaiting the owner's go-ahead for Phase 2 (events API). (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 

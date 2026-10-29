@@ -11,15 +11,19 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "etl:fetch": "node --env-file-if-exists=.env.local etl/fetch.ts",
-    "audit": "node etl/audit.ts"
+    "audit": "node etl/audit.ts",
+    "etl:load": "node etl/load.ts",
+    "etl": "npm run etl:fetch && npm run etl:load"
   },
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
     "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",

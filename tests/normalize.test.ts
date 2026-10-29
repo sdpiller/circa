@@ -64,8 +64,8 @@ describe("chooseDates", () => {
     expect(chooseDates(battle, [date("P585", -491), date("P585", -490, 9, "preferred")])).toMatchObject({ start: -490, end: -490 });
   });
 
-  it("spans disagreeing values of the same rank", () => {
-    expect(chooseDates(battle, [date("P585", -491), date("P585", -489)])).toMatchObject({ start: -491, end: -489, origYear: -491 });
+  it("uses the earliest of disagreeing values of the same rank, not a span between them", () => {
+    expect(chooseDates(battle, [date("P585", -489), date("P585", -491)])).toMatchObject({ start: -491, end: -491, origYear: -491 });
   });
 
   it("prefers P585 over P580 and extends the end with P582", () => {
@@ -152,7 +152,13 @@ describe("chooseDates with values of different precision", () => {
     expect(chooseDates(discovery, lascaux)).toMatchObject({ start: 1940, end: 1940, precision: 11 });
   });
 
-  it("still spans disagreeing values of equal precision", () => {
-    expect(chooseDates(battle, [date("P585", -491), date("P585", -489)])).toMatchObject({ start: -491, end: -489 });
+  it("treats several inceptions as milestones and keeps the founding (Kyoto: 794, not 794 to 1889)", () => {
+    // Real Kyoto rows, 2026-10-28: P571 794 (Heian-kyo) and 1889 (the modern municipality), equal rank and precision.
+    const founding: ClassConfig = { ...battle, key: "settlement-founding", kind: "founding", category: "founding", dateProps: ["P571"], locProps: ["P625"] };
+    expect(chooseDates(founding, [date("P571", 1889, 11), date("P571", 794, 9)])).toMatchObject({ start: 794, end: 794 });
+  });
+
+  it("still takes a real span from explicit start and end properties", () => {
+    expect(chooseDates(battle, [date("P580", -431), date("P582", -404)])).toMatchObject({ start: -431, end: -404 });
   });
 });

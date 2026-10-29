@@ -8,8 +8,8 @@ The narrative is the point; the globe is how you get to it.
 
 Work in progress, built in phases (see [docs/PLAN.md](docs/PLAN.md)).
 
-- **Done (Phase 0):** project scaffold, year-convention library with tests, and a Wikidata fetch plus data audit. The audit results are in [docs/data-audit.md](docs/data-audit.md).
-- **Not built yet:** the database loader, the events API, the globe UI, the area panel, and the narratives. `npm run dev` currently shows only the default starter page.
+- **Done (Phases 0 and 1):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), and a local SQLite database of about 255,000 dated, located items: events, settlement foundings, structures and sites, notable births, and discoveries.
+- **Not built yet:** the events API, the globe UI, the area panel, and the narratives. `npm run dev` currently shows only the default starter page.
 
 ## Requirements
 
@@ -39,7 +39,9 @@ Then edit `.env.local`. For the current phase only `WIKIMEDIA_CONTACT` is needed
 | `npm test` | Run the unit tests (vitest). |
 | `npm run typecheck` | Generate Next.js route types and run the TypeScript compiler. |
 | `npm run lint` | Run ESLint. |
+| `npm run etl` | Fetch whatever is missing, then build the database. One command from nothing to `data/chronoglobe.db`. |
 | `npm run etl:fetch` | Download event data from Wikidata into `data/raw/`. See below. |
+| `npm run etl:load` | Build `data/chronoglobe.db` from `data/raw/` (about 7 seconds). |
 | `npm run audit` | Rebuild the tables in `docs/data-audit.md` from `data/raw/`. |
 | `npm run dev` | Start the Next.js dev server on http://localhost:3000. |
 
@@ -61,6 +63,12 @@ How it works, briefly:
 - Every batch is saved as its own file under `data/raw/` (gitignored). If a run stops, rerunning it skips what is already there and continues.
 - A full run makes about a thousand small queries and takes roughly an hour. The raw files take well over 100 MB.
 
+## Building the database
+
+`npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 56 MB). It normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
+
+On Windows, stop the dev server before rebuilding: the final rename fails while another process has the database open.
+
 The reasoning behind these choices, including the Wikidata year-zero trap and why the queries are shaped the way they are, is in [docs/decisions.md](docs/decisions.md).
 
 ## Repository layout
@@ -68,7 +76,8 @@ The reasoning behind these choices, including the Wikidata year-zero trap and wh
 ```
 app/         Next.js app (starter page for now)
 lib/time/    Year conventions: no year 0, BCE as negative years, imprecise-date intervals
-etl/         Fetch, normalize, and audit scripts, plus classes.json
+lib/db/      Database schema and row validation
+etl/         Fetch, normalize, build, load, and audit scripts, plus classes.json
 tests/       Unit tests and live API fixtures
 docs/        PLAN.md, decisions.md, data-audit.md
 data/        Local data, gitignored

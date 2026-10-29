@@ -5,19 +5,17 @@
  *
  * Usage: npm run audit
  */
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { formatYear } from "../lib/time/index.ts";
-import { loadConfig, RAW_DIR, type RawFile } from "./fetch.ts";
-import { collectFacts, normalize, type EventRecord, type Rejection } from "./normalize.ts";
-import type { ClassConfig, Kind } from "./queries.ts";
+import { buildDataset, MAX_INTERVAL_YEARS, MAX_YEAR, MIN_YEAR } from "./build.ts";
+import { loadConfig } from "./fetch.ts";
+import type { EventRecord, Rejection } from "./normalize.ts";
+import type { Kind } from "./queries.ts";
 
 const REPORT = join(import.meta.dirname, "..", "docs", "data-audit.md");
 const BEGIN = "<!-- BEGIN GENERATED (npm run audit) -->";
 const END = "<!-- END GENERATED -->";
-const MIN_YEAR = -3500;
-const MAX_YEAR = 2026;
-
 // ---------- regions ----------
 
 /** Coarse, ordered, first match wins. Boundaries are approximate by design. */
@@ -88,52 +86,11 @@ function quantile(sorted: number[], q: number): number {
   return sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))];
 }
 
-// ---------- load ----------
-
-type ClassStats = { c: ClassConfig; fetched: number; records: EventRecord[]; rejections: Map<Rejection, number>; queries: number; queryMs: number };
-
-function loadClass(c: ClassConfig): ClassStats | null {
-  const dir = join(RAW_DIR, c.key);
-  if (!existsSync(join(dir, "items.json"))) return null;
-  const files = readdirSync(dir).filter((f) => f.endsWith(".json"));
-  const byFacet: Record<string, RawFile["bindings"]> = { items: [], meta: [], dates: [], locs: [], labels: [] };
-  let queryMs = 0;
-  for (const f of files) {
-    const raw: RawFile = JSON.parse(readFileSync(join(dir, f), "utf8"));
-    byFacet[raw.part.split("-")[0]].push(...raw.bindings);
-    queryMs += raw.elapsedMs;
-  }
-  const facts = collectFacts(byFacet.items, byFacet.meta, byFacet.dates, byFacet.locs, byFacet.labels);
-  const records: EventRecord[] = [];
-  const rejections = new Map<Rejection, number>();
-  for (const f of facts.values()) {
-    const r = normalize(c, f);
-    if (r.ok) records.push(r.record);
-    else rejections.set(r.reason, (rejections.get(r.reason) ?? 0) + 1);
-  }
-  return { c, fetched: facts.size, records, rejections, queries: files.length, queryMs };
-}
-
 // ---------- report ----------
 
 function main() {
   const config = loadConfig();
-  const stats = config.classes.map(loadClass).filter((s): s is ClassStats => s !== null);
-  const missing = config.classes.filter((c) => !stats.some((s) => s.c.key === c.key)).map((c) => c.key);
-
-  // Dedupe across classes: an item keeps the highest-priority kind, then category (classes.json).
-  const rank = (r: EventRecord) => config.kindPriority.indexOf(r.kind) * 100 + config.categoryPriority.indexOf(r.category);
-  const byQid = new Map<string, EventRecord>();
-  const classCount = new Map<string, number>();
-  for (const s of stats) {
-    for (const r of s.records) {
-      classCount.set(r.qid, (classCount.get(r.qid) ?? 0) + 1);
-      const prev = byQid.get(r.qid);
-      if (!prev || rank(r) < rank(prev)) byQid.set(r.qid, r);
-    }
-  }
-  const inRange = (r: EventRecord) => overlapsYears(r, MIN_YEAR, MAX_YEAR);
-  const all = [...byQid.values()].filter(inRange);
+  const { stats, missing, kept: all, dropped, classCount } = buildDataset(config);
   const ofKind = (k: Kind) => all.filter((r) => r.kind === k);
   const strict = ofKind("event"); // "events" throughout the report
   const foundings = ofKind("founding");
@@ -235,8 +192,7 @@ function main() {
     ["Century", "Events", "of which conflict", ...groupNames.slice(1)],
     centuries.map((c) => [centLabel(c), cm[0].get(c) ?? 0, pct(strictConflict.get(c) ?? 0, cm[0].get(c) ?? 0), ...cm.slice(1).map((m) => m.get(c) ?? 0)]),
   ));
-  const allStrict = [...byQid.values()];
-  out.push(`\nOutside the window (dropped): ${fmt(allStrict.filter((r) => r.endYear < MIN_YEAR).length)} items end before ${formatYear(MIN_YEAR)}, ${fmt(allStrict.filter((r) => r.startYear > MAX_YEAR).length)} start after ${MAX_YEAR}.`);
+  out.push(`\nDropped after dedupe (not in any table here, not loaded): ${fmt(dropped.outOfWindow)} items fall outside ${formatYear(MIN_YEAR)} to ${MAX_YEAR}; ${fmt(dropped.tooWide)} have an effective interval wider than ${fmt(MAX_INTERVAL_YEARS)} years.`);
   const prec = (rs: EventRecord[], p: (n: number) => boolean) => pct(rs.filter((r) => p(r.yearPrecision)).length, rs.length);
   out.push(table(
     ["Date precision", ...groupNames],

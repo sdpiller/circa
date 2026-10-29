@@ -107,5 +107,15 @@ A discovery is placed at its find spot (P189). Falling back to the item's own P6
 
 Risk to watch: the discovery membership query took 59.5 s on WDQS, just under its 60 s limit. If it times out on a rebuild, move it to QLever (`membershipEndpoint`).
 
-## 22. Among equal-rank dates, the most precise win (2026-10-28)
+## 22. Among equal-rank dates, the most precise win (2026-10-28; the "then spans them" part is superseded by entry 24)
 `chooseDates` keeps only the most precise of the best-ranked values (day, month, and year count as equal), then spans them. Found through Lascaux (Q172125): two normal-rank P575 values, 1940-09-12 at day precision (the discovery) and a millennium-precision value for the paintings' age. Spanning both gave a 19,000-year interval that would match almost every range query. Equal-precision disagreements (Marathon's three dates) still span as before.
+
+## 23. Schema additions and how the database is built (2026-10-28, Phase 1)
+The `events` table follows the CLAUDE.md schema plus three columns: `kind` (entry 18), `label_lang` (the label's language, since non-English labels are kept), and `class_key` (the class in `etl/classes.json` the item came from, for debugging and filtering). `loc_source` also takes `P19` (birthplace) and `P189` (find spot). A small `build_info` table records when and from what the database was built. Indexes are the two from CLAUDE.md; no others until Phase 2 measures.
+
+Build: `etl/build.ts` is the single definition of the data set (normalize, dedupe by kind then category priority, year window, width cap), used by both the audit and the loader, so their counts match exactly. `etl/load.ts` validates every row with zod, writes a fresh database to a temp file, carries cached narratives over from the old database, runs the four spot checks against the temp file, and only then renames it into place. A failed load never touches the working database. Rebuilding from the same raw files is byte-for-byte identical in content (same SHA-256 over all rows, checked twice).
+
+First timing (not optimized, for Phase 2): queries limited to a range such as 500 to 300 BCE take under 1 ms; the whole year range at world scale takes about 57 ms per kind (full scan and sort), so up to about 285 ms for five kinds. A `(kind, sitelinks)` index is the obvious candidate if Phase 2 confirms it.
+
+## 24. Several values of a single-moment date: earliest wins, never a span (2026-10-28, Phase 1)
+Supersedes the spanning in entry 22. Among the best-ranked, most precise values of a single-moment property (P585, P571, P569, P575), the earliest is used, with its own precision interval. Found when the new 1,000-year width cap dropped Kyoto (P571 794 for Heian-kyo and 1889 for the modern municipality, spanned to 1,100 years) and Stonehenge (construction phases). Several such values are milestones or small disagreements, not a span; real spans come only from explicit start and end properties (P580, P582). After the change the cap drops 10 items, all genuinely vague.

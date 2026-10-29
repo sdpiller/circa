@@ -148,8 +148,11 @@ export function chooseDates(c: ClassConfig, dates: DateValue[]): { start: number
   if (!starts.length) return "no-date";
   try {
     const intervals = starts.map((d) => ({ d, i: effectiveInterval(d.year, d.precision) }));
+    // Several values of a single-moment property are milestones or disagreements, not a span:
+    // Kyoto's inceptions are 794 (founding) and 1889 (municipality). Keep the earliest. Real spans
+    // come only from an explicit end property (P582).
     const earliest = intervals.reduce((a, b) => (b.i.start < a.i.start ? b : a));
-    let end = Math.max(...intervals.map((x) => x.i.end));
+    let end = earliest.i.end;
     const ends = bestRanked(dates.filter((d) => d.prop === END_PROP));
     if (ends.length) {
       const endMax = Math.max(...ends.map((d) => effectiveInterval(d.year, d.precision).end));

@@ -6,10 +6,10 @@ Five kinds are reported separately throughout:
 
 | Kind | Usable items | What it is |
 | --- | ---: | --- |
-| Events | 40,464 | Battles, treaties, earthquakes, protests, accidents, councils, and the other event classes (`etl/classes.json`) |
-| Settlement foundings | 73,345 | Settlements with an inception date |
-| Structures and sites | 53,569 | Built structures (≥5 sitelinks) and archaeological sites with an inception date |
-| Births | 85,013 | People with a birth date and a located birthplace (≥20 sitelinks) |
+| Events | 40,463 | Battles, treaties, earthquakes, protests, accidents, councils, and the other event classes (`etl/classes.json`) |
+| Settlement foundings | 73,344 | Settlements with an inception date |
+| Structures and sites | 53,562 | Built structures (≥5 sitelinks) and archaeological sites with an inception date |
+| Births | 85,011 | People with a birth date and a located birthplace (≥20 sitelinks) |
 | Discoveries | 3,095 | Items with a time of discovery, placed at the find spot |
 
 ## Summary
@@ -52,11 +52,11 @@ Structures and births were fetched with floors (≥5 and ≥20 sitelinks) to kee
 ## Findings to act on in Phase 1
 
 - **Rank within each kind, never across kinds.** Births have far more sitelinks than events (median 27 versus 3; Aristotle 319 versus Thermopylae 83, section F). One mixed ranking would fill the globe with birthplaces. The events API needs a quota per kind per viewport.
-- **Cap absurdly wide intervals.** A few items have precision 4 or coarser, for example the Dispilio Neolithic Settlement at "100000 BCE to 1 BCE". Under the overlap rule they match every range query. Proposal: skip items whose effective interval is wider than 1,000 years.
+- **Cap absurdly wide intervals: done in Phase 1.** Items whose effective interval is wider than 1,000 years match nearly every range query under the overlap rule, so they are dropped (`MAX_INTERVAL_YEARS` in `etl/build.ts`). Only 10 items, all genuinely vague: "neolithic revolution" (a 7,000-year span), births at ten-millennia precision, and caves and sites dated "100000 BCE to 1 BCE" such as the Dispilio Neolithic Settlement. The first version of the cap also caught Kyoto and Stonehenge; see the next point.
 - **Settlement foundings are mostly modern and mostly Europe and North America** (Europe 39,930, Americas north of 15°N 14,505; about 43,000 in the 19th and 20th centuries). Fine with per-kind ranking, but they would swamp modern ranges otherwise.
 - **"Inception" is not always "built".** The Temple of Artemis at Ephesus shows 323 BCE, the date of the rebuilt temple. UI copy should say "dated" or "inception", not "built", unless the narrative's source says so.
-- **Label fallback: done, modest gain.** The first pass rejected 3,093 events for having no English label, and I guessed these were mostly non-European events. **That guess was wrong.** Falling back to other languages (`chooseLabel`: English, then `mul`, then a preference list) recovers them; across today's 40,464 events, 3,313 rely on a non-English label, mostly French (906), Russian (708), German (320), and Spanish (260). Per region it ranges from 2% to 17%, highest in Russia and Central Asia (17%) and the Americas south of 15°N (14%), with Europe at 10% (section C2). Keep the fallback, and record the label language (`labelLang`) so the UI and narrative know when a label is not English.
-- **Most precise value wins.** When several equal-rank dates disagree, only the most precise are kept, then spanned. Without this, Lascaux (discovered 1940, with a misfiled millennium-precision value for the paintings' age) became a 19,000-year interval.
+- **Label fallback: done, modest gain.** The first pass rejected 3,093 events for having no English label, and I guessed these were mostly non-European events. **That guess was wrong.** Falling back to other languages (`chooseLabel`: English, then `mul`, then a preference list) recovers them; across 40,463 events, 3,313 rely on a non-English label, mostly French (906), Russian (708), German (320), and Spanish (260). Per region it ranges from 2% to 17%, highest in Russia and Central Asia (17%) and the Americas south of 15°N (14%), with Europe at 10% (section C2). Keep the fallback, and record the label language (`labelLang`) so the UI and narrative know when a label is not English.
+- **Several values: most precise, then earliest.** When several equal-rank values of one date property disagree, only the most precise are kept, and of those the earliest wins. Spanning them was wrong in both directions: Lascaux (discovered 1940, plus a misfiled millennium-precision value for the paintings' age) became a 19,000-year interval, and Kyoto (inceptions 794 for Heian-kyo and 1889 for the modern municipality) a 1,100-year "founding" that the width cap then dropped, as it did Stonehenge. Real spans come only from explicit start and end properties (P580 and P582).
 - **Dedupe:** 9,956 items matched more than one class; they are resolved by kind priority, then category priority.
 - **Multi-valued dates** are common for famous events (Marathon has three P585 values with different ranks). Rank handling works as designed.
 
@@ -73,7 +73,7 @@ Full detail in `docs/decisions.md`, entries 10 and 11, with tests in `tests/time
 The owner chose to add structures and sites, and births (options 2 and 3), as separate kinds; then, after a gap scan, civil and social events, accidents and disasters, more conflict classes, and discoveries. Sports and entertainment editions are excluded. Phase 1 adds a `kind` column to the schema.
 
 <!-- BEGIN GENERATED (npm run audit) -->
-Generated 2026-10-28 from `data/raw/`. Year window: 3500 BCE to 2026 (overlap test on effective intervals).
+Generated 2026-10-29 from `data/raw/`. Year window: 3500 BCE to 2026 (overlap test on effective intervals).
 
 ### A. Fetch and normalization, per class
 
@@ -133,23 +133,23 @@ Usable items that matched more than one class: 9,956 (deduped by category priori
 | Category | Events | Settlement foundings | Structures and sites | Births | Discoveries |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | conflict | 24,379 | 0 | 0 | 0 | 0 |
-| politics | 4,850 | 0 | 0 | 0 | 0 |
+| politics | 4,849 | 0 | 0 | 0 | 0 |
 | disaster | 10,642 | 0 | 0 | 0 | 0 |
 | science | 161 | 0 | 0 | 0 | 3,095 |
 | other | 49 | 0 | 0 | 0 | 0 |
-| culture | 383 | 0 | 53,569 | 85,013 | 0 |
-| founding | 0 | 73,345 | 0 | 0 | 0 |
+| culture | 383 | 0 | 53,562 | 85,011 | 0 |
+| founding | 0 | 73,344 | 0 | 0 | 0 |
 
-Events: **40,464**. Settlement foundings: **73,345**. Structures and sites: **53,569**. Births: **85,013**. Discoveries: **3,095**.
+Events: **40,463**. Settlement foundings: **73,344**. Structures and sites: **53,562**. Births: **85,011**. Discoveries: **3,095**.
 
 ### C. Location confidence
 
 | Group | Usable | Exact (own P625) | Inherited P276 | Inherited P131 | Inherited P19 (birthplace) | P189 (find spot) | Several places to pick from |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Events | 40,464 | 58% | 41% | 2% | 0% | 0% | 3% |
-| Settlement foundings | 73,345 | 100% | 0% | 0% | 0% | 0% | 0% |
-| Structures and sites | 53,569 | 98% | 0% | 2% | 0% | 0% | 1% |
-| Births | 85,013 | 0% | 0% | 0% | 100% | 0% | 1% |
+| Events | 40,463 | 58% | 41% | 2% | 0% | 0% | 3% |
+| Settlement foundings | 73,344 | 100% | 0% | 0% | 0% | 0% | 0% |
+| Structures and sites | 53,562 | 98% | 0% | 2% | 0% | 0% | 1% |
+| Births | 85,011 | 0% | 0% | 0% | 100% | 0% | 1% |
 | Discoveries | 3,095 | 40% | 0% | 0% | 0% | 60% | 2% |
 
 ### C2. Label language (events)
@@ -160,7 +160,7 @@ Items with no English label fall back to `mul` (language-neutral), then other la
 | --- | ---: | ---: | ---: | ---: |
 | Europe | 17,997 | 90% | 0% | 10% |
 | North Africa | 1,263 | 97% | 0% | 3% |
-| Anatolia and Middle East | 4,891 | 93% | 0% | 7% |
+| Anatolia and Middle East | 4,890 | 93% | 0% | 7% |
 | Sub-Saharan Africa | 1,621 | 96% | 0% | 4% |
 | South Asia | 1,783 | 96% | 0% | 4% |
 | East Asia | 2,913 | 90% | 0% | 10% |
@@ -178,9 +178,9 @@ Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). 
 
 | Region | before 1000 BCE | 1000 to 501 BCE | 500 to 1 BCE | 1 to 500 | 501 to 1000 | 1001 to 1500 | 1501 to 1800 | 1801 to 1900 | 1901 to now | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Europe | 4 | 33 | 554 | 264 | 617 | 2,543 | 3,913 | 2,145 | 7,967 | 17,997 |
+| Europe | 4 | 33 | 554 | 264 | 617 | 2,543 | 3,913 | 2,143 | 7,966 | 17,997 |
 | North Africa | 4 | 4 | 51 | 30 | 56 | 149 | 264 | 107 | 603 | 1,263 |
-| Anatolia and Middle East | 21 | 59 | 202 | 166 | 408 | 606 | 391 | 227 | 2,824 | 4,891 |
+| Anatolia and Middle East | 20 | 59 | 202 | 166 | 408 | 606 | 391 | 227 | 2,824 | 4,890 |
 | Sub-Saharan Africa | 0 | 0 | 1 | 0 | 1 | 16 | 78 | 205 | 1,329 | 1,621 |
 | South Asia | 0 | 3 | 19 | 7 | 25 | 81 | 384 | 131 | 1,143 | 1,783 |
 | East Asia | 4 | 7 | 21 | 73 | 68 | 210 | 492 | 301 | 1,744 | 2,913 |
@@ -194,15 +194,15 @@ Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). 
 
 | Region | Events | Settlement foundings | Structures and sites | Births | Discoveries |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Europe | 17,997 | 39,930 | 27,039 | 42,944 | 1,686 |
+| Europe | 17,997 | 39,929 | 27,035 | 42,942 | 1,686 |
 | North Africa | 1,263 | 189 | 672 | 1,091 | 227 |
-| Anatolia and Middle East | 4,891 | 2,513 | 3,078 | 3,818 | 416 |
+| Anatolia and Middle East | 4,890 | 2,513 | 3,078 | 3,818 | 416 |
 | Sub-Saharan Africa | 1,621 | 841 | 696 | 2,255 | 78 |
 | South Asia | 1,783 | 686 | 1,228 | 2,035 | 28 |
-| East Asia | 2,913 | 3,898 | 10,549 | 6,724 | 259 |
+| East Asia | 2,913 | 3,898 | 10,547 | 6,724 | 259 |
 | Southeast Asia and Oceania | 2,187 | 2,017 | 2,109 | 1,861 | 90 |
 | Russia, Central and North Asia | 671 | 7,017 | 612 | 1,011 | 84 |
-| Americas north of 15°N | 5,065 | 14,505 | 6,135 | 18,824 | 175 |
+| Americas north of 15°N | 5,065 | 14,505 | 6,134 | 18,824 | 175 |
 | Americas south of 15°N | 2,014 | 1,731 | 1,396 | 4,381 | 49 |
 | Other (oceans, polar) | 59 | 18 | 55 | 69 | 3 |
 
@@ -210,7 +210,7 @@ Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). 
 
 | Century | Events | of which conflict | Settlement foundings | Structures and sites | Births | Discoveries |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 35th c. BCE | 3 | 33% | 7 | 27 | 0 | 0 |
+| 35th c. BCE | 2 | 50% | 6 | 21 | 0 | 0 |
 | 34th c. BCE | 0 | n/a | 2 | 0 | 0 | 0 |
 | 33rd c. BCE | 1 | 100% | 0 | 1 | 1 | 0 |
 | 32nd c. BCE | 0 | n/a | 3 | 1 | 1 | 0 |
@@ -245,7 +245,7 @@ Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). 
 | 3rd c. BCE | 226 | 100% | 29 | 29 | 78 | 0 |
 | 2nd c. BCE | 121 | 97% | 20 | 35 | 65 | 0 |
 | 1st c. BCE | 197 | 96% | 22 | 68 | 102 | 0 |
-| 1st c. | 91 | 88% | 66 | 154 | 174 | 0 |
+| 1st c. | 91 | 88% | 66 | 153 | 172 | 0 |
 | 2nd c. | 49 | 86% | 13 | 66 | 126 | 0 |
 | 3rd c. | 120 | 93% | 21 | 69 | 155 | 0 |
 | 4th c. | 123 | 74% | 17 | 98 | 163 | 0 |
@@ -267,7 +267,7 @@ Approximate lat/lon boxes, first match wins (see `region()` in `etl/audit.ts`). 
 | 20th c. | 12,621 | 47% | 22,880 | 25,124 | 61,179 | 1,880 |
 | 21st c. | 9,190 | 31% | 3,704 | 5,899 | 1,289 | 415 |
 
-Outside the window (dropped): 132 items end before 3500 BCE, 9 start after 2026.
+Dropped after dedupe (not in any table here, not loaded): 142 items fall outside 3500 BCE to 2026; 10 have an effective interval wider than 1,000 years.
 | Date precision | Events | Settlement foundings | Structures and sites | Births | Discoveries |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | day or month (10 to 11) | 82% | 20% | 23% | 94% | 19% |
@@ -280,25 +280,25 @@ Outside the window (dropped): 132 items end before 3500 BCE, 9 start after 2026.
 
 | Group | Median | p90 | p99 | ≥1 | ≥2 | ≥3 | ≥5 | ≥10 | ≥20 | ≥50 | ≥100 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Events | 3 | 16 | 48 | 40,464 | 29,237 | 22,930 | 15,612 | 7,687 | 2,774 | 378 | 26 |
-| Settlement foundings | 9 | 38 | 93 | 73,345 | 65,160 | 60,104 | 54,391 | 33,946 | 17,422 | 3,140 | 629 |
-| Structures and sites | 7 | 19 | 47 | 53,569 | 53,092 | 52,565 | 52,090 | 17,660 | 5,133 | 458 | 33 |
-| Births | 27 | 54 | 117 | 85,013 | 85,013 | 85,013 | 85,013 | 85,013 | 85,013 | 10,858 | 1,408 |
+| Events | 3 | 16 | 48 | 40,463 | 29,236 | 22,929 | 15,611 | 7,686 | 2,773 | 377 | 26 |
+| Settlement foundings | 9 | 38 | 93 | 73,344 | 65,159 | 60,104 | 54,391 | 33,946 | 17,422 | 3,140 | 629 |
+| Structures and sites | 7 | 19 | 47 | 53,562 | 53,085 | 52,558 | 52,085 | 17,656 | 5,131 | 458 | 33 |
+| Births | 27 | 54 | 117 | 85,011 | 85,011 | 85,011 | 85,011 | 85,011 | 85,011 | 10,858 | 1,408 |
 | Discoveries | 2 | 15 | 126 | 3,095 | 2,052 | 1,474 | 938 | 513 | 208 | 56 | 35 |
 
 Candidates were fetched with a floor (structures ≥5, births ≥20), so their counts below the floor are zero by construction.
 
 | Events: sitelinks ≥ t, by era | ≥1 | ≥2 | ≥3 | ≥5 | ≥10 | ≥20 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| before 1000 BCE | 33 | 28 | 23 | 20 | 15 | 6 |
+| before 1000 BCE | 32 | 27 | 22 | 19 | 14 | 5 |
 | 1000 to 501 BCE | 106 | 76 | 66 | 50 | 35 | 15 |
 | 500 to 1 BCE | 858 | 663 | 575 | 471 | 329 | 138 |
 | 1 to 500 | 546 | 433 | 372 | 282 | 158 | 50 |
 | 501 to 1000 | 1,209 | 914 | 736 | 564 | 326 | 111 |
 | 1001 to 1500 | 3,697 | 2,648 | 2,054 | 1,417 | 732 | 240 |
 | 1501 to 1800 | 6,659 | 5,047 | 3,974 | 2,643 | 1,179 | 344 |
-| 1801 to 1900 | 5,631 | 4,322 | 3,366 | 2,191 | 900 | 277 |
-| 1901 to now | 21,845 | 15,200 | 11,843 | 8,033 | 4,051 | 1,613 |
+| 1801 to 1900 | 5,629 | 4,321 | 3,366 | 2,191 | 900 | 277 |
+| 1901 to now | 21,844 | 15,200 | 11,843 | 8,033 | 4,051 | 1,613 |
 
 Does a threshold cut some regions harder than others? Share of each region's events that survive:
 
@@ -306,7 +306,7 @@ Does a threshold cut some regions harder than others? Share of each region's eve
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Europe | 17,997 | 69% | 54% | 38% | 20% |
 | North Africa | 1,263 | 77% | 61% | 41% | 18% |
-| Anatolia and Middle East | 4,891 | 77% | 64% | 46% | 23% |
+| Anatolia and Middle East | 4,890 | 77% | 64% | 46% | 23% |
 | Sub-Saharan Africa | 1,621 | 82% | 62% | 39% | 17% |
 | South Asia | 1,783 | 78% | 57% | 36% | 17% |
 | East Asia | 2,913 | 72% | 58% | 41% | 20% |
@@ -322,14 +322,14 @@ Cells: events / settlement foundings / structures and sites / births / discoveri
 
 | Area | 1000 to 501 BCE | 500 to 300 BCE | 299 to 1 BCE | 1 to 500 | 1001 to 1500 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Greece and Aegean | 27 / 22 / 24 / 122 / 0 | 148 / 9 / 58 / 169 / 0 | 117 / 5 / 16 / 46 / 0 | 37 / 3 / 42 / 73 / 0 | 263 / 22 / 146 / 111 / 0 |
-| Italy | 11 / 35 / 17 / 20 / 0 | 93 / 14 / 27 / 30 / 0 | 185 / 6 / 63 / 82 / 0 | 94 / 6 / 148 / 168 / 0 | 422 / 167 / 947 / 483 / 0 |
+| Greece and Aegean | 27 / 21 / 23 / 122 / 0 | 148 / 8 / 57 / 169 / 0 | 117 / 4 / 15 / 46 / 0 | 37 / 3 / 42 / 73 / 0 | 263 / 22 / 145 / 111 / 0 |
+| Italy | 11 / 35 / 17 / 20 / 0 | 93 / 14 / 27 / 30 / 0 | 185 / 6 / 63 / 81 / 0 | 94 / 6 / 148 / 168 / 0 | 422 / 164 / 927 / 483 / 0 |
 | Nile valley (Egypt) | 5 / 0 / 4 / 1 / 0 | 4 / 1 / 1 / 3 / 0 | 10 / 1 / 4 / 18 / 0 | 8 / 1 / 6 / 67 / 0 | 19 / 2 / 52 / 33 / 0 |
-| Mesopotamia and Levant | 42 / 3 / 10 / 18 / 0 | 21 / 10 / 5 / 10 / 0 | 44 / 9 / 17 / 27 / 0 | 104 / 13 / 41 / 96 / 0 | 247 / 13 / 121 / 82 / 0 |
+| Mesopotamia and Levant | 42 / 3 / 9 / 18 / 0 | 21 / 9 / 4 / 10 / 0 | 44 / 8 / 16 / 27 / 0 | 104 / 12 / 40 / 96 / 0 | 247 / 12 / 120 / 82 / 0 |
 | Ganges plain | 0 / 1 / 1 / 7 / 0 | 5 / 2 / 3 / 7 / 0 | 3 / 0 / 2 / 4 / 0 | 2 / 0 / 5 / 3 / 0 | 24 / 7 / 51 / 27 / 0 |
-| Eastern China | 7 / 0 / 4 / 6 / 0 | 4 / 2 / 2 / 10 / 0 | 15 / 0 / 2 / 38 / 0 | 65 / 2 / 11 / 76 / 0 | 33 / 7 / 54 / 86 / 0 |
+| Eastern China | 7 / 0 / 2 / 6 / 0 | 4 / 2 / 0 / 10 / 0 | 15 / 0 / 0 / 38 / 0 | 65 / 2 / 11 / 76 / 0 | 33 / 7 / 54 / 86 / 0 |
 | West Africa | 0 / 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 / 0 | 0 / 5 / 1 / 0 / 0 | 8 / 6 / 8 / 3 / 0 |
-| Mesoamerica | 0 / 0 / 1 / 0 / 0 | 0 / 0 / 4 / 0 / 0 | 0 / 0 / 1 / 0 / 0 | 0 / 1 / 0 / 0 / 0 | 4 / 37 / 6 / 14 / 0 |
+| Mesoamerica | 0 / 0 / 0 / 0 / 0 | 0 / 0 / 3 / 0 / 0 | 0 / 0 / 0 / 0 / 0 | 0 / 1 / 0 / 0 / 0 | 4 / 37 / 6 / 14 / 0 |
 | Andes | 0 / 0 / 0 / 0 / 0 | 0 / 0 / 2 / 0 / 0 | 0 / 1 / 2 / 0 / 0 | 0 / 2 / 0 / 0 / 0 | 6 / 1 / 3 / 12 / 0 |
 
 ### H. Greece and Aegean, 500 to 300 BCE: top items by sitelinks
@@ -376,7 +376,6 @@ Settlement foundings:
 | Megalopolis | Q36024972 | 371 BCE | 9 | founding | exact | 4 |
 | Corone | Q59314203 | 365 BCE | 9 | founding | exact | 4 |
 | Rhodes | Q13533316 | 408 BCE | 9 | founding | exact | 2 |
-| Dispilio Neolithic Settlement | Q27243667 | 100000 BCE to 1 BCE | 4 | founding | exact | 2 |
 
 Structures and sites:
 
