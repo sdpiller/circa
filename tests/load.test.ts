@@ -117,16 +117,11 @@ describe("writeDatabase", () => {
     db.close();
   });
 
-  it("carries cached narratives over from the previous database", () => {
-    const old = join(dir, "old.db");
-    writeDatabase(old, [toRow(rec({}))], {});
-    const o = new Database(old);
-    o.prepare("INSERT INTO narratives VALUES ('k1', 'body', '[\"Q1\"]', 'model', 'v1', '2026-10-28')").run();
-    o.close();
-    const fresh = join(dir, "new.db");
-    writeDatabase(fresh, [toRow(rec({}))], {}, old);
-    const db = new Database(fresh, { readonly: true });
-    expect(db.prepare("SELECT cache_key, body FROM narratives").all()).toEqual([{ cache_key: "k1", body: "body" }]);
+  it("has no narratives table", () => {
+    const path = join(dir, "no-narratives.db");
+    writeDatabase(path, [toRow(rec({}))], {});
+    const db = new Database(path, { readonly: true });
+    expect(db.prepare("SELECT name FROM sqlite_master WHERE name = 'narratives'").get()).toBeUndefined();
     db.close();
   });
 });

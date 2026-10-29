@@ -48,15 +48,6 @@ CREATE INDEX idx_events_r3 ON events(h3_r3);
 CREATE INDEX idx_events_r4 ON events(h3_r4);
 CREATE INDEX idx_events_r5 ON events(h3_r5);
 
-CREATE TABLE narratives (
-  cache_key TEXT PRIMARY KEY,
-  body TEXT NOT NULL,
-  event_ids TEXT NOT NULL,
-  model TEXT NOT NULL,
-  prompt_version TEXT NOT NULL,
-  created_at TEXT NOT NULL
-);
-
 CREATE TABLE build_info (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL

@@ -3,13 +3,13 @@
  *
  * Builds a fresh database in a temp file, validates every row with zod, runs spot checks, and only
  * then renames it over the old one, so a failed or interrupted load never leaves a broken database.
- * Cached narratives from the previous database are carried over. Rebuilding is idempotent.
+ * Rebuilding is idempotent.
  *
  * Usage: npm run etl:load          (load from existing raw files)
  *        npm run etl               (fetch whatever is missing, then load)
  */
 import Database from "better-sqlite3";
-import { existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
+import { mkdirSync, renameSync, rmSync } from "node:fs";
 import { dirname } from "node:path";
 import { formatYear } from "../lib/time/index.ts";
 import { cellsForPoint } from "../lib/cells.ts";
@@ -40,8 +40,8 @@ export function toRow(r: EventRecord): EventRow {
   });
 }
 
-/** Write a complete database to `path`, which must not exist yet. Copies narratives from `previous` if given. */
-export function writeDatabase(path: string, rows: EventRow[], info: Record<string, string>, previous?: string): void {
+/** Write a complete database to `path`, which must not exist yet. */
+export function writeDatabase(path: string, rows: EventRow[], info: Record<string, string>): void {
   const db = new Database(path);
   try {
     db.pragma("journal_mode = DELETE"); // single file, nothing left beside it after close
@@ -57,12 +57,6 @@ export function writeDatabase(path: string, rows: EventRow[], info: Record<strin
       for (const row of rows) insert.run({ ...row, ...cellsForPoint(row.lat, row.lon) });
       for (const [k, v] of Object.entries(info)) setInfo.run(k, v);
     })();
-    if (previous && existsSync(previous)) {
-      db.prepare("ATTACH DATABASE ? AS old").run(previous);
-      const hasTable = db.prepare("SELECT 1 FROM old.sqlite_master WHERE type = 'table' AND name = 'narratives'").get();
-      if (hasTable) db.exec("INSERT INTO narratives SELECT * FROM old.narratives");
-      db.exec("DETACH DATABASE old");
-    }
     db.exec("ANALYZE");
   } finally {
     db.close();
@@ -124,7 +118,7 @@ function main() {
     dropped_out_of_window: String(ds.dropped.outOfWindow),
     dropped_too_wide: String(ds.dropped.tooWide),
     missing_classes: ds.missing.join(",") || "none",
-  }, DB_PATH);
+  });
 
   const check = new Database(tmp, { readonly: true });
   const results = runSpotChecks(check);
