@@ -8,8 +8,8 @@ The narrative is the point; the globe is how you get to it.
 
 Work in progress, built in phases (see [docs/PLAN.md](docs/PLAN.md)).
 
-- **Done (Phases 0 to 2):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items (events, settlement foundings, structures and sites, notable births, and discoveries), and the events API that serves dots for a viewport and year range.
-- **Not built yet:** the globe UI, the area panel, and the narratives. `npm run dev` shows the default starter page; the API answers at `/api/events`.
+- **Done (Phases 0 to 3):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items (events, settlement foundings, structures and sites, notable births, and discoveries), the events API, and the globe: spin and zoom, pick a year range, hover a dot for its name and date.
+- **Not built yet:** the area panel (click for the events in an area) and the narratives.
 
 ## Requirements
 
@@ -23,14 +23,14 @@ npm ci
 cp .env.example .env.local
 ```
 
-Then edit `.env.local`. For the current phase only `WIKIMEDIA_CONTACT` is needed:
+Then edit `.env.local`. For the current phase only `WIKIMEDIA_CONTACT` is needed, and only to fetch data:
 
 | Variable | Needed for | Notes |
 | --- | --- | --- |
 | `WIKIMEDIA_CONTACT` | Data fetch | An email or URL. Wikimedia's User-Agent policy requires a contact on every request. |
 | `ANTHROPIC_API_KEY` | Narratives (later phase) | Never commit it. |
 | `ANTHROPIC_MODEL` | Narratives (later phase) | Defaults to `claude-sonnet-5-5`. |
-| `BASEMAP_STYLE_URL` | Globe (later phase) | A tile provider with a free tier. Do not use the public OpenStreetMap tile servers. |
+| `BASEMAP_STYLE_URL` | Globe (optional) | Defaults to OpenFreeMap's dark style (free, no key). Read at build time. Do not use the public OpenStreetMap tile servers. |
 
 ## Commands
 
@@ -85,7 +85,8 @@ The reasoning behind these choices, including the Wikidata year-zero trap and wh
 ## Repository layout
 
 ```
-app/         Next.js app (starter page, and the events API in app/api/events)
+app/         Next.js app: the globe (app/ui) and the events API (app/api/events)
+lib/dots.ts  Dot legend groups, colours, and the GeoJSON the globe draws
 lib/time/    Year conventions: no year 0, BCE as negative years, imprecise-date intervals
 lib/db/      Database schema, row validation, connection, and the events query
 etl/         Fetch, normalize, build, load, and audit scripts, plus classes.json
@@ -99,6 +100,7 @@ data/        Local data, gitignored
 - **Wikidata:** event data (labels, dates, coordinates, sitelink counts) comes from [Wikidata](https://www.wikidata.org), available under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 - **Wikipedia:** later phases will show short extracts from Wikipedia articles and use them to ground narratives. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the app will credit and link the source article wherever an extract or a narrative based on one appears.
 - **Query services:** data is fetched through the [Wikidata Query Service](https://query.wikidata.org) and [QLever](https://qlever.dev) (University of Freiburg).
-- **Basemap:** the tile provider will be credited here and in the app footer once one is chosen.
+- **Basemap:** [OpenFreeMap](https://openfreemap.org), © [OpenMapTiles](https://openmaptiles.org), data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. Credited in the app footer and the map's attribution control.
+- **Map library:** [MapLibre GL JS](https://maplibre.org) (BSD 3-Clause).
 
 Coverage is uneven: Wikidata documents some regions and eras far better than others. Documented history is not the same as history.

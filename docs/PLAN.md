@@ -58,7 +58,7 @@ Acceptance: query time well under 100 ms in the largest zoom band. Tests include
 
 ### Phase 3: Globe UI
 - MapLibre globe with a dark, minimal basemap.
-- Dots colored by category, hollow for inherited locations. Refetch on move end and range change (debounced).
+- Dots colored by category, hollow for inherited locations. (Done as four legend groups, not seven categories: three event colours plus a gray for foundings, structures, and births. See decisions.md entry 26.) Refetch on move end and range change (debounced).
 - Two-handle range control on a NON-LINEAR scale (more resolution for recent centuries than deep antiquity), plus preset chips such as "Classical Greece (500 to 300 BCE)".
 - Legend, data-bias caption, attributions. Keyboard-accessible slider.
 

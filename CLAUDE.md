@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 2 complete, at the gate (2026-10-28): GET /api/events serves per-kind top N dots by viewport, range, and zoom; worst measured query 46 ms (decisions.md entry 25). Awaiting the owner's go-ahead for Phase 3 (globe UI). (Update this line at every phase gate.)
+Phase 3 complete, at the gate (2026-10-28): MapLibre globe with dots in four colour-blind-safe groups (decisions.md entries 26 and 27), non-linear range slider with presets, legend, bias caption, attributions. Awaiting the owner's go-ahead for Phase 4 (area panel). (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
