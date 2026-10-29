@@ -2,7 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DOT_GROUPS } from "../../lib/dots.ts";
 import { formatRange, MAX_YEAR, MIN_YEAR, type YearRange } from "../../lib/time/index.ts";
+import type { FeaturedEntry } from "../../lib/narrative/types.ts";
 import { AreaBox } from "./AreaBox.tsx";
+import { FeaturedList } from "./FeaturedList.tsx";
 import { GlobeMap, type MapStatus, type Selection } from "./GlobeMap.tsx";
 import { RangeControl } from "./RangeControl.tsx";
 import styles from "./globe.module.css";
@@ -75,7 +77,16 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
   const [status, setStatus] = useState<MapStatus>({ state: "loading", zoomedOut: true });
   const [showDots, setShowDots] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
+  const [flyTo, setFlyTo] = useState<{ cell: string; nonce: number } | null>(null);
   const selectionRef = useRef<HTMLDivElement>(null);
+
+  // A featured entry: its exact range, its cell selected, and the camera moved there. All three land
+  // in one render, so GlobeMap sees the fly before it reacts to the new selection.
+  const chooseFeatured = useCallback((e: FeaturedEntry) => {
+    setRange({ from: e.from, to: e.to });
+    setSelection({ kind: "cell", cell: e.cell });
+    setFlyTo({ cell: e.cell, nonce: Date.now() });
+  }, []);
 
   // Closing removes the focused close button: hand keyboard focus back to the map, not the page body.
   const close = useCallback(() => {
@@ -103,6 +114,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
         onSelect={setSelection}
         onStatus={setStatus}
         occluderLeft={occluderLeft}
+        flyTo={flyTo}
       />
 
       <div ref={selectionRef} className={styles.slot}>
@@ -112,6 +124,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
 
       <aside className={`${styles.panel} ${styles.legendPanel}`}>
         <h1 className={styles.title}>Chronoglobe</h1>
+        <FeaturedList onChoose={chooseFeatured} />
         <Legend status={status} showDots={showDots} onShowDots={setShowDots} />
         <p className={styles.caption}>Documented history is not the same as history: coverage is uneven worldwide.</p>
       </aside>

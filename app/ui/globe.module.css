@@ -32,6 +32,50 @@
   margin-bottom: 10px;
 }
 
+/* Featured stories: a closed-by-default list of buttons between the title and the dot toggle. */
+.featured {
+  margin-bottom: 10px;
+}
+
+.featured summary {
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.featuredNote {
+  margin: 6px 0 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.featuredList {
+  list-style: none;
+  display: grid;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px; /* room for the focus outline, which the scroller would otherwise clip */
+  margin: -4px;
+}
+
+.featuredList button {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.featuredList button:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .toggle {
   display: flex;
   align-items: center;

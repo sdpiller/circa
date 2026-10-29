@@ -7,7 +7,7 @@
  */
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { latLngToCell } from "h3-js";
+import { cellToLatLng, getResolution, latLngToCell } from "h3-js";
 import type {
   CircleLayerSpecification,
   FillLayerSpecification,
@@ -17,7 +17,7 @@ import type {
   SymbolLayerSpecification,
 } from "maplibre-gl";
 import { panToClear } from "../../lib/box.ts";
-import { GRID_MIN_ZOOM, cellPolygon, groundSelection, resolutionForZoom, type Res } from "../../lib/cells.ts";
+import { GRID_MIN_ZOOM, cellPolygon, groundSelection, resolutionForZoom, zoomForRes, type Res } from "../../lib/cells.ts";
 import type { CellsResult } from "../../lib/db/cells.ts";
 import type { EventsResult } from "../../lib/db/events.ts";
 import { DOT_GROUPS, dotMeta, toFeatureCollection, type DotProperties, type GroupKey } from "../../lib/dots.ts";
@@ -207,6 +207,7 @@ export function GlobeMap({
   onSelect,
   onStatus,
   occluderLeft,
+  flyTo = null,
 }: {
   styleUrl: string;
   range: YearRange;
@@ -216,6 +217,8 @@ export function GlobeMap({
   onStatus: (s: MapStatus) => void;
   /** Viewport x where a panel over the map's right side begins (the area box), or null when none is open. */
   occluderLeft?: () => number | null;
+  /** Move the camera to this cell, once per nonce (a featured entry chosen). */
+  flyTo?: { cell: string; nonce: number } | null;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -226,6 +229,11 @@ export function GlobeMap({
   const onSelectRef = useRef(onSelect);
   const onStatusRef = useRef(onStatus);
   const occluderLeftRef = useRef(occluderLeft);
+  // The latest fly request, the nonce last flown (each request flies once), and the cell of a fly
+  // started in this commit, so the selected-cell effect leaves that cell's placement to the fly.
+  const flyToRef = useRef(flyTo);
+  const flownNonceRef = useRef<number | null>(null);
+  const flyCellRef = useRef<string | null>(null);
   // One controller and one last-query per endpoint, so a slow dots answer never cancels the grid.
   const cellsAbortRef = useRef<AbortController | null>(null);
   const dotsAbortRef = useRef<AbortController | null>(null);
@@ -482,15 +490,52 @@ export function GlobeMap({
     return () => window.removeEventListener("keydown", onKey);
   }, [web, closeWeb]);
 
+  /**
+   * Fly to the requested cell at a zoom where the grid draws its resolution, with the cell's centre in
+   * the middle of the map left of the area box. Runs once per nonce; before the map is ready the
+   * request waits for style.load. An `offset`, not `padding`: MapLibre keeps a flyTo's padding on the
+   * camera afterwards, which would shift the globe left for the rest of the session, box open or not.
+   */
+  const runFly = useCallback(() => {
+    const target = flyToRef.current;
+    const map = mapRef.current;
+    if (!target || !map || !readyRef.current || flownNonceRef.current === target.nonce) return;
+    flownNonceRef.current = target.nonce;
+    flyCellRef.current = target.cell;
+    const [lat, lng] = cellToLatLng(target.cell);
+    // The box is in the DOM already (same commit as the selection), so its width is measured.
+    const left = occluderLeftRef.current?.() ?? null;
+    const boxWidth = left !== null && container.current ? Math.max(0, container.current.getBoundingClientRect().right - left) : 0;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    map.flyTo({
+      center: [lng, lat],
+      zoom: zoomForRes(getResolution(target.cell) as Res),
+      offset: [-boxWidth / 2, 0],
+      ...(still ? { duration: 0 } : {}),
+    });
+  }, []);
+
+  // Declared before the selected-cell effect on purpose: effects run in declaration order within a
+  // commit, and GlobeApp sets the selection and the fly in one render, so flyCellRef is set by the
+  // time the selected-cell effect looks at it.
+  useEffect(() => {
+    flyToRef.current = flyTo;
+    runFly();
+  }, [flyTo, runFly]);
+
   useEffect(() => {
     selectedRef.current = selectedCell;
+    // A selection the fly placed needs no pan of its own: the pan measures the projection before the
+    // fly and would fight it. Consumed here, so a later selection of the same cell pans as usual.
+    const flying = selectedCell !== null && selectedCell === flyCellRef.current;
+    flyCellRef.current = null;
     const map = mapRef.current;
     if (map && readyRef.current) {
       (map.getSource("selected") as GeoJSONSource | undefined)?.setData(selectedGeoJson(selectedCell) as never);
       // A newly selected cell under the box: pan left just enough that the whole cell (its easternmost
       // corner on screen) clears the box. The centre alone would leave half the outline hidden.
       // The box is already in the DOM here (same commit), so it is measured, not assumed.
-      const left = selectedCell ? occluderLeftRef.current?.() : null;
+      const left = selectedCell && !flying ? occluderLeftRef.current?.() : null;
       if (selectedCell && left != null && container.current) {
         const x = Math.max(...cellPolygon(selectedCell).map((c) => map.project(c).x));
         const dx = panToClear(x, left - container.current.getBoundingClientRect().left, SELECTED_CLEARANCE_PX);
@@ -547,6 +592,7 @@ export function GlobeMap({
         map!.addLayer({ ...STACK_COUNT_LAYER, layout: { ...STACK_COUNT_LAYER.layout, visibility } });
         readyRef.current = true;
         schedule();
+        runFly(); // an entry chosen before the map was ready
       });
       map.on("moveend", schedule);
       map.on("move", closeWeb); // every frame, so no web is left behind or opened by a moving camera
@@ -635,7 +681,7 @@ export function GlobeMap({
       loadScheduledRef.current = false;
       cellsStateRef.current = "pending";
     };
-  }, [styleUrl, schedule, closeWeb, openWeb, insideWeb, selectCell, selectStack]);
+  }, [styleUrl, schedule, closeWeb, openWeb, insideWeb, selectCell, selectStack, runFly]);
 
   return (
     <>
