@@ -17,7 +17,7 @@ import type {
   SymbolLayerSpecification,
 } from "maplibre-gl";
 import { panToClear } from "../../lib/box.ts";
-import { GRID_MIN_ZOOM, cellPolygon, resolutionForZoom, type Res } from "../../lib/cells.ts";
+import { GRID_MIN_ZOOM, cellPolygon, groundSelection, resolutionForZoom, type Res } from "../../lib/cells.ts";
 import type { CellsResult } from "../../lib/db/cells.ts";
 import type { EventsResult } from "../../lib/db/events.ts";
 import { DOT_GROUPS, dotMeta, toFeatureCollection, type DotProperties, type GroupKey } from "../../lib/dots.ts";
@@ -232,6 +232,10 @@ export function GlobeMap({
   const lastCellsQueryRef = useRef("");
   const lastDotsQueryRef = useRef("");
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  // Whether the grid on screen answers for the current view and range: not while a load is waiting
+  // on the debounce or in flight, nor after one failed. Only then is empty ground "nothing documented".
+  const loadScheduledRef = useRef(false);
+  const cellsStateRef = useRef<"pending" | "ok" | "error">("pending");
   // What the legend shows: the latest answer from each endpoint.
   const resultRef = useRef({ cells: 0, counts: zeroCounts() });
   const dotsReadyRef = useRef(false); // true once the events answer for the current view and toggle is in
@@ -337,6 +341,7 @@ export function GlobeMap({
   const loadCells = useCallback(
     async (map: MapLibreMap, params: string) => {
       lastCellsQueryRef.current = params;
+      cellsStateRef.current = "pending";
       cellsAbortRef.current?.abort();
       const controller = new AbortController();
       cellsAbortRef.current = controller;
@@ -349,11 +354,13 @@ export function GlobeMap({
           type: "FeatureCollection",
           features: data.cells.map((c) => cellFeature(c.cell, { cell: c.cell, items: c.items, events: c.events })),
         } as never);
+        cellsStateRef.current = "ok";
         resultRef.current = { ...resultRef.current, cells: data.cells.length };
         report(false);
       } catch (err) {
         if ((err as Error).name === "AbortError" || controller.signal.aborted) return;
         lastCellsQueryRef.current = ""; // let the same view retry
+        cellsStateRef.current = "error";
         onStatusRef.current({ state: "error", zoomedOut: false });
       }
     },
@@ -392,6 +399,7 @@ export function GlobeMap({
   const load = useCallback(async () => {
     const map = mapRef.current;
     if (!map || !readyRef.current) return;
+    loadScheduledRef.current = false;
     const v = viewport(map);
     const source = (id: string) => map.getSource(id) as GeoJSONSource | undefined;
 
@@ -401,6 +409,7 @@ export function GlobeMap({
       lastCellsQueryRef.current = "";
       lastDotsQueryRef.current = "";
       dotsReadyRef.current = false;
+      cellsStateRef.current = "pending"; // the emptied grid answers for no view at or above the grid zoom
       source("grid")?.setData(EMPTY as never);
       source("dots")?.setData(EMPTY as never);
       resultRef.current = { cells: 0, counts: zeroCounts() };
@@ -429,6 +438,7 @@ export function GlobeMap({
 
   const schedule = useCallback(() => {
     clearTimeout(timerRef.current);
+    loadScheduledRef.current = true;
     timerRef.current = setTimeout(load, FETCH_DEBOUNCE_MS);
   }, [load]);
 
@@ -572,6 +582,7 @@ export function GlobeMap({
         webAbortRef.current = null;
       });
       // A dot, then a stack, wins over a grid cell; empty ground is only clickable on the grid.
+      // Empty ground reads "nothing documented" only against a current grid (groundSelection).
       map.on("click", (e) => {
         const m = map!;
         const zoom = m.getZoom();
@@ -602,11 +613,8 @@ export function GlobeMap({
           }
         }
         const cell = m.queryRenderedFeatures(e.point, { layers: ["grid-fill"] })[0]?.properties?.cell;
-        if (typeof cell === "string") {
-          onSelectRef.current({ kind: "cell", cell });
-          return;
-        }
-        onSelectRef.current({ kind: "empty", lngLat: [e.lngLat.lng, e.lngLat.lat] });
+        const gridCurrent = !loadScheduledRef.current && cellsStateRef.current === "ok";
+        onSelectRef.current(groundSelection(typeof cell === "string" ? cell : undefined, gridCurrent, e.lngLat.lng, e.lngLat.lat, res));
       });
     })();
     return () => {
@@ -622,6 +630,8 @@ export function GlobeMap({
       lastCellsQueryRef.current = ""; // a new map starts empty, so it must fetch even an identical view
       lastDotsQueryRef.current = "";
       dotsReadyRef.current = false;
+      loadScheduledRef.current = false;
+      cellsStateRef.current = "pending";
     };
   }, [styleUrl, schedule, closeWeb, openWeb, insideWeb, selectCell, selectStack]);
 

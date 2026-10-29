@@ -5,6 +5,7 @@ import {
   cellPolygon,
   cellsForPoint,
   GRID_MIN_ZOOM,
+  groundSelection,
   isGridCell,
   RESOLUTIONS,
   resolutionForZoom,
@@ -78,5 +79,25 @@ describe("cellPolygon", () => {
       expect(lon).toBeGreaterThanOrEqual(23);
       expect(lon).toBeLessThanOrEqual(25);
     }
+  });
+});
+
+describe("groundSelection", () => {
+  const ATHENS = { lat: 37.98, lng: 23.72 };
+  const hit = cellsForPoint(ATHENS.lat, ATHENS.lng).h3_r4;
+
+  it("selects the grid cell under the click", () => {
+    expect(groundSelection(hit, true, ATHENS.lng, ATHENS.lat, 4)).toEqual({ kind: "cell", cell: hit });
+  });
+
+  it("says nothing is documented only when the grid on screen is current", () => {
+    expect(groundSelection(undefined, true, ATHENS.lng, ATHENS.lat, 4)).toEqual({ kind: "empty", lngLat: [ATHENS.lng, ATHENS.lat] });
+  });
+
+  it("asks the server for the cell under the click while the grid is loading or failed", () => {
+    expect(groundSelection(undefined, false, ATHENS.lng, ATHENS.lat, 5)).toEqual({
+      kind: "cell",
+      cell: latLngToCell(ATHENS.lat, ATHENS.lng, 5),
+    });
   });
 });

@@ -58,3 +58,20 @@ export function cellPolygon(cell: string): [number, number][] {
   }
   return ring;
 }
+
+/**
+ * What a click on bare ground (no dot or stack) selects. A grid cell under the click wins. With none,
+ * "nothing documented here" is only true if the grid on screen is current: while a grid load is
+ * pending or the last one failed, the cell under the click goes to the server, which answers honestly.
+ */
+export function groundSelection(
+  hitCell: string | undefined,
+  gridCurrent: boolean,
+  lng: number,
+  lat: number,
+  res: Res,
+): { kind: "cell"; cell: string } | { kind: "empty"; lngLat: [number, number] } {
+  if (hitCell !== undefined) return { kind: "cell", cell: hitCell };
+  if (!gridCurrent) return { kind: "cell", cell: latLngToCell(lat, lng, res) };
+  return { kind: "empty", lngLat: [lng, lat] };
+}
