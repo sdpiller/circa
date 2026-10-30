@@ -49,7 +49,18 @@ describe("publishStories", () => {
 
   it("throws when a story has no input, a mismatched input, or is not featured", () => {
     expect(() => publishStories([entry("a")], [story("a")], new Map())).toThrow(/a/);
-    expect(() => publishStories([entry("a")], [story("a")], new Map([["a", input("z")]]))).toThrow(/a/);
+    expect(() => publishStories([entry("a")], [story("a")], new Map([["a", input("z")]]))).toThrow("Story a has an input for z");
     expect(() => publishStories([entry("a")], [story("q")], new Map([["q", input("q")]]))).toThrow(/q/);
+  });
+
+  it.each([
+    ["cell", { cell: "851eda73fffffff" }],
+    ["from", { from: -600 }],
+    ["to", { to: -200 }],
+  ])("throws when the input was written for a different %s", (field, change) => {
+    const bad = { ...input("a"), entry: { ...entry("a"), ...change } };
+    expect(() => publishStories([entry("a")], [story("a")], new Map([["a", bad]]))).toThrow(
+      `Story a has an input for a different ${field}`,
+    );
   });
 });

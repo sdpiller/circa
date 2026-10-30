@@ -22,6 +22,15 @@ function toItem(ref: string, a: AreaItem, extracts: ReadonlyMap<string, string |
   };
 }
 
+/** The C sentence source: totals for the area, and how many of the listed events are approximate. */
+export function contextText(eventsTotal: number, othersTotal: number, events: readonly AreaItem[]): string {
+  const approx = events.filter((e) => e.loc_confidence === "inherited").length;
+  return (
+    `This area has ${eventsTotal} documented events and ${othersTotal} documented people and places in this range. ` +
+    `${approx} of these ${events.length} events have approximate locations.`
+  );
+}
+
 export function buildStoryInput(
   entry: FeaturedEntry,
   area: AreaResult,
@@ -30,7 +39,6 @@ export function buildStoryInput(
 ): StoryInput {
   const events = area.events.slice(0, MAX_EVENTS);
   const others = area.others.slice(0, MAX_OTHERS);
-  const approx = events.filter((e) => e.loc_confidence === "inherited").length;
   return {
     entry,
     generatedAt: meta.generatedAt,
@@ -39,9 +47,7 @@ export function buildStoryInput(
     othersTotal: area.othersTotal,
     context: {
       ref: "C",
-      text:
-        `This area has ${area.eventsTotal} documented events and ${area.othersTotal} documented people and places in this range. ` +
-        `${approx} of these ${events.length} events have approximate locations.`,
+      text: contextText(area.eventsTotal, area.othersTotal, events),
     },
     items: [
       ...events.map((e, i) => toItem(`E${i + 1}`, e, extracts)),

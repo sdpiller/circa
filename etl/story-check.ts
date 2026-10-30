@@ -1,6 +1,7 @@
 /**
  * After a database rebuild: re-queries each published story's area and reports stories whose cited
- * items changed (stale, exit 1) and areas whose top items moved (drift, a warning).
+ * items changed (stale, exit 1), and warns on areas whose top items moved (drift), a changed context sentence, or a
+ * changed location confidence. Warnings never change the exit code.
  * Usage: npm run story:check
  */
 import { readFileSync } from "node:fs";
@@ -33,6 +34,7 @@ for (const p of published) {
     console.log(`STALE ${id}:`);
     for (const reason of r.stale) console.log(`  ${reason}`);
   }
+  for (const w of r.warnings) console.log(`warning ${w}`);
   if (r.drift) console.log(`drift ${id}: the area's top items differ from the frozen input (cited items intact: ${r.stale.length === 0})`);
 }
 db.close();

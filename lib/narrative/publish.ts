@@ -28,6 +28,9 @@ export function publishStories(
     const input = inputs.get(entry.id);
     if (!input) throw new Error(`Story ${entry.id} has no input`);
     if (input.entry.id !== entry.id) throw new Error(`Story ${entry.id} has an input for ${input.entry.id}`);
+    for (const field of ["cell", "from", "to"] as const) {
+      if (input.entry[field] !== entry[field]) throw new Error(`Story ${entry.id} has an input for a different ${field}`);
+    }
     const failures = checkStory(story, input);
     if (failures.length > 0) {
       throw new Error(`Story ${entry.id} fails its checks: ${failures.map((f) => `${f.code}: ${f.detail}`).join("; ")}`);

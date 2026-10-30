@@ -179,7 +179,7 @@ function checkNumbers(sentence: string, source: string): string[] {
     }
     keys.add(`${p.value}|${p.unit}|${p.era}`);
     valueUnit.add(`${p.value}|${p.unit}`);
-    values.add(p.value);
+    if (p.unit === "") values.add(p.value);
   }
   const bad: string[] = [];
   for (const p of findNumbers(sentence)) {

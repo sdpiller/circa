@@ -408,6 +408,11 @@ describe("checkStory", () => {
     it("fails 'twenty five' (spaced) against stray Twenty and 5th", () => {
       expect(fails("Twenty ships sailed in the 5th year.", "Some twenty five ships sailed.")).toEqual(["number"]);
     });
+    it("fails a bare story number against a source number that carries a unit", () => {
+      expect(fails("It was built in the 1520s.", "It fell in 1520.")).toEqual(["number"]);
+      expect(fails("It was built in the 5th century.", "It fell in 5.")).toEqual(["number"]);
+      expect(passes("It was built in 1520.", "It fell in 1520.")).toEqual([]);
+    });
     it("is not fooled by words that merely look like keys, such as 'constructor'", () => {
       expect(passes("Nothing here.", "The constructor of ships arrived.")).toEqual([]);
     });
