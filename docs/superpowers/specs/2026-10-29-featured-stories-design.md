@@ -125,7 +125,7 @@ Adapted from PLAN.md Phase 5:
 - 60 to 250 words, chronological, plain prose, no headings or lists. Short is fine when the input is thin.
 - Every sentence cites at least one ref, and every statement in a sentence is supported by the text of the items that sentence cites.
 - Do not restate the area size or the year range.
-- Where cited events have inherited locations, say their placement is approximate.
+- Where cited items have inherited locations, say so once per story, in one sentence (owner decision, 2026-10-30, `rulesVersion` 2; it replaced a per-event note that read as a tic). The box marks each item.
 - People and places: state their tie to this area (born here, founded or built here, as the kind says). Their later deeds happened elsewhere unless their text says they happened here; do not tell them as if they happened here.
 - Keep to what happened inside the range. Something an extract mentions outside it may be left out, or named as earlier or later.
 - When the box has few events, say so plainly, citing `C`. Never pad.

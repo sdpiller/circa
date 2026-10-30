@@ -1,6 +1,6 @@
 # Writing rules for featured stories
 
-rulesVersion: 1
+rulesVersion: 2
 
 You are writing one short history of one area of the globe for one span of years. Everything you may say is in one input file. Your general knowledge of history is not a source: if the input does not say it, the story does not say it, however sure you are that it is true.
 
@@ -21,7 +21,7 @@ The "source text" of an item is its label, description, years text, the words "a
 - 60 to 250 words, chronological, plain prose, no headings or lists. Short is fine when the input is thin.
 - Every sentence cites at least one ref, and every statement in a sentence is supported by the text of the items that sentence cites.
 - Do not restate the area size or the year range.
-- Where cited events have inherited locations, say their placement is approximate.
+- If any item the story cites has an inherited location, say so exactly once, in one sentence near the start or at the end, for example "Some locations in this account are approximate." Do not repeat it sentence by sentence or attach it to single events or births: the box marks each item under the story. That sentence cites `C` when `C` counts at least one approximate event, otherwise the inherited items it covers. Give a count or share only if the cited text states it. If no cited item is inherited, say nothing about placement.
 - People and places: state their tie to this area (born here, founded or built here, as the kind says: `birth` means born here, `founding` means founded here, `structure` means built or dated here). Their later deeds happened elsewhere unless their text says they happened here; do not tell them as if they happened here.
 - Keep to what happened inside the range. Something an extract mentions outside it may be left out, or named as earlier or later.
 - When the box has few events, say so plainly, citing `C`. Never pad.
@@ -45,7 +45,7 @@ Write `stories/<id>.json`:
 ```json
 {
   "id": "<the entry id>",
-  "rulesVersion": 1,
+  "rulesVersion": 2,
   "writtenAt": "<today, YYYY-MM-DD>",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
