@@ -1,0 +1,27 @@
+{
+  "id": "tenochtitlan",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "This area has 10 documented events, and 5 of them have approximate locations.", "cites": ["C"] },
+      { "text": "The founding of Tenochtitlan, on an island in Lake Texcoco, is conventionally dated to 1325, though the exact date is unclear.", "cites": ["P1"] },
+      { "text": "Moctezuma I, born here in 1398 (approximate location), later became the fifth king of Tenochtitlan.", "cites": ["P5"] },
+      { "text": "The Mexico Flood of 1446 is placed here approximately.", "cites": ["E1"] },
+      { "text": "Moctezuma II, born here in 1466 (approximate location), later became the ninth emperor of the Aztec Empire.", "cites": ["P2"] },
+      { "text": "In 1473 Tenochtitlan fought the Battle of Tlatelolco against Tlatelolco, its neighbour on the island.", "cites": ["E2"] },
+      { "text": "On 19 February 1475 an earthquake struck Tenochtitlan during the reign of Tlatoani Axayacatl.", "cites": ["E3"] },
+      { "text": "Cuauhtémoc, born here in 1495 (approximate location), later became the last Aztec Emperor.", "cites": ["P4"] }
+    ],
+    [
+      { "text": "A smallpox epidemic in Tenochtitlan from 1519 to 1520 is placed approximately.", "cites": ["E4"] },
+      { "text": "On 22 May 1520, during the Spanish conquest, the Feast of Toxcatl ended in a massacre of Mexica elites.", "cites": ["E5"] },
+      { "text": "On 30 June 1521 the Mexica won the Battle of Colhuacatonco, regarded as their most important victory of the siege of Tenochtitlan.", "cites": ["E7"] },
+      { "text": "Tenochtitlan fell in 1521 to the Spanish and thousands of indigenous allies, especially Tlaxcaltec warriors.", "cites": ["E6"] },
+      { "text": "The cocoliztli epidemic of 1545 to 1548, placed approximately, brought high fevers and bleeding.", "cites": ["E8"] },
+      { "text": "The Mexico City Metropolitan Cathedral, dated to 1570, sits on the former Aztec sacred precinct.", "cites": ["P3"] },
+      { "text": "The Francisco Hernández expedition of 1570 to 1577 and a cocoliztli epidemic of 1576 to 1577 are also placed approximately.", "cites": ["E9", "E10"] }
+    ]
+  ]
+}

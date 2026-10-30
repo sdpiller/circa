@@ -1,0 +1,26 @@
+{
+  "id": "lhasa",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "This area has 8 documented events, all with approximate locations.", "cites": ["C"] },
+      { "text": "Songtsän Gampo, a Tibetan emperor, was born here in 604 CE, at an approximate location.", "cites": ["P4"] },
+      { "text": "Lhasa, today the capital of Tibet, was founded in 633 CE.", "cites": ["P1"] },
+      { "text": "The Potala Palace dates to 637 CE, and Songtsän Gampo moved the capital to it.", "cites": ["P2", "P4"] },
+      { "text": "In 1240 the Mongol general Doorda Darkhan invaded Tibet with 30,000 troops, and in the late 1240s Sakya Pandita urged leading Tibetan figures to submit to Mongol authority.", "cites": ["E1"] },
+      { "text": "Sonam Gyatso, born here in 1543 CE at an approximate location, was later named Dalai Lama by Altan Khan in 1578 for teachings in Mongolia.", "cites": ["P5"] },
+      { "text": "Ngawang Lobzang Gyatso, the 5th Dalai Lama, was born here in 1617 CE at an approximate location.", "cites": ["P3"] }
+    ],
+    [
+      { "text": "The wars of the Dzungar Khanate against the Qing dynasty, from 1688 CE to 1759 CE, reached Tibet.", "cites": ["E2"] },
+      { "text": "In 1720 a Qing expedition took Tibet from the Dzungar Khanate and established Qing rule.", "cites": ["E3"] },
+      { "text": "The Lhasa riot of 1750 began after two ambans assassinated Gyurme Namgyal, the expected new regent, and 51 Qing soldiers and 77 Chinese citizens were killed.", "cites": ["E4"] },
+      { "text": "In 1788 a dispute over debased silver currency led to a Nepalese invasion of Tibet, followed by the Treaty of Kerung (1789).", "cites": ["E5"] },
+      { "text": "Tibet fought the Kingdom of Jammu from May 1841 to August 1842.", "cites": ["E6"] },
+      { "text": "The Nepalese-Tibetan War of 1855 to 1856 was fought in Tibet and ended with the Treaty of Thapathali.", "cites": ["E7"] },
+      { "text": "In 1910 Qing China sent 2,000 troops to Tibet, causing the Dalai Lama to flee to British India.", "cites": ["E8"] }
+    ]
+  ]
+}

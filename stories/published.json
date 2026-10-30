@@ -1,6 +1,345 @@
 [
   {
     "entry": {
+      "id": "babylon",
+      "place": "Babylon",
+      "from": -2500,
+      "to": -500,
+      "cell": "832ca2fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 8 events are documented here, 5 of them at approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Babylon, the capital city of Babylonia, has its founding dated to between 3000 BCE and 2001 BCE.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q5684",
+              "label": "Babylon"
+            }
+          ]
+        },
+        {
+          "text": "Ammi-Saduqa, a king of Babylon, was born here, at an approximate location, between 1800 BCE and 1701 BCE.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q441344",
+              "label": "Ammi-Saduqa"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The Battle of Babylon came in 710 BCE and the Battle of Kish in 703 BCE, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q110448500",
+              "label": "Battle of Babylon"
+            },
+            {
+              "ref": "E2",
+              "qid": "Q30915144",
+              "label": "Battle of Kish"
+            }
+          ]
+        },
+        {
+          "text": "The Hanging Gardens of Babylon, one of the seven wonders of the ancient world, are dated to between 700 BCE and 601 BCE.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q41931",
+              "label": "Hanging Gardens of Babylon"
+            }
+          ]
+        },
+        {
+          "text": "In 693 BCE the Neo-Assyrian Empire fought the Elamites at the Battle of Diyala River, and in 691 BCE the Assyrian empire fought rebelling Babylonians, Elamites and others at the Battle of Halule, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q6647487",
+              "label": "Battle of Diyala River"
+            },
+            {
+              "ref": "E4",
+              "qid": "Q2888775",
+              "label": "Battle of Halule"
+            }
+          ]
+        },
+        {
+          "text": "In 689 BCE the Assyrian king Sennacherib, having beaten the Elamites, besieged Babylon for up to fifteen months and destroyed it.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q6646260",
+              "label": "Siege of Babylon"
+            }
+          ]
+        },
+        {
+          "text": "In 626 BCE the general Nabopolassar began a revolt, at an approximate location, and by 620 BCE he had consolidated control of Babylonia.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q6646276",
+              "label": "Revolt of Babylon"
+            }
+          ]
+        },
+        {
+          "text": "The Ishtar Gate of Babylon, dated to 575 BCE, was constructed by order of King Nebuchadnezzar II.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q26082",
+              "label": "Ishtar Gate"
+            }
+          ]
+        },
+        {
+          "text": "In September 539 BCE Persia won a decisive victory over the Neo-Babylonian Empire at the Battle of Opis, north of Babylon.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q3434300",
+              "label": "Battle of Opis"
+            }
+          ]
+        },
+        {
+          "text": "After the battle, Persian forces supposedly entered Babylon without further resistance, and Cyrus the Great was proclaimed king of Babylonia.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q28169617",
+              "label": "Fall of Babylon"
+            },
+            {
+              "ref": "E8",
+              "qid": "Q3434300",
+              "label": "Battle of Opis"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "carthage",
+      "place": "Carthage",
+      "from": -800,
+      "to": -100,
+      "cell": "83386efffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Hanno the Navigator, a Carthaginian explorer, was born here in the fifth century BCE, and the general Hamilcar Barca around 275 BCE.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q296478",
+              "label": "Hanno the Navigator"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q185101",
+              "label": "Hamilcar Barca"
+            }
+          ]
+        },
+        {
+          "text": "During the First Punic War, a Roman army under Marcus Atilius Regulus won the Battle of Adys.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q963839",
+              "label": "Battle of Adys"
+            }
+          ]
+        },
+        {
+          "text": "In spring 255 BCE, a Carthaginian army led by Xanthippus defeated Regulus at the Battle of Bagradas.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q6891",
+              "label": "Battle of Bagradas"
+            }
+          ]
+        },
+        {
+          "text": "The sons of Hamilcar Barca, Hannibal and Hasdrubal, were born here in 247 BCE and 245 BCE.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q36456",
+              "label": "Hannibal"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q185101",
+              "label": "Hamilcar Barca"
+            },
+            {
+              "ref": "P5",
+              "qid": "Q311702",
+              "label": "Hasdrubal Barca"
+            }
+          ]
+        },
+        {
+          "text": "These birthplaces are placed approximately.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q296478",
+              "label": "Hanno the Navigator"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q185101",
+              "label": "Hamilcar Barca"
+            },
+            {
+              "ref": "P1",
+              "qid": "Q36456",
+              "label": "Hannibal"
+            },
+            {
+              "ref": "P5",
+              "qid": "Q311702",
+              "label": "Hasdrubal Barca"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The Mercenary War, a mutiny by troops employed by Carthage, ran from 240 BCE to 238 BCE, placed approximately.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q1132393",
+              "label": "Mercenary War"
+            }
+          ]
+        },
+        {
+          "text": "Early in 240 BCE, both sides were routed at the Battle of Utica.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q928903",
+              "label": "Battle of Utica"
+            }
+          ]
+        },
+        {
+          "text": "Later in 240 BCE, Hamilcar Barca defeated rebels led by Spendius at the Battle of the Bagradas River.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q2888088",
+              "label": "Battle of the Bagradas River"
+            }
+          ]
+        },
+        {
+          "text": "A Siege of Carthage, placed approximately, is recorded in 239 BCE, and in October 238 BCE Hamilcar Barca besieged rebels under Mathos at Tunis.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q16683519",
+              "label": "Siege of Carthage"
+            },
+            {
+              "ref": "E7",
+              "qid": "Q3070000",
+              "label": "Siege of Tunis"
+            }
+          ]
+        },
+        {
+          "text": "In 204 BCE a Roman army under Publius Cornelius Scipio unsuccessfully besieged Utica, and in 203 BCE he defeated allied Carthaginian and Numidian armies at the Great Plains and at Utica.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q4872636",
+              "label": "Siege of Utica"
+            },
+            {
+              "ref": "E9",
+              "qid": "Q1353773",
+              "label": "Battle of the Great Plains"
+            },
+            {
+              "ref": "E10",
+              "qid": "Q2888065",
+              "label": "Battle of Utica"
+            }
+          ]
+        },
+        {
+          "text": "Terence, the Roman comic playwright, was born here in 185 BCE, placed approximately.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q172048",
+              "label": "Terence"
+            }
+          ]
+        },
+        {
+          "text": "In 149 BCE a large Roman army landed at Utica, and at the Battle of Lake Tunis the Carthaginians launched fire ships that destroyed most of the Roman fleet.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q815160",
+              "label": "Siege of Carthage"
+            },
+            {
+              "ref": "E12",
+              "qid": "Q27863955",
+              "label": "Battle of Lake Tunis"
+            }
+          ]
+        },
+        {
+          "text": "The Siege of Carthage, the main engagement of the Third Punic War, lasted nearly three years, 149 BCE to 146 BCE.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q815160",
+              "label": "Siege of Carthage"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
       "id": "athens",
       "place": "Athens",
       "from": -500,
@@ -180,6 +519,1379 @@
               "ref": "E8",
               "qid": "Q16912790",
               "label": "Athenian-Macedonian War (340–338 BC)"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "rome",
+      "place": "Rome",
+      "from": -100,
+      "to": 100,
+      "cell": "851e8053fffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Julius Caesar was born here in 100 BCE at an approximate location.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q1048",
+              "label": "Julius Caesar"
+            }
+          ]
+        },
+        {
+          "text": "In 88 BCE the consul Sulla led the March on Rome, the first time a general ordered his army to march against the Republic; its placement is approximate.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q125727661",
+              "label": "March on Rome"
+            }
+          ]
+        },
+        {
+          "text": "In 82 BCE Sulla won the Battle of the Colline Gate at the northeastern end of Rome and secured control of Italy.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q1230563",
+              "label": "Battle of the Colline Gate"
+            }
+          ]
+        },
+        {
+          "text": "Augustus, also known as Octavian, was born here in 63 BCE; this placement is approximate.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q1405",
+              "label": "Augustus"
+            }
+          ]
+        },
+        {
+          "text": "On the Ides of March, 44 BCE, a group of senators assassinated Julius Caesar during a Senate session at the Curia of Pompey in Rome, stabbing him approximately 23 times.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q1025466",
+              "label": "assassination of Julius Caesar"
+            }
+          ]
+        },
+        {
+          "text": "Tiberius was born in Rome in 42 BCE at an approximate location.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q1407",
+              "label": "Tiberius"
+            }
+          ]
+        },
+        {
+          "text": "From 41 BCE to 40 BCE the Perusine War, a civil war placed only approximately here, was fought by Lucius Antonius in support of Mark Antony against Octavian.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q643987",
+              "label": "Perusine War"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "In 49 CE the emperor Claudius expelled Jews from Rome; this placement is approximate.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q5129460",
+              "label": "Claudius' expulsion of Jews from Rome"
+            }
+          ]
+        },
+        {
+          "text": "The Great Fire of Rome began in July 64 CE around the Circus Maximus, and nearly three quarters of Rome was destroyed.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q215231",
+              "label": "Great Fire of Rome"
+            }
+          ]
+        },
+        {
+          "text": "In 69 CE, the Year of the Four Emperors, Galba, Otho, Vitellius, and Vespasian ruled in succession amid turmoil in Rome and the provinces.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q470596",
+              "label": "Year of the Four Emperors"
+            }
+          ]
+        },
+        {
+          "text": "That year also brought the Siege of the Capitoline Hill and a Battle of Rome, the latter at an approximate location.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q16529004",
+              "label": "Siege of the Capitoline Hill"
+            },
+            {
+              "ref": "E9",
+              "qid": "Q16531511",
+              "label": "Battle of Rome"
+            }
+          ]
+        },
+        {
+          "text": "Construction of the Colosseum began under the Emperor Vespasian in 72 and was completed in 80 under his successor Titus.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q10285",
+              "label": "Colosseum"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "jerusalem",
+      "place": "Jerusalem",
+      "from": 1,
+      "to": 150,
+      "cell": "832db2fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "This area has 10 documented events, 6 of them with approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Prochorus, born here at a date given only as 1 CE to 100 CE, was one of the Seven Deacons chosen to care for the poor of the Christian community in Jerusalem.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q1169498",
+              "label": "Prochorus"
+            }
+          ]
+        },
+        {
+          "text": "Josephus, best known for writing The Jewish War, was born in Jerusalem around 37 CE.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q134461",
+              "label": "Josephus"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Around 48 to 50 CE came the Council of Jerusalem, the first Christian synod, at an approximate location.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q619950",
+              "label": "Council of Jerusalem"
+            }
+          ]
+        },
+        {
+          "text": "In 66 CE riots in Jerusalem, placed approximately, became the catalyst of the First Jewish-Roman War, and the Battle of Jerusalem was fought.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q18206754",
+              "label": "Jerusalem riots of 66"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q9173065",
+              "label": "Battle of Jerusalem"
+            }
+          ]
+        },
+        {
+          "text": "In 67 CE, according to Josephus, the Sicarii of Masada raided Ein Gedi, placed approximately, and killed 700 of its inhabitants.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q16932817",
+              "label": "pillage of Ein Gedi"
+            }
+          ]
+        },
+        {
+          "text": "In 68 CE came the Zealot Temple Siege and the Battle of the Jordan River, both placed approximately.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q8068200",
+              "label": "Zealot Temple Siege"
+            },
+            {
+              "ref": "E6",
+              "qid": "Q3636260",
+              "label": "Battle of the Jordan River"
+            }
+          ]
+        },
+        {
+          "text": "In 70 CE Roman forces led by Titus besieged Jerusalem, destroyed the Second Temple, and razed the city, the effective end of the First Jewish Revolt.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q844886",
+              "label": "Siege of Jerusalem"
+            }
+          ]
+        },
+        {
+          "text": "The Siege of Machaerus followed in 71 CE, and from 72 CE to 73 CE Roman imperial forces took the hilltop fortress of Masada, held by the Sicarii.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q17620934",
+              "label": "Siege of Machaerus"
+            },
+            {
+              "ref": "E9",
+              "qid": "Q3555020",
+              "label": "Siege of Masada"
+            }
+          ]
+        },
+        {
+          "text": "Hegesippus, a Christian writer of the early Church, was born here in 107 CE, and the Siege of Betar, at an approximate location, is dated 132 CE to 135 CE.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q503230",
+              "label": "Hegesippus"
+            },
+            {
+              "ref": "E10",
+              "qid": "Q11794928",
+              "label": "Siege of Betar"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "medina",
+      "place": "Medina",
+      "from": 570,
+      "to": 700,
+      "cell": "835311fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 8 events and 44 people and places are documented here; 2 of the events have approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "In 617 the Aws and the Khazraj, the dominant tribes of Medina, fought the Yawm al-Buath, their final armed conflict; its placement is approximate.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q2718136",
+              "label": "Yawm al-Buath"
+            }
+          ]
+        },
+        {
+          "text": "The Prophet's Mosque, built by Muhammad, is dated here to 622.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q486080",
+              "label": "Prophet's Mosque"
+            }
+          ]
+        },
+        {
+          "text": "The siege of the Banu Qaynuqa, a Jewish tribe expelled by Muhammad for breaking the Constitution of Medina, occurred in April 624.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q3079892",
+              "label": "Invasion of Banu Qaynuqa"
+            }
+          ]
+        },
+        {
+          "text": "In 624 Muhammad took 300 men to Buhran, where the Banu Sulaym fled; its placement is approximate.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q6059603",
+              "label": "Invasion of Bahran"
+            }
+          ]
+        },
+        {
+          "text": "On 23 March 625 the early Muslims fought the Quraysh at the Battle of Uhud, north of Medina.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q488278",
+              "label": "Battle of Uhud"
+            }
+          ]
+        },
+        {
+          "text": "Hasan ibn Ali, a grandson of Muhammad, was born here in 625, and his younger brother Husayn ibn Ali in 626, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q182914",
+              "label": "Hasan ibn Ali"
+            },
+            {
+              "ref": "P1",
+              "qid": "Q112128",
+              "label": "Husayn ibn Ali"
+            }
+          ]
+        },
+        {
+          "text": "In 627, at the Battle of the Trench, the Muslims defended themselves in Medina by digging a trench around it.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q826083",
+              "label": "Battle of the Trench"
+            }
+          ]
+        },
+        {
+          "text": "In mid-August 632 forces of Caliph Abu Bakr fought rebellious Arab tribes at the Battle of Abraq in the Nejd region.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q124958496",
+              "label": "Battle of Abraq"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Abd al-Malik ibn Marwan, later the fifth Umayyad caliph, was born here in 646, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q36788",
+              "label": "Abd al-Malik ibn Marwan"
+            }
+          ]
+        },
+        {
+          "text": "In 656 the caliph Uthman ibn Affan was assassinated at the end of a siege upon his house.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q3625539",
+              "label": "Siege of Uthman"
+            }
+          ]
+        },
+        {
+          "text": "On 26 August 683 the Umayyad army of Yazid I fought the rebel defenders of Medina at the Battle of al-Harrah.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q514382",
+              "label": "Battle of al-Harrah"
+            }
+          ]
+        },
+        {
+          "text": "Jaafar Al-Sadiq, a Muslim scholar and Imam, was born here in 699, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q170046",
+              "label": "Jaafar Al-Sadiq"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "lhasa",
+      "place": "Lhasa",
+      "from": 600,
+      "to": 1950,
+      "cell": "853c7277fffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "This area has 8 documented events, all with approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Songtsän Gampo, a Tibetan emperor, was born here in 604 CE, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q320122",
+              "label": "Songtsän Gampo"
+            }
+          ]
+        },
+        {
+          "text": "Lhasa, today the capital of Tibet, was founded in 633 CE.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q5869",
+              "label": "Lhasa"
+            }
+          ]
+        },
+        {
+          "text": "The Potala Palace dates to 637 CE, and Songtsän Gampo moved the capital to it.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q71229",
+              "label": "Potala Palace"
+            },
+            {
+              "ref": "P4",
+              "qid": "Q320122",
+              "label": "Songtsän Gampo"
+            }
+          ]
+        },
+        {
+          "text": "In 1240 the Mongol general Doorda Darkhan invaded Tibet with 30,000 troops, and in the late 1240s Sakya Pandita urged leading Tibetan figures to submit to Mongol authority.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q6899566",
+              "label": "Mongol conquest of Tibet"
+            }
+          ]
+        },
+        {
+          "text": "Sonam Gyatso, born here in 1543 CE at an approximate location, was later named Dalai Lama by Altan Khan in 1578 for teachings in Mongolia.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q25256",
+              "label": "Sonam Gyatso"
+            }
+          ]
+        },
+        {
+          "text": "Ngawang Lobzang Gyatso, the 5th Dalai Lama, was born here in 1617 CE at an approximate location.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q25252",
+              "label": "Ngawang Lobzang Gyatso"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The wars of the Dzungar Khanate against the Qing dynasty, from 1688 CE to 1759 CE, reached Tibet.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q6808293",
+              "label": "Dzungar–Qing Wars"
+            }
+          ]
+        },
+        {
+          "text": "In 1720 a Qing expedition took Tibet from the Dzungar Khanate and established Qing rule.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q21275805",
+              "label": "Chinese expedition to Tibet"
+            }
+          ]
+        },
+        {
+          "text": "The Lhasa riot of 1750 began after two ambans assassinated Gyurme Namgyal, the expected new regent, and 51 Qing soldiers and 77 Chinese citizens were killed.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q2765370",
+              "label": "Lhasa riot of 1750"
+            }
+          ]
+        },
+        {
+          "text": "In 1788 a dispute over debased silver currency led to a Nepalese invasion of Tibet, followed by the Treaty of Kerung (1789).",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q2270170",
+              "label": "Sino-Nepalese War"
+            }
+          ]
+        },
+        {
+          "text": "Tibet fought the Kingdom of Jammu from May 1841 to August 1842.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q7524776",
+              "label": "Sino-Sikh War"
+            }
+          ]
+        },
+        {
+          "text": "The Nepalese-Tibetan War of 1855 to 1856 was fought in Tibet and ended with the Treaty of Thapathali.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q2001528",
+              "label": "Nepalese-Tibetan War"
+            }
+          ]
+        },
+        {
+          "text": "In 1910 Qing China sent 2,000 troops to Tibet, causing the Dalai Lama to flee to British India.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q15051573",
+              "label": "Chinese Invasion of Tibet (1910)"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "baghdad",
+      "place": "Baghdad",
+      "from": 750,
+      "to": 1260,
+      "cell": "842ca2bffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 8 events are documented here, along with 55 people and places, and 5 of the 8 events have approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Baghdad was founded in 762 CE.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q1530",
+              "label": "Baghdad"
+            }
+          ]
+        },
+        {
+          "text": "The jurist Ahmad ibn Hanbal was born here in 780 CE and the future caliph al-Ma'mun in 786 CE, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q194442",
+              "label": "Ahmad ibn Hanbal"
+            },
+            {
+              "ref": "P4",
+              "qid": "Q61056",
+              "label": "al-Maʾmun"
+            }
+          ]
+        },
+        {
+          "text": "The siege of Baghdad, part of a civil war between al-Amin and al-Ma'mun for the Abbasid Caliphate, lasted from August 812 until September 813.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q7509846",
+              "label": "Siege of Baghdad (812-813)"
+            }
+          ]
+        },
+        {
+          "text": "Al-Ma'mun reigned from 813 until 833 and promoted the flowering of learning and the sciences in Baghdad.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q61056",
+              "label": "al-Maʾmun"
+            }
+          ]
+        },
+        {
+          "text": "The traveller Ahmad ibn Fadlan was born here in 879 CE and the historian Al-Mas'udi around 896 CE, also at approximate locations.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q200947",
+              "label": "Ahmad ibn Fadlan"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q168705",
+              "label": "Al-Mas'udi"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "A battle of Baghdad is recorded in 932 CE, at an approximate location, with no further detail.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q126112148",
+              "label": "Battle of Baghdad"
+            }
+          ]
+        },
+        {
+          "text": "In 942 CE the Hamdanids defeated the Baridis near al-Mada'in in a four-day battle for control over Baghdad, placed approximately.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q85745957",
+              "label": "Battle of al-Mada'in"
+            }
+          ]
+        },
+        {
+          "text": "In 946 CE the Buyids under Mu'izz al-Dawla expelled the Hamdanids from Baghdad after months of fighting within the city, also placed approximately.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q4870385",
+              "label": "Battle of Baghdad"
+            }
+          ]
+        },
+        {
+          "text": "Seljuk forces blockaded the Abbasid capital for fifty days in 1136 CE, at an approximate location, and besieged it again in 1157 CE, when Caliph al-Muqtafi successfully defended it.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q105275820",
+              "label": "Siege of Baghdad (1136)"
+            },
+            {
+              "ref": "E6",
+              "qid": "Q7509844",
+              "label": "Siege of Baghdad (1157)"
+            }
+          ]
+        },
+        {
+          "text": "In 1258 CE a Mongol army under Hulegu took and sacked Baghdad, and the caliph al-Musta'sim was killed alongside hundreds of thousands of his subjects.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q369560",
+              "label": "Siege of Baghdad"
+            }
+          ]
+        },
+        {
+          "text": "A sédition de Karkh is also recorded in 1258 CE, at an approximate location, with no further detail.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q108064516",
+              "label": "sédition de Karkh"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "tenochtitlan",
+      "place": "Tenochtitlan",
+      "from": 1300,
+      "to": 1600,
+      "cell": "854995bbfffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "This area has 10 documented events, and 5 of them have approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "The founding of Tenochtitlan, on an island in Lake Texcoco, is conventionally dated to 1325, though the exact date is unclear.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q13695",
+              "label": "Tenochtitlan"
+            }
+          ]
+        },
+        {
+          "text": "Moctezuma I, born here in 1398 (approximate location), later became the fifth king of Tenochtitlan.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q13702",
+              "label": "Moctezuma I"
+            }
+          ]
+        },
+        {
+          "text": "The Mexico Flood of 1446 is placed here approximately.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q43668035",
+              "label": "Mexico Flood of 1446"
+            }
+          ]
+        },
+        {
+          "text": "Moctezuma II, born here in 1466 (approximate location), later became the ninth emperor of the Aztec Empire.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q141791",
+              "label": "Moctezuma II"
+            }
+          ]
+        },
+        {
+          "text": "In 1473 Tenochtitlan fought the Battle of Tlatelolco against Tlatelolco, its neighbour on the island.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q387238",
+              "label": "Battle of Tlatelolco"
+            }
+          ]
+        },
+        {
+          "text": "On 19 February 1475 an earthquake struck Tenochtitlan during the reign of Tlatoani Axayacatl.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q46437483",
+              "label": "Tenochtitlan Earthquake of 1475"
+            }
+          ]
+        },
+        {
+          "text": "Cuauhtémoc, born here in 1495 (approximate location), later became the last Aztec Emperor.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q297050",
+              "label": "Cuauhtémoc"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "A smallpox epidemic in Tenochtitlan from 1519 to 1520 is placed approximately.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q5677417",
+              "label": "smallpox epidemic in Tenochtitlan"
+            }
+          ]
+        },
+        {
+          "text": "On 22 May 1520, during the Spanish conquest, the Feast of Toxcatl ended in a massacre of Mexica elites.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q1131442",
+              "label": "Massacre in the Great Temple of Tenochtitlan"
+            }
+          ]
+        },
+        {
+          "text": "On 30 June 1521 the Mexica won the Battle of Colhuacatonco, regarded as their most important victory of the siege of Tenochtitlan.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q112811996",
+              "label": "Battle of Colhuacatonco"
+            }
+          ]
+        },
+        {
+          "text": "Tenochtitlan fell in 1521 to the Spanish and thousands of indigenous allies, especially Tlaxcaltec warriors.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q593267",
+              "label": "Fall of Tenochtitlan"
+            }
+          ]
+        },
+        {
+          "text": "The cocoliztli epidemic of 1545 to 1548, placed approximately, brought high fevers and bleeding.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q55074666",
+              "label": "cocoliztli epidemic of 1545-1548"
+            }
+          ]
+        },
+        {
+          "text": "The Mexico City Metropolitan Cathedral, dated to 1570, sits on the former Aztec sacred precinct.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q610961",
+              "label": "Mexico City Metropolitan Cathedral"
+            }
+          ]
+        },
+        {
+          "text": "The Francisco Hernández expedition of 1570 to 1577 and a cocoliztli epidemic of 1576 to 1577 are also placed approximately.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q5483438",
+              "label": "Francisco Hernández Expedition (1570-1577)"
+            },
+            {
+              "ref": "E10",
+              "qid": "Q5834733",
+              "label": "cocoliztli epidemic of 1576"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "seoul",
+      "place": "Seoul",
+      "from": 1390,
+      "to": 1910,
+      "cell": "8430e1dffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 10 events are documented here, along with 49 people and places, and 8 of the 10 events have approximate locations.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Seoul was founded in 1395.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q8684",
+              "label": "Seoul"
+            }
+          ]
+        },
+        {
+          "text": "Sejong the Great, creator of Hangul, was born here in 1397, and Yi Sun-sin, a Korean admiral, in 1545, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q37682",
+              "label": "Sejong the Great"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q50184",
+              "label": "Yi Sun-sin"
+            }
+          ]
+        },
+        {
+          "text": "The Imjin War, two Japanese invasions of Korea, ran from 1592 CE to 1598 CE and ended with the withdrawal of Japanese forces after a military stalemate in Korea's southern provinces; its placement here is approximate.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q576338",
+              "label": "Japanese invasions of Korea"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Gojong of the Korean Empire was born here in 1852, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q257425",
+              "label": "Gojong of the Korean Empire"
+            }
+          ]
+        },
+        {
+          "text": "In 1882 soldiers of the Joseon Army began the Imo Incident, an uprising in Seoul.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q709191",
+              "label": "Imo Incident"
+            }
+          ]
+        },
+        {
+          "text": "Korea negotiated treaties with the United Kingdom in 1883, Russia in 1884 and Japan in 1885; like the Imo Incident, they are placed only approximately.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q709191",
+              "label": "Imo Incident"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q7888196",
+              "label": "United Kingdom–Korea Treaty of 1883"
+            },
+            {
+              "ref": "E4",
+              "qid": "Q7382322",
+              "label": "Russia–Korea Treaty of 1884"
+            },
+            {
+              "ref": "E5",
+              "qid": "Q912109",
+              "label": "Japan–Korea Treaty of 1885"
+            }
+          ]
+        },
+        {
+          "text": "The Donghak Peasant Revolution took place in Korea from 1894 CE to 1895 CE, also at an approximate location.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q701045",
+              "label": "Donghak Peasant Revolution"
+            }
+          ]
+        },
+        {
+          "text": "On 23 July 1894, during its ceasefire, Imperial Japanese forces occupied Gyeongbokgung palace to establish a pro-Japanese government.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q108523769",
+              "label": "Japanese occupation of Gyeongbokgung"
+            }
+          ]
+        },
+        {
+          "text": "On 8 October 1895, Queen Min, the consort of Gojong, was assassinated by Japanese agents at the royal palace Gyeongbokgung in Seoul.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q623757",
+              "label": "Eulmi Sabyeon"
+            }
+          ]
+        },
+        {
+          "text": "The Eulsa Treaty of 1905 made Korea a protectorate of Imperial Japan; its placement is approximate.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q233254",
+              "label": "Japan–Korea Treaty of November 1905"
+            }
+          ]
+        },
+        {
+          "text": "On August 1, 1907, in reaction to its disbandment, the Korean army rebelled against Japanese forces at the Namdaemun Gate in Seoul and was suppressed; this placement is approximate too.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q12601111",
+              "label": "Namdaemun Battle"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "constantinople",
+      "place": "Constantinople",
+      "from": 1400,
+      "to": 1500,
+      "cell": "851ec903fffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "The siege of Constantinople from 1394 to 1402 was a long blockade of the capital of the Byzantine Empire by the Ottoman sultan Bayezid I.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q3485863",
+              "label": "Siege of Constantinople"
+            }
+          ]
+        },
+        {
+          "text": "Andronikos V Palaiologos was born here in 1400, and Konstantinos XI Palaiologos in 1404, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "P5",
+              "qid": "Q37089",
+              "label": "Andronikos V Palaiologos"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q37142",
+              "label": "Konstantinos XI Palaiologos"
+            }
+          ]
+        },
+        {
+          "text": "In 1411, Constantinople was besieged during the Ottoman Interregnum, which followed the defeat of Bayezid I by Timur.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q16827799",
+              "label": "Siege of Constantinople"
+            }
+          ]
+        },
+        {
+          "text": "Wikidata records a Byzantine-Ottoman war from 1421 to 1424, placed approximately.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q97236239",
+              "label": "Byzantine–Ottoman War of 1421–1424"
+            }
+          ]
+        },
+        {
+          "text": "In 1422, the Ottoman Empire laid siege to Constantinople as a result of the Byzantine Emperor Manuel II's attempts to interfere in the succession of Ottoman Sultans.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q700886",
+              "label": "Siege of Constantinople"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Konstantinos XI Palaiologos, the last Byzantine emperor, died in battle at the fall of Constantinople on 29 May 1453, and Wikidata dates the founding of Istanbul here to the same year.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q37142",
+              "label": "Konstantinos XI Palaiologos"
+            },
+            {
+              "ref": "P1",
+              "qid": "Q406",
+              "label": "Istanbul"
+            }
+          ]
+        },
+        {
+          "text": "On April 18, 1454, the Ottoman Empire and the Republic of Venice signed the Treaty of Constantinople, the first treaty signed by Mehmed the Conqueror after the capture of the city; its placement is approximate.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q28221972",
+              "label": "Treaty of Constantinople"
+            }
+          ]
+        },
+        {
+          "text": "The Grand Bazaar dates here to 1455 and Topkapı Palace to 1460, and from the 1460s the palace served as the administrative center of the Ottoman Empire.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q505954",
+              "label": "Grand Bazaar"
+            },
+            {
+              "ref": "P2",
+              "qid": "Q170495",
+              "label": "Topkapı Palace"
+            }
+          ]
+        },
+        {
+          "text": "In 1479 another Treaty of Constantinople ended the sixteen-year-long war between the Republic of Venice and the Ottoman Empire, and Wikidata records a further treaty in 1482, both placed approximately.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q1980621",
+              "label": "Treaty of Constantinople"
+            },
+            {
+              "ref": "E8",
+              "qid": "Q16330702",
+              "label": "Treaty of Constantinople"
+            }
+          ]
+        },
+        {
+          "text": "The Synod of Constantinople in 1484, also approximately placed, was the first synod to condemn the Council of Florence.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q4231480",
+              "label": "Synod of Constantinople (1484)"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "cusco",
+      "place": "Cusco",
+      "from": 1400,
+      "to": 1600,
+      "cell": "838b61fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "The semi-legendary Inca-Chanka war between Cusco and the Chanka chiefdom is dated 1401 CE to 1500 CE, at an approximate location.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q5643516",
+              "label": "Chanka–Inca War"
+            }
+          ]
+        },
+        {
+          "text": "A Battle of Cusco is recorded in 1438, placed approximately.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q3401901",
+              "label": "Battle of Cusco"
+            }
+          ]
+        },
+        {
+          "text": "Túpac Inca Yupanqui was born here in 1441, Manco Inca in 1500, and Túpac Huallpa in 1510, all at approximate locations.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q311415",
+              "label": "Túpac Inca Yupanqui"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q332049",
+              "label": "Manco Inca"
+            },
+            {
+              "ref": "P5",
+              "qid": "Q381846",
+              "label": "Túpac Huallpa"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "In 1533 a Battle of Cusco was fought between the Spanish Conquistadors and forces of the Incas, and battles at Anta and Capi, placed approximately, date to that year.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q1612814",
+              "label": "Battle of Cusco"
+            },
+            {
+              "ref": "E5",
+              "qid": "Q137641848",
+              "label": "Battle of Anta"
+            },
+            {
+              "ref": "E6",
+              "qid": "Q137641850",
+              "label": "Battle of Capi"
+            }
+          ]
+        },
+        {
+          "text": "In 1536 Manco Inca Yupanqui led an Incan army in a 10-month siege of Cusco, held by Spanish conquistadors and Indian auxiliaries under Hernando Pizarro.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q2398589",
+              "label": "Siege of Cusco"
+            }
+          ]
+        },
+        {
+          "text": "Sacsayhuaman and Yucay saw battles in 1536, at approximate locations.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q5055825",
+              "label": "Battle of Sacsayhuaman"
+            },
+            {
+              "ref": "E9",
+              "qid": "Q137637279",
+              "label": "Battle of Yucay"
+            }
+          ]
+        },
+        {
+          "text": "In 1537 Hernando Pizarro led the besieged in a raid on the emperor's headquarters at Ollantaytambo.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q2338569",
+              "label": "Battle of Ollantaytambo"
+            }
+          ]
+        },
+        {
+          "text": "The Incans hoped the siege would restore their empire, but it was ultimately unsuccessful.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q2398589",
+              "label": "Siege of Cusco"
+            }
+          ]
+        },
+        {
+          "text": "In 1538 Hernando and Gonzalo Pizarro fought rival conquistador Diego de Almagro at the Battle of Las Salinas.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q947591",
+              "label": "Battle of Las Salinas"
+            }
+          ]
+        },
+        {
+          "text": "Inca Garcilaso de la Vega, later a chronicler, was born here in 1539, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q334711",
+              "label": "Inca Garcilaso de la Vega"
+            }
+          ]
+        },
+        {
+          "text": "In 1548 Gonzalo Pizarro and Pedro de la Gasca fought the Battle of Jaquijahuana, during the Revolt of the Encomenderos.",
+          "cites": [
+            {
+              "ref": "E12",
+              "qid": "Q2338093",
+              "label": "Battle of Jaquijahuana"
+            }
+          ]
+        },
+        {
+          "text": "The Spanish conquest of the Inca Empire ended in Spanish victory in 1572 and colonization of the region as the Viceroyalty of Peru.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q636771",
+              "label": "Spanish conquest of the Inca Empire"
             }
           ]
         }
@@ -370,6 +2082,123 @@
   },
   {
     "entry": {
+      "id": "mombasa",
+      "place": "Mombasa",
+      "from": 1490,
+      "to": 1900,
+      "cell": "837b59fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 5 events and 2 people and places are documented here, and 4 of the 5 events have approximate locations, so this account is short.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "In 1505, Portuguese forces under the first Viceroy of India, Dom Francisco de Almeida, fought the Sultanate of Mombasa, staged a landing and sacked the city.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q121047056",
+              "label": "Battle of Mombasa"
+            }
+          ]
+        },
+        {
+          "text": "In 1528, Portuguese forces under Nuno da Cunha, the Portuguese governor of India, fought the Sultanate of Mombasa.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q121076382",
+              "label": "Battle of Mombasa"
+            }
+          ]
+        },
+        {
+          "text": "On 5 March 1589, Portuguese and Zimba forces under Tomé Coutinho fought the Ottomans, and the Portuguese reconquered the city and captured Mir Ali Beg.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q128812160",
+              "label": "Battle of Mombasa"
+            }
+          ]
+        },
+        {
+          "text": "The placement of these battles on the globe is approximate.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q121047056",
+              "label": "Battle of Mombasa"
+            },
+            {
+              "ref": "E2",
+              "qid": "Q121076382",
+              "label": "Battle of Mombasa"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q128812160",
+              "label": "Battle of Mombasa"
+            }
+          ]
+        },
+        {
+          "text": "Fort Jesus, designed by the Italian architect Giovanni Battista Cairati, was built on Mombasa Island between 1593 and 1596 by order of King Felipe II of Spain to guard the Old Port of Mombasa.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q379080",
+              "label": "Fort Jesus Museum"
+            }
+          ]
+        },
+        {
+          "text": "It was the only fort maintained by the Portuguese on the Swahili coast.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q379080",
+              "label": "Fort Jesus Museum"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "From 13 March 1696 to 13 December 1698, the army of the Ya'rubid ruler of Oman, Saif I bin Sultan, besieged the Portuguese city of Mombasa and Fort Jesus.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q17070460",
+              "label": "Siege of Mombasa"
+            }
+          ]
+        },
+        {
+          "text": "In 1899, a famine struck central Kenya around Mount Kenya, and its placement here is approximate.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q1637884",
+              "label": "Central Kenya famine of 1899"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
       "id": "panipat",
       "place": "Panipat",
       "from": 1500,
@@ -479,6 +2308,796 @@
               "ref": "E3",
               "qid": "Q1259218",
               "label": "Third Battle of Panipat"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "port-au-prince",
+      "place": "Port-au-Prince",
+      "from": 1750,
+      "to": 1810,
+      "cell": "836725fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Only 8 events and 3 people and places are documented here, so this account is short.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "The 1751 Port-au-Prince earthquake occurred on 21 November in Saint-Domingue, followed by a tsunami.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q4552874",
+              "label": "1751 Port-au-Prince earthquake"
+            }
+          ]
+        },
+        {
+          "text": "Alexandre Pétion was born here in 1770 and Jean-Pierre Boyer in 1776, though the placement of both births is approximate.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q353464",
+              "label": "Alejandro Petion"
+            },
+            {
+              "ref": "P2",
+              "qid": "Q449421",
+              "label": "Jean-Pierre Boyer"
+            }
+          ]
+        },
+        {
+          "text": "Both later became presidents of Haiti.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q353464",
+              "label": "Alejandro Petion"
+            },
+            {
+              "ref": "P2",
+              "qid": "Q449421",
+              "label": "Jean-Pierre Boyer"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The Battle of Croix-des-Bouquets in 1792 and the siege of Port-au-Prince in April 1793 both took place during the Haitian Revolution.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q2890512",
+              "label": "Battle of Croix-des-Bouquets"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q3485993",
+              "label": "Siege of Port-au-Prince"
+            }
+          ]
+        },
+        {
+          "text": "In 1794 came the Battle of Port-Républicain, also during the Haitian Revolution, and the Battle of Trutier.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q2889670",
+              "label": "Battle of Port-Républicain"
+            },
+            {
+              "ref": "E5",
+              "qid": "Q2890259",
+              "label": "Battle of Trutier"
+            }
+          ]
+        },
+        {
+          "text": "The Siege of Jacmel, a four-and-half month long siege during the War of the South, ran from 1799 to 1800, and its placement here is approximate.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q140288692",
+              "label": "Siege of Jacmel"
+            }
+          ]
+        },
+        {
+          "text": "Port-au-Prince was besieged again from October to November 1803, also during the Haitian Revolution.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q3485993",
+              "label": "Siege of Port-au-Prince"
+            },
+            {
+              "ref": "E7",
+              "qid": "Q3485996",
+              "label": "Siege of Port-au-Prince"
+            }
+          ]
+        },
+        {
+          "text": "Fort Dimanche, a fortress near La Saline in Port-au-Prince, dates from 1804.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q3077851",
+              "label": "Fort Dimanche"
+            }
+          ]
+        },
+        {
+          "text": "In 1807 came the Battle of Sibert, whose placement is also approximate.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q138340356",
+              "label": "Battle of Sibert"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "paris",
+      "place": "Paris",
+      "from": 1789,
+      "to": 1815,
+      "cell": "851fb467fffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Of 41 documented events here, only the most notable appear.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "On 17 July 1791, the Champ de Mars Massacre struck a crowd of republican protesters in Paris.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q1089686",
+              "label": "Champ de Mars Massacre"
+            }
+          ]
+        },
+        {
+          "text": "On 10 August 1792, armed revolutionaries stormed the Tuileries Palace, leading France to abolish the monarchy and establish a republic.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q1154330",
+              "label": "10 August insurrection"
+            }
+          ]
+        },
+        {
+          "text": "The Louvre Museum is dated here to 1793.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q19675",
+              "label": "Louvre Museum"
+            }
+          ]
+        },
+        {
+          "text": "The Revolt of 1 Prairial Year III, on 20 May 1795, was the final major popular uprising of the French Revolution, its location approximate.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q1151536",
+              "label": "Revolt of 1 Prairial Year III"
+            }
+          ]
+        },
+        {
+          "text": "In 1795, 13 Vendémiaire, a battle in the streets of Paris, advanced the career of Napoleon Bonaparte.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q720498",
+              "label": "13 Vendémiaire"
+            }
+          ]
+        },
+        {
+          "text": "In 1797, the Coup of 18 Fructidor ousted the monarchists from the legislature, its location approximate.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q248033",
+              "label": "Coup of 18 Fructidor"
+            }
+          ]
+        },
+        {
+          "text": "Eugène Delacroix was born here in 1798, at an approximate location.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q33477",
+              "label": "Eugène Delacroix"
+            }
+          ]
+        },
+        {
+          "text": "On 9 November 1799, the bloodless Coup of 18 Brumaire overthrew the Directory and brought Napoleon Bonaparte to power as First Consul.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q620965",
+              "label": "coup of 18 Brumaire"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Napoleon Bonaparte and Pope Pius VII signed the Concordat of 1801 in Paris on 15 July 1801.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q1428015",
+              "label": "Concordat of 1801"
+            }
+          ]
+        },
+        {
+          "text": "Napoleon was crowned Emperor of the French on December 2, 1804, at Notre-Dame de Paris.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q973118",
+              "label": "coronation of Napoleon I"
+            }
+          ]
+        },
+        {
+          "text": "George Sand was born here in 1804, Alexis de Tocqueville in 1805, and Napoleon III in 1808, all at approximate locations.",
+          "cites": [
+            {
+              "ref": "P2",
+              "qid": "Q3816",
+              "label": "George Sand"
+            },
+            {
+              "ref": "P5",
+              "qid": "Q140694",
+              "label": "Alexis de Tocqueville"
+            },
+            {
+              "ref": "P3",
+              "qid": "Q7721",
+              "label": "Napoleon III"
+            }
+          ]
+        },
+        {
+          "text": "Bernard Courtois discovered iodine in 1811, the location approximate.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q1103",
+              "label": "iodine"
+            }
+          ]
+        },
+        {
+          "text": "In 1814, Allied forces drove back the defenders of Paris, and the French evacuated it on 31 March.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q780921",
+              "label": "Battle of Paris"
+            }
+          ]
+        },
+        {
+          "text": "The Treaty of Paris was signed on 30 May 1814 and the Second Treaty of Paris on 20 November 1815, both at approximate locations.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q740724",
+              "label": "Treaty of Paris"
+            },
+            {
+              "ref": "E12",
+              "qid": "Q233688",
+              "label": "Treaty of Paris"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "isandlwana",
+      "place": "Isandlwana",
+      "from": 1870,
+      "to": 1900,
+      "cell": "83bcf1fffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "On 22 January 1879, eleven days after the British invaded the Zulu Kingdom, a Zulu force of some 20,000 warriors attacked a portion of the British main column at Isandlwana.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q747589",
+              "label": "Battle of Isandlwana"
+            }
+          ]
+        },
+        {
+          "text": "During the final hours of the British defeat there, a large contingent of Zulu warriors broke off and travelled ten kilometres to attack the mission station at Rorke's Drift.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q1123353",
+              "label": "Battle of Rorke's Drift"
+            }
+          ]
+        },
+        {
+          "text": "A vastly outnumbered British force under Lieutenants John Chard and Gonville Bromhead held it, and the battle holds the record for the most Victoria Crosses awarded for a single battle.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q1123353",
+              "label": "Battle of Rorke's Drift"
+            }
+          ]
+        },
+        {
+          "text": "Hattingspruit, a coal mining town, was established here in the 1880s.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q3643570",
+              "label": "Hattingspruit"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "The Battle of Talana Hill, in 1899, was the first major clash of the Second Boer War, and the Battle of Elandslaagte, fought while the Boers were invading Natal, was one of the few decisive British victories.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q247871",
+              "label": "Battle of Talana Hill"
+            },
+            {
+              "ref": "E6",
+              "qid": "Q263950",
+              "label": "Battle of Elandslaagte"
+            }
+          ]
+        },
+        {
+          "text": "On 30 October 1899 a British sortie from Ladysmith ended in disaster, and the Boers began a siege of the town on 2 November 1899.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q2889085",
+              "label": "Battle of Ladysmith"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q2543997",
+              "label": "Siege of Ladysmith"
+            }
+          ]
+        },
+        {
+          "text": "Redvers Buller's attempts to relieve it started on 15 December 1899 at the Second Battle of Colenso, where the Boers repelled British forces on the Tugela River.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q3237997",
+              "label": "Relief of Ladysmith"
+            },
+            {
+              "ref": "E4",
+              "qid": "Q868249",
+              "label": "Battle of Colenso"
+            }
+          ]
+        },
+        {
+          "text": "The Battle of Vaal Krantz, in 1900, was his third failed attempt to fight past Louis Botha's Boer army.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q736490",
+              "label": "Battle of Vaal Krantz"
+            }
+          ]
+        },
+        {
+          "text": "From 14 February to 27 February 1900, at the Battle of the Tugela Heights, Buller's army forced Botha's army to lift the siege, which lasted until 28 February 1900.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q4873033",
+              "label": "Battle of the Tugela Heights"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q2543997",
+              "label": "Siege of Ladysmith"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "beijing",
+      "place": "Beijing",
+      "from": 1900,
+      "to": 1990,
+      "cell": "8531aa43fffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "This area has 18 documented events; of the 12 told here, all but the 1900 battle and siege, the May Fourth Movement and the 1989 protests are approximately placed.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            },
+            {
+              "ref": "E1",
+              "qid": "Q4087313",
+              "label": "Battle of Peking"
+            },
+            {
+              "ref": "E2",
+              "qid": "Q4337436",
+              "label": "Siege of the International Legations"
+            },
+            {
+              "ref": "E5",
+              "qid": "Q279790",
+              "label": "May Fourth Movement"
+            },
+            {
+              "ref": "E12",
+              "qid": "Q99717",
+              "label": "1989 Tiananmen Square protests and massacre"
+            }
+          ]
+        },
+        {
+          "text": "In 1900 Boxers and Qing Dynasty troops besieged the foreign legations in Peking for 55 days, until the Eight-Nation Alliance relieved the siege.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q4087313",
+              "label": "Battle of Peking"
+            },
+            {
+              "ref": "E2",
+              "qid": "Q4337436",
+              "label": "Siege of the International Legations"
+            }
+          ]
+        },
+        {
+          "text": "Only the Treaty of Peking's name and year, 1905, are documented here.",
+          "cites": [
+            {
+              "ref": "E3",
+              "qid": "Q11563873",
+              "label": "Treaty of Peking"
+            }
+          ]
+        },
+        {
+          "text": "Puyi, the last Qing emperor, was born here in 1906, approximately placed.",
+          "cites": [
+            {
+              "ref": "P3",
+              "qid": "Q185152",
+              "label": "Puyi"
+            }
+          ]
+        },
+        {
+          "text": "In 1917 Zhang Xun's army seized Beijing and reinstalled Puyi, a restoration Republican troops reversed within two weeks.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q1041813",
+              "label": "Manchu Restoration"
+            }
+          ]
+        },
+        {
+          "text": "On May 4, 1919, students protested at Tiananmen, beginning the May Fourth Movement.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q279790",
+              "label": "May Fourth Movement"
+            }
+          ]
+        },
+        {
+          "text": "Feng Yuxiang staged the Beijing Coup in 1924, students in Beiping demanded resistance to Japanese aggression in 1935, and in 1937 battles near Beiping and Tianjin ended in a Japanese victory.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q1049741",
+              "label": "Beijing Coup"
+            },
+            {
+              "ref": "E7",
+              "qid": "Q697547",
+              "label": "December 9th Movement"
+            },
+            {
+              "ref": "E8",
+              "qid": "Q709429",
+              "label": "Battle of Beiping–Tianjin"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "Xi Jinping was born here in 1953, Ai Weiwei in 1957, and Jet Li in 1963, all approximately placed.",
+          "cites": [
+            {
+              "ref": "P1",
+              "qid": "Q15031",
+              "label": "Xi Jinping"
+            },
+            {
+              "ref": "P5",
+              "qid": "Q160115",
+              "label": "Ai Weiwei"
+            },
+            {
+              "ref": "P2",
+              "qid": "Q159577",
+              "label": "Jet Li"
+            }
+          ]
+        },
+        {
+          "text": "Red August, beginning in August 1966 during the Cultural Revolution, was a period of political violence and massacres in Beijing; official statistics published in 1980 said Red Guards killed 1,772, those of November 1985 gave 10,275 deaths.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q79546163",
+              "label": "Red August"
+            }
+          ]
+        },
+        {
+          "text": "In April 1976, after Zhou Enlai's death, crowds protested at Tiananmen Square, and that October a bloodless coup arrested the Gang of Four.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q1191151",
+              "label": "Tiananmen incident"
+            },
+            {
+              "ref": "E11",
+              "qid": "Q11072441",
+              "label": "Huairentang incident"
+            }
+          ]
+        },
+        {
+          "text": "Zhang Ziyi was born here in 1979, approximately placed.",
+          "cites": [
+            {
+              "ref": "P4",
+              "qid": "Q180852",
+              "label": "Zhang Ziyi"
+            }
+          ]
+        },
+        {
+          "text": "From 15 April to 4 June 1989, students and workers protested in Tiananmen Square, until government troops occupied it in the Tiananmen Square massacre.",
+          "cites": [
+            {
+              "ref": "E12",
+              "qid": "Q99717",
+              "label": "1989 Tiananmen Square protests and massacre"
+            }
+          ]
+        }
+      ]
+    ]
+  },
+  {
+    "entry": {
+      "id": "gallipoli",
+      "place": "Gallipoli",
+      "from": 1914,
+      "to": 1918,
+      "cell": "831ecafffffffff"
+    },
+    "writtenAt": "2026-10-29",
+    "writtenBy": "Claude Opus 5.5 in Claude Code",
+    "paragraphs": [
+      [
+        {
+          "text": "Of the 23 documented events here, this account follows 12 of them.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "The Gallipoli campaign, a First World War campaign on the Gallipoli Peninsula, began on 19 February 1915.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q164983",
+              "label": "Gallipoli Campaign"
+            }
+          ]
+        },
+        {
+          "text": "In 1915, Royal Navy, French, Russian and Australian ships attempted to force a passage through the Dardanelles Straits; the placement of these operations is approximate.",
+          "cites": [
+            {
+              "ref": "E2",
+              "qid": "Q2778755",
+              "label": "naval operations in the Dardanelles Campaign"
+            }
+          ]
+        },
+        {
+          "text": "On 25 April 1915, amphibious landings by British and French forces included Cape Helles, and British Empire forces landed at Anzac Cove, beginning the campaign's land phase.",
+          "cites": [
+            {
+              "ref": "E5",
+              "qid": "Q1754797",
+              "label": "Landing at Cape Helles"
+            },
+            {
+              "ref": "E3",
+              "qid": "Q2624963",
+              "label": "Landing at Anzac Cove"
+            }
+          ]
+        },
+        {
+          "text": "The First Battle of Krithia, from 28 April, was the first Allied attempt to advance, and Ottoman forces quickly overwhelmed it.",
+          "cites": [
+            {
+              "ref": "E4",
+              "qid": "Q1230997",
+              "label": "First Battle of Krithia"
+            }
+          ]
+        },
+        {
+          "text": "In the Second Battle of Krithia, the Allies captured only a small amount of ground after two days of costly fighting.",
+          "cites": [
+            {
+              "ref": "E11",
+              "qid": "Q233379",
+              "label": "Second Battle of Krithia"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "text": "In August 1915 the British made their final attempt to seize the peninsula, the August Offensive or Battle of Sari Bair.",
+          "cites": [
+            {
+              "ref": "E10",
+              "qid": "Q1775801",
+              "label": "Battle of Sari Bair"
+            }
+          ]
+        },
+        {
+          "text": "The landing at Suvla Bay, part of that offensive, began on the night of 6 August 1915.",
+          "cites": [
+            {
+              "ref": "E7",
+              "qid": "Q1776241",
+              "label": "Landing at Suvla Bay"
+            }
+          ]
+        },
+        {
+          "text": "Between 6 and 10 August, ANZAC and Ottoman forces fought at Lone Pine in a diversionary attack.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q3636509",
+              "label": "Battle of Lone Pine"
+            }
+          ]
+        },
+        {
+          "text": "On 7 August the minor Battle of the Nek took place on a narrow ridge that was easy to defend.",
+          "cites": [
+            {
+              "ref": "E8",
+              "qid": "Q2450777",
+              "label": "Battle of the Nek"
+            }
+          ]
+        },
+        {
+          "text": "The Battle of Hill 60, launched on 21 August, was one of the last major assaults of the campaign.",
+          "cites": [
+            {
+              "ref": "E6",
+              "qid": "Q12297894",
+              "label": "Battle of Hill 60 (Gallipoli)"
+            }
+          ]
+        },
+        {
+          "text": "The campaign lasted until 9 January 1916, and the Allied attempt to control the Turkish straits failed.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q164983",
+              "label": "Gallipoli Campaign"
+            }
+          ]
+        },
+        {
+          "text": "Later, on 20 January 1918, an Ottoman squadron engaged a Royal Navy flotilla off Imbros.",
+          "cites": [
+            {
+              "ref": "E12",
+              "qid": "Q2436624",
+              "label": "Battle of Imbros"
             }
           ]
         }

@@ -1,0 +1,24 @@
+{
+  "id": "rome",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "Julius Caesar was born here in 100 BCE at an approximate location.", "cites": ["P1"] },
+      { "text": "In 88 BCE the consul Sulla led the March on Rome, the first time a general ordered his army to march against the Republic; its placement is approximate.", "cites": ["E1"] },
+      { "text": "In 82 BCE Sulla won the Battle of the Colline Gate at the northeastern end of Rome and secured control of Italy.", "cites": ["E2"] },
+      { "text": "Augustus, also known as Octavian, was born here in 63 BCE; this placement is approximate.", "cites": ["P2"] },
+      { "text": "On the Ides of March, 44 BCE, a group of senators assassinated Julius Caesar during a Senate session at the Curia of Pompey in Rome, stabbing him approximately 23 times.", "cites": ["E3"] },
+      { "text": "Tiberius was born in Rome in 42 BCE at an approximate location.", "cites": ["P4"] },
+      { "text": "From 41 BCE to 40 BCE the Perusine War, a civil war placed only approximately here, was fought by Lucius Antonius in support of Mark Antony against Octavian.", "cites": ["E4"] }
+    ],
+    [
+      { "text": "In 49 CE the emperor Claudius expelled Jews from Rome; this placement is approximate.", "cites": ["E5"] },
+      { "text": "The Great Fire of Rome began in July 64 CE around the Circus Maximus, and nearly three quarters of Rome was destroyed.", "cites": ["E6"] },
+      { "text": "In 69 CE, the Year of the Four Emperors, Galba, Otho, Vitellius, and Vespasian ruled in succession amid turmoil in Rome and the provinces.", "cites": ["E7"] },
+      { "text": "That year also brought the Siege of the Capitoline Hill and a Battle of Rome, the latter at an approximate location.", "cites": ["E8", "E9"] },
+      { "text": "Construction of the Colosseum began under the Emperor Vespasian in 72 and was completed in 80 under his successor Titus.", "cites": ["P3"] }
+    ]
+  ]
+}

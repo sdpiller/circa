@@ -1,0 +1,25 @@
+{
+  "id": "gallipoli",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "Of the 23 documented events here, this account follows 12 of them.", "cites": ["C"] },
+      { "text": "The Gallipoli campaign, a First World War campaign on the Gallipoli Peninsula, began on 19 February 1915.", "cites": ["E1"] },
+      { "text": "In 1915, Royal Navy, French, Russian and Australian ships attempted to force a passage through the Dardanelles Straits; the placement of these operations is approximate.", "cites": ["E2"] },
+      { "text": "On 25 April 1915, amphibious landings by British and French forces included Cape Helles, and British Empire forces landed at Anzac Cove, beginning the campaign's land phase.", "cites": ["E5", "E3"] },
+      { "text": "The First Battle of Krithia, from 28 April, was the first Allied attempt to advance, and Ottoman forces quickly overwhelmed it.", "cites": ["E4"] },
+      { "text": "In the Second Battle of Krithia, the Allies captured only a small amount of ground after two days of costly fighting.", "cites": ["E11"] }
+    ],
+    [
+      { "text": "In August 1915 the British made their final attempt to seize the peninsula, the August Offensive or Battle of Sari Bair.", "cites": ["E10"] },
+      { "text": "The landing at Suvla Bay, part of that offensive, began on the night of 6 August 1915.", "cites": ["E7"] },
+      { "text": "Between 6 and 10 August, ANZAC and Ottoman forces fought at Lone Pine in a diversionary attack.", "cites": ["E9"] },
+      { "text": "On 7 August the minor Battle of the Nek took place on a narrow ridge that was easy to defend.", "cites": ["E8"] },
+      { "text": "The Battle of Hill 60, launched on 21 August, was one of the last major assaults of the campaign.", "cites": ["E6"] },
+      { "text": "The campaign lasted until 9 January 1916, and the Allied attempt to control the Turkish straits failed.", "cites": ["E1"] },
+      { "text": "Later, on 20 January 1918, an Ottoman squadron engaged a Royal Navy flotilla off Imbros.", "cites": ["E12"] }
+    ]
+  ]
+}

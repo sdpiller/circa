@@ -1,0 +1,24 @@
+{
+  "id": "beijing",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "This area has 18 documented events; of the 12 told here, all but the 1900 battle and siege, the May Fourth Movement and the 1989 protests are approximately placed.", "cites": ["C", "E1", "E2", "E5", "E12"] },
+      { "text": "In 1900 Boxers and Qing Dynasty troops besieged the foreign legations in Peking for 55 days, until the Eight-Nation Alliance relieved the siege.", "cites": ["E1", "E2"] },
+      { "text": "Only the Treaty of Peking's name and year, 1905, are documented here.", "cites": ["E3"] },
+      { "text": "Puyi, the last Qing emperor, was born here in 1906, approximately placed.", "cites": ["P3"] },
+      { "text": "In 1917 Zhang Xun's army seized Beijing and reinstalled Puyi, a restoration Republican troops reversed within two weeks.", "cites": ["E4"] },
+      { "text": "On May 4, 1919, students protested at Tiananmen, beginning the May Fourth Movement.", "cites": ["E5"] },
+      { "text": "Feng Yuxiang staged the Beijing Coup in 1924, students in Beiping demanded resistance to Japanese aggression in 1935, and in 1937 battles near Beiping and Tianjin ended in a Japanese victory.", "cites": ["E6", "E7", "E8"] }
+    ],
+    [
+      { "text": "Xi Jinping was born here in 1953, Ai Weiwei in 1957, and Jet Li in 1963, all approximately placed.", "cites": ["P1", "P5", "P2"] },
+      { "text": "Red August, beginning in August 1966 during the Cultural Revolution, was a period of political violence and massacres in Beijing; official statistics published in 1980 said Red Guards killed 1,772, those of November 1985 gave 10,275 deaths.", "cites": ["E9"] },
+      { "text": "In April 1976, after Zhou Enlai's death, crowds protested at Tiananmen Square, and that October a bloodless coup arrested the Gang of Four.", "cites": ["E10", "E11"] },
+      { "text": "Zhang Ziyi was born here in 1979, approximately placed.", "cites": ["P4"] },
+      { "text": "From 15 April to 4 June 1989, students and workers protested in Tiananmen Square, until government troops occupied it in the Tiananmen Square massacre.", "cites": ["E12"] }
+    ]
+  ]
+}

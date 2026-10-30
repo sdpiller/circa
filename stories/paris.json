@@ -1,0 +1,27 @@
+{
+  "id": "paris",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "Of 41 documented events here, only the most notable appear.", "cites": ["C"] },
+      { "text": "On 17 July 1791, the Champ de Mars Massacre struck a crowd of republican protesters in Paris.", "cites": ["E1"] },
+      { "text": "On 10 August 1792, armed revolutionaries stormed the Tuileries Palace, leading France to abolish the monarchy and establish a republic.", "cites": ["E2"] },
+      { "text": "The Louvre Museum is dated here to 1793.", "cites": ["P1"] },
+      { "text": "The Revolt of 1 Prairial Year III, on 20 May 1795, was the final major popular uprising of the French Revolution, its location approximate.", "cites": ["E4"] },
+      { "text": "In 1795, 13 Vendémiaire, a battle in the streets of Paris, advanced the career of Napoleon Bonaparte.", "cites": ["E3"] },
+      { "text": "In 1797, the Coup of 18 Fructidor ousted the monarchists from the legislature, its location approximate.", "cites": ["E5"] },
+      { "text": "Eugène Delacroix was born here in 1798, at an approximate location.", "cites": ["P4"] },
+      { "text": "On 9 November 1799, the bloodless Coup of 18 Brumaire overthrew the Directory and brought Napoleon Bonaparte to power as First Consul.", "cites": ["E6"] }
+    ],
+    [
+      { "text": "Napoleon Bonaparte and Pope Pius VII signed the Concordat of 1801 in Paris on 15 July 1801.", "cites": ["E7"] },
+      { "text": "Napoleon was crowned Emperor of the French on December 2, 1804, at Notre-Dame de Paris.", "cites": ["E8"] },
+      { "text": "George Sand was born here in 1804, Alexis de Tocqueville in 1805, and Napoleon III in 1808, all at approximate locations.", "cites": ["P2", "P5", "P3"] },
+      { "text": "Bernard Courtois discovered iodine in 1811, the location approximate.", "cites": ["E9"] },
+      { "text": "In 1814, Allied forces drove back the defenders of Paris, and the French evacuated it on 31 March.", "cites": ["E11"] },
+      { "text": "The Treaty of Paris was signed on 30 May 1814 and the Second Treaty of Paris on 20 November 1815, both at approximate locations.", "cites": ["E10", "E12"] }
+    ]
+  ]
+}

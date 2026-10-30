@@ -1,0 +1,21 @@
+{
+  "id": "mombasa",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "Only 5 events and 2 people and places are documented here, and 4 of the 5 events have approximate locations, so this account is short.", "cites": ["C"] },
+      { "text": "In 1505, Portuguese forces under the first Viceroy of India, Dom Francisco de Almeida, fought the Sultanate of Mombasa, staged a landing and sacked the city.", "cites": ["E1"] },
+      { "text": "In 1528, Portuguese forces under Nuno da Cunha, the Portuguese governor of India, fought the Sultanate of Mombasa.", "cites": ["E2"] },
+      { "text": "On 5 March 1589, Portuguese and Zimba forces under Tomé Coutinho fought the Ottomans, and the Portuguese reconquered the city and captured Mir Ali Beg.", "cites": ["E3"] },
+      { "text": "The placement of these battles on the globe is approximate.", "cites": ["E1", "E2", "E3"] },
+      { "text": "Fort Jesus, designed by the Italian architect Giovanni Battista Cairati, was built on Mombasa Island between 1593 and 1596 by order of King Felipe II of Spain to guard the Old Port of Mombasa.", "cites": ["P2"] },
+      { "text": "It was the only fort maintained by the Portuguese on the Swahili coast.", "cites": ["P2"] }
+    ],
+    [
+      { "text": "From 13 March 1696 to 13 December 1698, the army of the Ya'rubid ruler of Oman, Saif I bin Sultan, besieged the Portuguese city of Mombasa and Fort Jesus.", "cites": ["E4"] },
+      { "text": "In 1899, a famine struck central Kenya around Mount Kenya, and its placement here is approximate.", "cites": ["E5"] }
+    ]
+  ]
+}

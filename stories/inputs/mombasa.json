@@ -1,0 +1,110 @@
+{
+  "entry": {
+    "id": "mombasa",
+    "place": "Mombasa",
+    "from": 1490,
+    "to": 1900,
+    "cell": "837b59fffffffff"
+  },
+  "generatedAt": "2026-10-29T23:59:33.444Z",
+  "dbRows": 255475,
+  "eventsTotal": 5,
+  "othersTotal": 2,
+  "context": {
+    "ref": "C",
+    "text": "This area has 5 documented events and 2 documented people and places in this range. 4 of these 5 events have approximate locations."
+  },
+  "items": [
+    {
+      "ref": "E1",
+      "qid": "Q121047056",
+      "label": "Battle of Mombasa",
+      "kind": "event",
+      "description": "military confrontation that took place in 1505",
+      "years": "1505 CE",
+      "start_year": 1505,
+      "end_year": 1505,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "Battle of Mombasa (1505)",
+      "extract": "The Battle of Mombasa in 1505 was a military engagement between Portuguese forces under the command of the first Viceroy of India Dom Francisco de Almeida and the Sultanate of Mombasa. The Portuguese staged a landing and sacked the city on the occasion."
+    },
+    {
+      "ref": "E2",
+      "qid": "Q121076382",
+      "label": "Battle of Mombasa",
+      "kind": "event",
+      "description": "1528 military confrontation",
+      "years": "1528 CE",
+      "start_year": 1528,
+      "end_year": 1528,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "Battle of Mombasa (1528)",
+      "extract": "The Battle of Mombasa in 1528 was a military engagement between Portuguese forces under the command of the Portuguese governor of India Nuno da Cunha and the Sultanate of Mombasa."
+    },
+    {
+      "ref": "E3",
+      "qid": "Q128812160",
+      "label": "Battle of Mombasa",
+      "kind": "event",
+      "description": "1589 battle",
+      "years": "1589 CE",
+      "start_year": 1589,
+      "end_year": 1589,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "Battle of Mombasa (1589)",
+      "extract": "The Battle of Mombasa took place on 5 March 1589, between Portuguese and Zimba forces under the command of Tomé Coutinho against the Ottomans. The Portuguese would reconquer the city and capture Mir Ali Beg."
+    },
+    {
+      "ref": "E4",
+      "qid": "Q17070460",
+      "label": "Siege of Mombasa",
+      "kind": "event",
+      "description": "1696–1698 siege",
+      "years": "1696 CE to 1698 CE",
+      "start_year": 1696,
+      "end_year": 1698,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Siege of Mombasa (1696–1698)",
+      "extract": "The siege of Mombasa was an attack on the Portuguese city of Mombasa and Fort Jesus by the army of the Ya'rubid ruler of Oman, Saif I bin Sultan, from 13 March 1696 to 13 December 1698."
+    },
+    {
+      "ref": "E5",
+      "qid": "Q1637884",
+      "label": "Central Kenya famine of 1899",
+      "kind": "event",
+      "description": null,
+      "years": "1899 CE",
+      "start_year": 1899,
+      "end_year": 1899,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "1899 famine in central Kenya",
+      "extract": "The famine in central Kenya in 1899 is regarded as a devastating catastrophe in Kenyan history. It spread rapidly from 1898 in the central region of the country around Mount Kenya after several consecutive years of low rainfall. The prevalence of locusts, cattle diseases that decimated the livestock population and the growing demand for food from travelling caravans of British, Swahili and Arab traders also contributed to the food shortage. The famine was accompanied by a smallpox epidemic that resulted in the depopulation of entire regions."
+    },
+    {
+      "ref": "P1",
+      "qid": "Q225641",
+      "label": "Mombasa",
+      "kind": "founding",
+      "description": "city in Kenya",
+      "years": "1593 CE",
+      "start_year": 1593,
+      "end_year": 1593,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Mombasa",
+      "extract": "Mombasa is a coastal city in southeastern Kenya along the Indian Ocean. It was the first capital of British East Africa, before Nairobi was elevated to capital status in 1907. It now serves as the capital of Mombasa County. Buildings in the Central Business District are blue and white, representing the Indian Ocean. It is the country's oldest and second-largest city after Nairobi, with a population of about 1,208,333 people according to the 2019 census."
+    },
+    {
+      "ref": "P2",
+      "qid": "Q379080",
+      "label": "Fort Jesus Museum",
+      "kind": "structure",
+      "description": "fort in Mombasa, Kenya",
+      "years": "1593 CE",
+      "start_year": 1593,
+      "end_year": 1593,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Fort Jesus",
+      "extract": "Fort Jesus, is a fort located on Mombasa Island. Designed by the Italian architect Giovanni Battista Cairati, it was built between 1593 and 1596 by order of King Felipe II of Spain, who also reigned as King Filipe I of Portugal and the Algarves, to guard the Old Port of Mombasa. Fort Jesus was the only fort maintained by the Portuguese on the Swahili coast and is recognised as a testament to the first successful attempt by a Western power to establish influence over the Indian Ocean trade."
+    }
+  ]
+}

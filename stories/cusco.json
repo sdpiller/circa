@@ -1,0 +1,24 @@
+{
+  "id": "cusco",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "The semi-legendary Inca-Chanka war between Cusco and the Chanka chiefdom is dated 1401 CE to 1500 CE, at an approximate location.", "cites": ["E1"] },
+      { "text": "A Battle of Cusco is recorded in 1438, placed approximately.", "cites": ["E2"] },
+      { "text": "Túpac Inca Yupanqui was born here in 1441, Manco Inca in 1500, and Túpac Huallpa in 1510, all at approximate locations.", "cites": ["P4", "P3", "P5"] }
+    ],
+    [
+      { "text": "In 1533 a Battle of Cusco was fought between the Spanish Conquistadors and forces of the Incas, and battles at Anta and Capi, placed approximately, date to that year.", "cites": ["E4", "E5", "E6"] },
+      { "text": "In 1536 Manco Inca Yupanqui led an Incan army in a 10-month siege of Cusco, held by Spanish conquistadors and Indian auxiliaries under Hernando Pizarro.", "cites": ["E7"] },
+      { "text": "Sacsayhuaman and Yucay saw battles in 1536, at approximate locations.", "cites": ["E8", "E9"] },
+      { "text": "In 1537 Hernando Pizarro led the besieged in a raid on the emperor's headquarters at Ollantaytambo.", "cites": ["E10"] },
+      { "text": "The Incans hoped the siege would restore their empire, but it was ultimately unsuccessful.", "cites": ["E7"] },
+      { "text": "In 1538 Hernando and Gonzalo Pizarro fought rival conquistador Diego de Almagro at the Battle of Las Salinas.", "cites": ["E11"] },
+      { "text": "Inca Garcilaso de la Vega, later a chronicler, was born here in 1539, at an approximate location.", "cites": ["P2"] },
+      { "text": "In 1548 Gonzalo Pizarro and Pedro de la Gasca fought the Battle of Jaquijahuana, during the Revolt of the Encomenderos.", "cites": ["E12"] },
+      { "text": "The Spanish conquest of the Inca Empire ended in Spanish victory in 1572 and colonization of the region as the Viceroyalty of Peru.", "cites": ["E3"] }
+    ]
+  ]
+}

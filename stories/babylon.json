@@ -1,0 +1,23 @@
+{
+  "id": "babylon",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "Only 8 events are documented here, 5 of them at approximate locations.", "cites": ["C"] },
+      { "text": "Babylon, the capital city of Babylonia, has its founding dated to between 3000 BCE and 2001 BCE.", "cites": ["P1"] },
+      { "text": "Ammi-Saduqa, a king of Babylon, was born here, at an approximate location, between 1800 BCE and 1701 BCE.", "cites": ["P5"] }
+    ],
+    [
+      { "text": "The Battle of Babylon came in 710 BCE and the Battle of Kish in 703 BCE, both at approximate locations.", "cites": ["E1", "E2"] },
+      { "text": "The Hanging Gardens of Babylon, one of the seven wonders of the ancient world, are dated to between 700 BCE and 601 BCE.", "cites": ["P2"] },
+      { "text": "In 693 BCE the Neo-Assyrian Empire fought the Elamites at the Battle of Diyala River, and in 691 BCE the Assyrian empire fought rebelling Babylonians, Elamites and others at the Battle of Halule, both at approximate locations.", "cites": ["E3", "E4"] },
+      { "text": "In 689 BCE the Assyrian king Sennacherib, having beaten the Elamites, besieged Babylon for up to fifteen months and destroyed it.", "cites": ["E5"] },
+      { "text": "In 626 BCE the general Nabopolassar began a revolt, at an approximate location, and by 620 BCE he had consolidated control of Babylonia.", "cites": ["E6"] },
+      { "text": "The Ishtar Gate of Babylon, dated to 575 BCE, was constructed by order of King Nebuchadnezzar II.", "cites": ["P3"] },
+      { "text": "In September 539 BCE Persia won a decisive victory over the Neo-Babylonian Empire at the Battle of Opis, north of Babylon.", "cites": ["E8"] },
+      { "text": "After the battle, Persian forces supposedly entered Babylon without further resistance, and Cyrus the Great was proclaimed king of Babylonia.", "cites": ["E7", "E8"] }
+    ]
+  ]
+}

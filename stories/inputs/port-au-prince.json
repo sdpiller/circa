@@ -1,0 +1,162 @@
+{
+  "entry": {
+    "id": "port-au-prince",
+    "place": "Port-au-Prince",
+    "from": 1750,
+    "to": 1810,
+    "cell": "836725fffffffff"
+  },
+  "generatedAt": "2026-10-29T23:59:35.139Z",
+  "dbRows": 255475,
+  "eventsTotal": 8,
+  "othersTotal": 3,
+  "context": {
+    "ref": "C",
+    "text": "This area has 8 documented events and 3 documented people and places in this range. 2 of these 8 events have approximate locations."
+  },
+  "items": [
+    {
+      "ref": "E1",
+      "qid": "Q4552874",
+      "label": "1751 Port-au-Prince earthquake",
+      "kind": "event",
+      "description": "magnitude 7-8 earthquake that occurred in Port-au-Prince, Haiti in 1751",
+      "years": "1751 CE",
+      "start_year": 1751,
+      "end_year": 1751,
+      "loc_confidence": "exact",
+      "wikipedia_title": "1751 Port-au-Prince earthquake",
+      "extract": "The 1751 Port-au-Prince earthquake occurred at 12:50 UTC on 21 November in Saint-Domingue, followed by a tsunami. Another earthquake was reported at the same location on 15 September of the same year and it is uncertain whether the two reports refer to the same event."
+    },
+    {
+      "ref": "E2",
+      "qid": "Q2890512",
+      "label": "Battle of Croix-des-Bouquets",
+      "kind": "event",
+      "description": "1792 conflict in Haiti",
+      "years": "1792 CE",
+      "start_year": 1792,
+      "end_year": 1792,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Battle of Croix-des-Bouquets",
+      "extract": "The Battle of Croix-des-Bouquets took place during the Haitian Revolution."
+    },
+    {
+      "ref": "E3",
+      "qid": "Q3485993",
+      "label": "Siege of Port-au-Prince",
+      "kind": "event",
+      "description": "1793 siege",
+      "years": "1793 CE",
+      "start_year": 1793,
+      "end_year": 1793,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Siege of Port-au-Prince (1793)",
+      "extract": "The siege of Port-au-Prince took place in April 1793 during the Haitian Revolution."
+    },
+    {
+      "ref": "E4",
+      "qid": "Q2889670",
+      "label": "Battle of Port-Républicain",
+      "kind": "event",
+      "description": "1794 battle",
+      "years": "1794 CE",
+      "start_year": 1794,
+      "end_year": 1794,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Battle of Port-Républicain",
+      "extract": "The Battle of Port-Républicain took place during the Haitian Revolution (1791–1804)."
+    },
+    {
+      "ref": "E5",
+      "qid": "Q2890259",
+      "label": "Battle of Trutier",
+      "kind": "event",
+      "description": "1794 battle",
+      "years": "1794 CE",
+      "start_year": 1794,
+      "end_year": 1794,
+      "loc_confidence": "exact",
+      "wikipedia_title": null,
+      "extract": null
+    },
+    {
+      "ref": "E6",
+      "qid": "Q140288692",
+      "label": "Siege of Jacmel",
+      "kind": "event",
+      "description": "siege during the War of the South in Haiti (1799–1800)",
+      "years": "1799 CE to 1800 CE",
+      "start_year": 1799,
+      "end_year": 1800,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "Siege of Jacmel",
+      "extract": "The Siege of Jacmel was a four-and-half month long siege that took place during the War of the South, a sub-war of the Haitian revolution."
+    },
+    {
+      "ref": "E7",
+      "qid": "Q3485996",
+      "label": "Siege of Port-au-Prince",
+      "kind": "event",
+      "description": "1803 siege",
+      "years": "1803 CE",
+      "start_year": 1803,
+      "end_year": 1803,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Siege of Port-au-Prince (1803)",
+      "extract": "The siege of Port-au-Prince was an engagement that took place from October to November 1803 during the Haitian Revolution."
+    },
+    {
+      "ref": "E8",
+      "qid": "Q138340356",
+      "label": "Battle of Sibert",
+      "kind": "event",
+      "description": "1807 battle in Haiti",
+      "years": "1807 CE",
+      "start_year": 1807,
+      "end_year": 1807,
+      "loc_confidence": "inherited",
+      "wikipedia_title": null,
+      "extract": null
+    },
+    {
+      "ref": "P1",
+      "qid": "Q353464",
+      "label": "Alejandro Petion",
+      "kind": "birth",
+      "description": "1st President of the Republic of Haiti (1770-1818)",
+      "years": "1770 CE",
+      "start_year": 1770,
+      "end_year": 1770,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "Alexandre Pétion",
+      "extract": "Alexandre Sabès Pétion was a Haitian army officer and statesman who served as the first president of the Republic of Haiti from 1807 until his death in 1818. One of Haiti's founding fathers, Pétion belonged to the revolutionary quartet that also includes Toussaint Louverture, Jean-Jacques Dessalines, and his later rival Henri Christophe. Regarded as an excellent artilleryman in his early adulthood, Pétion would distinguish himself as an esteemed military commander with experience leading both French and Haitian troops. The 1802 coalition formed by him and Dessalines against French forces led by Charles Leclerc would prove to be a watershed moment in the decade-long conflict, eventually culminating in the decisive Haitian victory at the Battle of Vertières in 1803."
+    },
+    {
+      "ref": "P2",
+      "qid": "Q449421",
+      "label": "Jean-Pierre Boyer",
+      "kind": "birth",
+      "description": "2nd President of Haiti (1776-1850)",
+      "years": "1776 CE",
+      "start_year": 1776,
+      "end_year": 1776,
+      "loc_confidence": "inherited",
+      "wikipedia_title": "Jean-Pierre Boyer",
+      "extract": "Jean-Pierre Boyer was a Haitian military officer and statesman. He was one of the leaders of the Haitian Revolution, and served as the president of Haiti from 1818 to 1843. He reunited the north and south of the country into the Republic of Haiti in 1820 and also annexed the newly independent Spanish Haiti, which brought all of Hispaniola under one Haitian government by 1822. Serving as president for just under 25 years, Boyer managed to rule for the longest period of time of any Haitian leader."
+    },
+    {
+      "ref": "P3",
+      "qid": "Q3077851",
+      "label": "Fort Dimanche",
+      "kind": "structure",
+      "description": "monument and prison in Port-au-Prince, Haiti",
+      "years": "1804 CE",
+      "start_year": 1804,
+      "end_year": 1804,
+      "loc_confidence": "exact",
+      "wikipedia_title": "Fort Dimanche",
+      "extract": "Fort Dimanche is a fortress and former prison in Haiti located near La Saline in Port-au-Prince that was notorious for torture and murder during the reign of François Duvalier. It was declared a monument in 1987."
+    }
+  ]
+}

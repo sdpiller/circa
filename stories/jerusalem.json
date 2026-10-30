@@ -1,0 +1,22 @@
+{
+  "id": "jerusalem",
+  "rulesVersion": 1,
+  "writtenAt": "2026-10-29",
+  "writtenBy": "Claude Opus 5.5 in Claude Code",
+  "paragraphs": [
+    [
+      { "text": "This area has 10 documented events, 6 of them with approximate locations.", "cites": ["C"] },
+      { "text": "Prochorus, born here at a date given only as 1 CE to 100 CE, was one of the Seven Deacons chosen to care for the poor of the Christian community in Jerusalem.", "cites": ["P4"] },
+      { "text": "Josephus, best known for writing The Jewish War, was born in Jerusalem around 37 CE.", "cites": ["P2"] }
+    ],
+    [
+      { "text": "Around 48 to 50 CE came the Council of Jerusalem, the first Christian synod, at an approximate location.", "cites": ["E1"] },
+      { "text": "In 66 CE riots in Jerusalem, placed approximately, became the catalyst of the First Jewish-Roman War, and the Battle of Jerusalem was fought.", "cites": ["E2", "E3"] },
+      { "text": "In 67 CE, according to Josephus, the Sicarii of Masada raided Ein Gedi, placed approximately, and killed 700 of its inhabitants.", "cites": ["E4"] },
+      { "text": "In 68 CE came the Zealot Temple Siege and the Battle of the Jordan River, both placed approximately.", "cites": ["E5", "E6"] },
+      { "text": "In 70 CE Roman forces led by Titus besieged Jerusalem, destroyed the Second Temple, and razed the city, the effective end of the First Jewish Revolt.", "cites": ["E7"] },
+      { "text": "The Siege of Machaerus followed in 71 CE, and from 72 CE to 73 CE Roman imperial forces took the hilltop fortress of Masada, held by the Sicarii.", "cites": ["E8", "E9"] },
+      { "text": "Hegesippus, a Christian writer of the early Church, was born here in 107 CE, and the Siege of Betar, at an approximate location, is dated 132 CE to 135 CE.", "cites": ["P3", "E10"] }
+    ]
+  ]
+}

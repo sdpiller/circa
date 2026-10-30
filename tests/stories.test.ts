@@ -20,6 +20,11 @@ describe("committed stories", () => {
     for (const s of stories) expect(featured.map((e) => e.id)).toContain(s.id);
   });
 
+  it("every featured.json entry has a story, twenty in all", () => {
+    expect(featured).toHaveLength(20);
+    expect(stories.map((s) => s.id).sort()).toEqual(featured.map((e) => e.id).sort());
+  });
+
   it("every story passes the checker against its input", () => {
     for (const s of stories) {
       const input = inputs.get(s.id);
