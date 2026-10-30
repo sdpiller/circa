@@ -206,3 +206,16 @@ Full design: `docs/superpowers/specs/2026-10-29-featured-stories-design.md`. Sup
 **Staying current.** `npm run story:check` (needs the database; run after `etl:load`) confirms each story's cited qids are still in its box with unchanged labels and years. Ranking drift only warns, and so does a changed context sentence or location confidence (warnings do not make a story stale and leave the exit code at 0). At runtime a story is hidden, with a `console.warn`, if any cited qid is missing from the box's response.
 
 **Coverage gaps, measured.** These places had fewer than 3 documented events in any sensible cell and range and were dropped as picks: Timbuktu, Great Zimbabwe, Aksum, Teotihuacan, Angkor, Giza, Knossos, Benin City, Tikal, Varanasi, Lagos, Kano, Hiroshima (1939 to 1950). This is the coverage bias in CLAUDE.md, measured, and it is why the Featured list deliberately spans continents and eras rather than only well-documented regions, even at thin counts such as mombasa (5 events) and panipat (3). Six picks are deliberate stress cases: athens (the famous neighbours are in other cells, and half its events have no article), panipat (exactly 3 events), lhasa and paris (most or all locations inherited), kyoto (27 events, only 7 with articles), and mombasa (5 events across four centuries).
+
+## 31. Owner decisions at the Phase 5 gate (2026-10-30, Phase 5, owner decided)
+**The twenty featured stories are the product.** Every other area shows its list.
+
+**Say approximate placement once per story** (`rulesVersion` 2). The per-event note read as a tic and spent words, and the box already marks each item under the story. The sentence covers events and people alike: a count of approximate events alone implied that approximate births were exact, so eight stories were reworded to say "some locations in this account are approximate". Seventeen stories were rewritten. Panipat and isandlwana cite no inherited item, and gallipoli has one note on its one inherited item, so those three already complied and stay at `rulesVersion` 1.
+
+**Measured outcome of the rewrite.** All 17 passed the checker on their first run. Fresh reviewers then raised 20 findings across 9 stories (carthage 4, athens 3, medina 3, beijing 3, lhasa 2, constantinople 2, tenochtitlan 1, rome 1, mombasa 1); the other 8 were clean. Some findings were in sentences earlier reviewers had passed, such as the Tiananmen sentence and the Tenochtitlan founding date. Review reduces this risk; it does not end it.
+
+**Licence wording stays as built.** The story credit names Wikipedia (CC BY-SA) and Wikidata and links to those sites; each cited item links to its article from its row in the box. Raised at the gate, owner judged it not important.
+
+**The Featured list starts open on a tall screen** (at least 700 px), closed on a short one, because the list is the way to a story.
+
+New data quirk: the Mercenary War's years field says 240 BCE and its extract says 241. The Carthage story gives the war no dates.
