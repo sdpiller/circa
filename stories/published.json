@@ -7,12 +7,12 @@
       "to": -500,
       "cell": "832ca2fffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Only 8 events are documented here, 5 of them at approximate locations.",
+          "text": "Only 8 events are documented here, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -32,7 +32,7 @@
           ]
         },
         {
-          "text": "Ammi-Saduqa, a king of Babylon, was born here, at an approximate location, between 1800 BCE and 1701 BCE.",
+          "text": "Ammi-Saduqa, a king of Babylon, was born here between 1800 BCE and 1701 BCE.",
           "cites": [
             {
               "ref": "P5",
@@ -44,7 +44,7 @@
       ],
       [
         {
-          "text": "The Battle of Babylon came in 710 BCE and the Battle of Kish in 703 BCE, both at approximate locations.",
+          "text": "The Battle of Babylon came in 710 BCE and the Battle of Kish in 703 BCE.",
           "cites": [
             {
               "ref": "E1",
@@ -69,7 +69,7 @@
           ]
         },
         {
-          "text": "In 693 BCE the Neo-Assyrian Empire fought the Elamites at the Battle of Diyala River, and in 691 BCE the Assyrian empire fought rebelling Babylonians, Elamites and others at the Battle of Halule, both at approximate locations.",
+          "text": "In 693 BCE the Neo-Assyrian Empire fought the Elamites at the Battle of Diyala River, and in 691 BCE the Assyrian empire fought rebelling Babylonians, Elamites and others at the Battle of Halule.",
           "cites": [
             {
               "ref": "E3",
@@ -94,7 +94,7 @@
           ]
         },
         {
-          "text": "In 626 BCE the general Nabopolassar began a revolt, at an approximate location, and by 620 BCE he had consolidated control of Babylonia.",
+          "text": "In 626 BCE the general Nabopolassar began a revolt, and by 620 BCE he had consolidated control of Babylonia.",
           "cites": [
             {
               "ref": "E6",
@@ -149,7 +149,7 @@
       "to": -100,
       "cell": "83386efffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
@@ -189,7 +189,7 @@
           ]
         },
         {
-          "text": "The sons of Hamilcar Barca, Hannibal and Hasdrubal, were born here in 247 BCE and 245 BCE.",
+          "text": "Hannibal and Hasdrubal, sons of Hamilcar Barca, were born here in 247 BCE and 245 BCE.",
           "cites": [
             {
               "ref": "P1",
@@ -200,31 +200,6 @@
               "ref": "P3",
               "qid": "Q185101",
               "label": "Hamilcar Barca"
-            },
-            {
-              "ref": "P5",
-              "qid": "Q311702",
-              "label": "Hasdrubal Barca"
-            }
-          ]
-        },
-        {
-          "text": "These birthplaces are placed approximately.",
-          "cites": [
-            {
-              "ref": "P4",
-              "qid": "Q296478",
-              "label": "Hanno the Navigator"
-            },
-            {
-              "ref": "P3",
-              "qid": "Q185101",
-              "label": "Hamilcar Barca"
-            },
-            {
-              "ref": "P1",
-              "qid": "Q36456",
-              "label": "Hannibal"
             },
             {
               "ref": "P5",
@@ -236,7 +211,7 @@
       ],
       [
         {
-          "text": "The Mercenary War, a mutiny by troops employed by Carthage, ran from 240 BCE to 238 BCE, placed approximately.",
+          "text": "The Mercenary War was a mutiny by troops employed by Carthage.",
           "cites": [
             {
               "ref": "E3",
@@ -266,7 +241,7 @@
           ]
         },
         {
-          "text": "A Siege of Carthage, placed approximately, is recorded in 239 BCE, and in October 238 BCE Hamilcar Barca besieged rebels under Mathos at Tunis.",
+          "text": "A Siege of Carthage is recorded in 239 BCE, and in October 238 BCE Hamilcar Barca besieged rebels under Mathos at Tunis.",
           "cites": [
             {
               "ref": "E6",
@@ -281,7 +256,7 @@
           ]
         },
         {
-          "text": "In 204 BCE a Roman army under Publius Cornelius Scipio unsuccessfully besieged Utica, and in 203 BCE he defeated allied Carthaginian and Numidian armies at the Great Plains and at Utica.",
+          "text": "In 204 BCE a Roman army under Publius Cornelius Scipio began an unsuccessful siege of Utica, and in 203 BCE he fought allied Carthaginian and Numidian armies at the Great Plains and at Utica, both heavy defeats for Carthage.",
           "cites": [
             {
               "ref": "E8",
@@ -301,7 +276,7 @@
           ]
         },
         {
-          "text": "Terence, the Roman comic playwright, was born here in 185 BCE, placed approximately.",
+          "text": "Terence, the Roman comic playwright, was born here in 185 BCE.",
           "cites": [
             {
               "ref": "P2",
@@ -334,6 +309,16 @@
               "label": "Siege of Carthage"
             }
           ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
         }
       ]
     ]
@@ -346,12 +331,12 @@
       "to": -300,
       "cell": "851eda77fffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Only 8 events are documented here, with 59 people and places; 5 of the 8 have approximate locations.",
+          "text": "Only 8 events are documented here, with 59 people and places, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -361,7 +346,7 @@
           ]
         },
         {
-          "text": "Sophocles was born here in 496 BCE and Pericles in 494 BCE, both at approximate locations.",
+          "text": "Sophocles was born here in 496 BCE and Pericles in 494 BCE.",
           "cites": [
             {
               "ref": "P3",
@@ -376,7 +361,17 @@
           ]
         },
         {
-          "text": "In 480 BCE the Achaemenid Empire captured Athens, then razed the Acropolis, the Old Temple of Athena, and the Older Parthenon.",
+          "text": "In 480 BCE the Achaemenid Empire captured Athens.",
+          "cites": [
+            {
+              "ref": "E1",
+              "qid": "Q60188600",
+              "label": "Persian destruction of Athens"
+            }
+          ]
+        },
+        {
+          "text": "It subsequently razed the Acropolis, the Old Temple of Athena, and the Older Parthenon.",
           "cites": [
             {
               "ref": "E1",
@@ -396,7 +391,7 @@
           ]
         },
         {
-          "text": "Socrates was born here in 470 BCE, placed approximately.",
+          "text": "Socrates was born here in 470 BCE.",
           "cites": [
             {
               "ref": "P2",
@@ -406,7 +401,7 @@
           ]
         },
         {
-          "text": "Pericles led Athens as its preeminent orator and statesman roughly from 461 to 429 BCE.",
+          "text": "Pericles led Athens as its preeminent orator and statesman roughly from 461 BCE to 429 BCE.",
           "cites": [
             {
               "ref": "P5",
@@ -416,7 +411,7 @@
           ]
         },
         {
-          "text": "Aristophanes was born here in 445 BCE, also placed approximately.",
+          "text": "Aristophanes was born here in 445 BCE.",
           "cites": [
             {
               "ref": "P4",
@@ -428,7 +423,7 @@
       ],
       [
         {
-          "text": "Spartan invasions of Attica ran from 431 BCE to 425 BCE, and the Plague of Athens from 430 BCE to 426 BCE, both placed approximately.",
+          "text": "Spartan invasions of Attica ran from 431 BCE to 425 BCE, and the Plague of Athens from 430 BCE to 426 BCE.",
           "cites": [
             {
               "ref": "E2",
@@ -453,7 +448,7 @@
           ]
         },
         {
-          "text": "Plato was born here between 429 BCE and 420 BCE, at an approximate location.",
+          "text": "Plato was born here between 429 BCE and 420 BCE.",
           "cites": [
             {
               "ref": "P1",
@@ -463,7 +458,7 @@
           ]
         },
         {
-          "text": "In 420 BCE an earthquake disrupted the Athenian assembly, also placed approximately.",
+          "text": "In 420 BCE an earthquake disrupted the Athenian assembly.",
           "cites": [
             {
               "ref": "E4",
@@ -493,7 +488,7 @@
           ]
         },
         {
-          "text": "In 403 BCE, at the Battle of Piraeus, placed approximately, a Spartan force narrowly defeated the exiles, and a settlement then allowed the reestablishment of democratic government in Athens.",
+          "text": "In 403 BCE, at the Battle of Piraeus, a Spartan force narrowly defeated the exiles, and a settlement then allowed the reestablishment of democratic government in Athens.",
           "cites": [
             {
               "ref": "E7",
@@ -513,7 +508,7 @@
           ]
         },
         {
-          "text": "The Athenian-Macedonian War followed from 340 BCE to 338 BCE, also placed approximately.",
+          "text": "The Athenian-Macedonian War ran from 340 BCE to 338 BCE.",
           "cites": [
             {
               "ref": "E8",
@@ -533,12 +528,12 @@
       "to": 100,
       "cell": "851e8053fffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Julius Caesar was born here in 100 BCE at an approximate location.",
+          "text": "Julius Caesar was born here in 100 BCE.",
           "cites": [
             {
               "ref": "P1",
@@ -548,7 +543,7 @@
           ]
         },
         {
-          "text": "In 88 BCE the consul Sulla led the March on Rome, the first time a general ordered his army to march against the Republic; its placement is approximate.",
+          "text": "In 88 BCE the consul Sulla led the March on Rome, the first time a general ordered his army to march against the Republic.",
           "cites": [
             {
               "ref": "E1",
@@ -568,7 +563,7 @@
           ]
         },
         {
-          "text": "Augustus, also known as Octavian, was born here in 63 BCE; this placement is approximate.",
+          "text": "Augustus, also known as Octavian, was born here in 63 BCE.",
           "cites": [
             {
               "ref": "P2",
@@ -588,7 +583,7 @@
           ]
         },
         {
-          "text": "Tiberius was born in Rome in 42 BCE at an approximate location.",
+          "text": "Tiberius was born in Rome in 42 BCE.",
           "cites": [
             {
               "ref": "P4",
@@ -598,7 +593,7 @@
           ]
         },
         {
-          "text": "From 41 BCE to 40 BCE the Perusine War, a civil war placed only approximately here, was fought by Lucius Antonius in support of Mark Antony against Octavian.",
+          "text": "The Perusine War, a civil war from 41 BCE to 40 BCE, was fought by Lucius Antonius in support of Mark Antony against Octavian.",
           "cites": [
             {
               "ref": "E4",
@@ -610,7 +605,7 @@
       ],
       [
         {
-          "text": "In 49 CE the emperor Claudius expelled Jews from Rome; this placement is approximate.",
+          "text": "In 49 CE the emperor Claudius expelled Jews from Rome.",
           "cites": [
             {
               "ref": "E5",
@@ -640,7 +635,7 @@
           ]
         },
         {
-          "text": "That year also brought the Siege of the Capitoline Hill and a Battle of Rome, the latter at an approximate location.",
+          "text": "That year also brought the Siege of the Capitoline Hill and a Battle of Rome.",
           "cites": [
             {
               "ref": "E8",
@@ -655,12 +650,22 @@
           ]
         },
         {
-          "text": "Construction of the Colosseum began under the Emperor Vespasian and was completed under his successor Titus.",
+          "text": "Construction of the Colosseum in Rome began under the Emperor Vespasian and was completed under his successor Titus.",
           "cites": [
             {
               "ref": "P3",
               "qid": "Q10285",
               "label": "Colosseum"
+            }
+          ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
             }
           ]
         }
@@ -675,12 +680,12 @@
       "to": 150,
       "cell": "832db2fffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "This area has 10 documented events, 6 of them with approximate locations.",
+          "text": "This area has 10 documented events, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -712,7 +717,7 @@
       ],
       [
         {
-          "text": "Around 48 to 50 CE came the Council of Jerusalem, the first Christian synod, at an approximate location.",
+          "text": "Around 48 to 50 CE came the Council of Jerusalem, the first Christian synod.",
           "cites": [
             {
               "ref": "E1",
@@ -722,7 +727,7 @@
           ]
         },
         {
-          "text": "In 66 CE riots in Jerusalem, placed approximately, became the catalyst of the First Jewish-Roman War, and the Battle of Jerusalem was fought.",
+          "text": "In 66 CE riots in Jerusalem became the catalyst of the First Jewish-Roman War, and the Battle of Jerusalem was fought.",
           "cites": [
             {
               "ref": "E2",
@@ -737,7 +742,7 @@
           ]
         },
         {
-          "text": "In 67 CE, according to Josephus, the Sicarii of Masada raided Ein Gedi, placed approximately, and killed 700 of its inhabitants.",
+          "text": "In 67 CE, according to Josephus, the Sicarii of Masada raided Ein Gedi and killed 700 of its inhabitants.",
           "cites": [
             {
               "ref": "E4",
@@ -747,7 +752,7 @@
           ]
         },
         {
-          "text": "In 68 CE came the Zealot Temple Siege and the Battle of the Jordan River, both placed approximately.",
+          "text": "In 68 CE came the Zealot Temple Siege and the Battle of the Jordan River.",
           "cites": [
             {
               "ref": "E5",
@@ -787,7 +792,7 @@
           ]
         },
         {
-          "text": "Hegesippus, a Christian writer of the early Church, was born here in 107 CE, and the Siege of Betar, at an approximate location, is dated 132 CE to 135 CE.",
+          "text": "Hegesippus, a Christian writer of the early Church, was born here in 107 CE, and the Siege of Betar is dated 132 CE to 135 CE.",
           "cites": [
             {
               "ref": "P3",
@@ -812,12 +817,12 @@
       "to": 700,
       "cell": "835311fffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Only 8 events and 44 people and places are documented here; 2 of the events have approximate locations.",
+          "text": "Only 8 events and 44 people and places are documented here, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -827,7 +832,7 @@
           ]
         },
         {
-          "text": "In 617 the Aws and the Khazraj, the dominant tribes of Medina, fought the Yawm al-Buath, their final armed conflict; its placement is approximate.",
+          "text": "In 617 the Aws and the Khazraj, the dominant tribes of Medina, fought each other at the Yawm al-Buath, the final armed conflict between them before their conversion to Islam.",
           "cites": [
             {
               "ref": "E1",
@@ -857,7 +862,7 @@
           ]
         },
         {
-          "text": "In 624 Muhammad took 300 men to Buhran, where the Banu Sulaym fled; its placement is approximate.",
+          "text": "In 624 Muhammad took 300 men to Buhran, where the Banu Sulaym fled.",
           "cites": [
             {
               "ref": "E3",
@@ -877,7 +882,7 @@
           ]
         },
         {
-          "text": "Hasan ibn Ali, a grandson of Muhammad, was born here in 625, and his younger brother Husayn ibn Ali in 626, both at approximate locations.",
+          "text": "Hasan ibn Ali, a grandson of Muhammad, was born here in 625, and his younger brother Husayn ibn Ali in 626.",
           "cites": [
             {
               "ref": "P3",
@@ -892,7 +897,7 @@
           ]
         },
         {
-          "text": "In 627, at the Battle of the Trench, the Muslims defended themselves in Medina by digging a trench around it.",
+          "text": "In 627, at the Battle of the Trench, the Muslims defended themselves in Medina by digging a trench around their settlement.",
           "cites": [
             {
               "ref": "E5",
@@ -914,7 +919,7 @@
       ],
       [
         {
-          "text": "Abd al-Malik ibn Marwan, later the fifth Umayyad caliph, was born here in 646, at an approximate location.",
+          "text": "Abd al-Malik ibn Marwan, later the fifth Umayyad caliph, was born here in 646.",
           "cites": [
             {
               "ref": "P5",
@@ -944,7 +949,7 @@
           ]
         },
         {
-          "text": "Jaafar Al-Sadiq, a Muslim scholar and Imam, was born here in 699, at an approximate location.",
+          "text": "Jaafar Al-Sadiq, a Muslim scholar and Imam, was born here in 699.",
           "cites": [
             {
               "ref": "P4",
@@ -964,12 +969,12 @@
       "to": 1950,
       "cell": "853c7277fffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "This area has 8 documented events, all with approximate locations.",
+          "text": "Some locations in this account are approximate, including all 8 documented events.",
           "cites": [
             {
               "ref": "C",
@@ -979,7 +984,7 @@
           ]
         },
         {
-          "text": "Songtsän Gampo, a Tibetan emperor, was born here in 604 CE, at an approximate location.",
+          "text": "Songtsän Gampo, a Tibetan emperor, was born here in 604 CE.",
           "cites": [
             {
               "ref": "P4",
@@ -1014,7 +1019,7 @@
           ]
         },
         {
-          "text": "In 1240 the Mongol general Doorda Darkhan invaded Tibet with 30,000 troops, and in the late 1240s Sakya Pandita urged leading Tibetan figures to submit to Mongol authority.",
+          "text": "In 1240 the Mongol general Doorda Darkhan invaded Tibet with 30,000 troops, and in the late 1240s Mongol prince Godan invited Sakya Pandita, who urged other leading Tibetan figures to submit to Mongol authority.",
           "cites": [
             {
               "ref": "E1",
@@ -1024,7 +1029,7 @@
           ]
         },
         {
-          "text": "Sonam Gyatso, born here in 1543 CE at an approximate location, was later named Dalai Lama by Altan Khan in 1578 for teachings in Mongolia.",
+          "text": "Sonam Gyatso, born here in 1543 CE, was later named Dalai Lama by Altan Khan in 1578 for teachings in Mongolia.",
           "cites": [
             {
               "ref": "P5",
@@ -1034,7 +1039,7 @@
           ]
         },
         {
-          "text": "Ngawang Lobzang Gyatso, the 5th Dalai Lama, was born here in 1617 CE at an approximate location.",
+          "text": "Ngawang Lobzang Gyatso, the 5th Dalai Lama, was born here in 1617 CE.",
           "cites": [
             {
               "ref": "P3",
@@ -1126,12 +1131,12 @@
       "to": 1260,
       "cell": "842ca2bffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Only 8 events are documented here, along with 55 people and places, and 5 of the 8 events have approximate locations.",
+          "text": "Only 8 events are documented here, along with 55 people and places, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1151,7 +1156,7 @@
           ]
         },
         {
-          "text": "The jurist Ahmad ibn Hanbal was born here in 780 CE and the future caliph al-Ma'mun in 786 CE, both at approximate locations.",
+          "text": "The jurist Ahmad ibn Hanbal was born here in 780 CE and the future caliph al-Ma'mun in 786 CE.",
           "cites": [
             {
               "ref": "P2",
@@ -1186,7 +1191,7 @@
           ]
         },
         {
-          "text": "The traveller Ahmad ibn Fadlan was born here in 879 CE and the historian Al-Mas'udi around 896 CE, also at approximate locations.",
+          "text": "The traveller Ahmad ibn Fadlan was born here in 879 CE and the historian Al-Mas'udi around 896 CE.",
           "cites": [
             {
               "ref": "P5",
@@ -1203,7 +1208,7 @@
       ],
       [
         {
-          "text": "A battle of Baghdad is recorded in 932 CE, at an approximate location, with no further detail.",
+          "text": "A battle of Baghdad is recorded in 932 CE, with no further detail.",
           "cites": [
             {
               "ref": "E2",
@@ -1213,7 +1218,7 @@
           ]
         },
         {
-          "text": "In 942 CE the Hamdanids defeated the Baridis near al-Mada'in in a four-day battle for control over Baghdad, placed approximately.",
+          "text": "In 942 CE the Hamdanids defeated the Baridis near al-Mada'in in a four-day battle for control over Baghdad.",
           "cites": [
             {
               "ref": "E3",
@@ -1223,7 +1228,7 @@
           ]
         },
         {
-          "text": "In 946 CE the Buyids under Mu'izz al-Dawla expelled the Hamdanids from Baghdad after months of fighting within the city, also placed approximately.",
+          "text": "In 946 CE the Buyids under Mu'izz al-Dawla expelled the Hamdanids from Baghdad after months of fighting within the city.",
           "cites": [
             {
               "ref": "E4",
@@ -1233,7 +1238,7 @@
           ]
         },
         {
-          "text": "Seljuk forces blockaded the Abbasid capital for fifty days in 1136 CE, at an approximate location, and besieged it again in 1157 CE, when Caliph al-Muqtafi successfully defended it.",
+          "text": "Seljuk forces blockaded the Abbasid capital for fifty days in 1136 CE and besieged it again in 1157 CE, when Caliph al-Muqtafi successfully defended it.",
           "cites": [
             {
               "ref": "E5",
@@ -1258,7 +1263,7 @@
           ]
         },
         {
-          "text": "A sédition de Karkh is also recorded in 1258 CE, at an approximate location, with no further detail.",
+          "text": "A sédition de Karkh is also recorded in 1258 CE, with no further detail.",
           "cites": [
             {
               "ref": "E8",
@@ -1278,12 +1283,12 @@
       "to": 1600,
       "cell": "854995bbfffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "This area has 10 documented events, and 5 of them have approximate locations.",
+          "text": "This area has 10 documented events, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1293,7 +1298,7 @@
           ]
         },
         {
-          "text": "The founding of Tenochtitlan, on an island in Lake Texcoco, is conventionally dated to 1325, though the exact date is unclear.",
+          "text": "The exact date of the founding of Tenochtitlan, on an island in Lake Texcoco, is unclear, but 1325 was later chosen to celebrate its anniversary.",
           "cites": [
             {
               "ref": "P1",
@@ -1303,7 +1308,7 @@
           ]
         },
         {
-          "text": "Moctezuma I, born here in 1398 (approximate location), later became the fifth king of Tenochtitlan.",
+          "text": "Moctezuma I, born here in 1398, later became the fifth king of Tenochtitlan.",
           "cites": [
             {
               "ref": "P5",
@@ -1313,7 +1318,7 @@
           ]
         },
         {
-          "text": "The Mexico Flood of 1446 is placed here approximately.",
+          "text": "The Mexico Flood of 1446 is documented here.",
           "cites": [
             {
               "ref": "E1",
@@ -1323,7 +1328,7 @@
           ]
         },
         {
-          "text": "Moctezuma II, born here in 1466 (approximate location), later became the ninth emperor of the Aztec Empire.",
+          "text": "Moctezuma II, born here in 1466, later became the ninth emperor of the Aztec Empire.",
           "cites": [
             {
               "ref": "P2",
@@ -1353,7 +1358,7 @@
           ]
         },
         {
-          "text": "Cuauhtémoc, born here in 1495 (approximate location), later became the last Aztec Emperor.",
+          "text": "Cuauhtémoc, born here in 1495, later became the last Aztec Emperor.",
           "cites": [
             {
               "ref": "P4",
@@ -1365,7 +1370,7 @@
       ],
       [
         {
-          "text": "A smallpox epidemic in Tenochtitlan from 1519 to 1520 is placed approximately.",
+          "text": "A smallpox epidemic in Tenochtitlan lasted from 1519 to 1520.",
           "cites": [
             {
               "ref": "E4",
@@ -1405,7 +1410,7 @@
           ]
         },
         {
-          "text": "The cocoliztli epidemic of 1545 to 1548, placed approximately, brought high fevers and bleeding.",
+          "text": "The cocoliztli epidemic of 1545 to 1548 brought high fevers and bleeding.",
           "cites": [
             {
               "ref": "E8",
@@ -1425,7 +1430,7 @@
           ]
         },
         {
-          "text": "The Francisco Hernández expedition of 1570 to 1577 and a cocoliztli epidemic of 1576 to 1577 are also placed approximately.",
+          "text": "The Francisco Hernández expedition ran from 1570 to 1577, and a cocoliztli epidemic lasted from 1576 to 1577.",
           "cites": [
             {
               "ref": "E9",
@@ -1450,12 +1455,12 @@
       "to": 1910,
       "cell": "8430e1dffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Only 10 events are documented here, along with 49 people and places, and 8 of the 10 events have approximate locations.",
+          "text": "Only 10 events are documented here, along with 49 people and places, and some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1475,7 +1480,7 @@
           ]
         },
         {
-          "text": "Sejong the Great, creator of Hangul, was born here in 1397, and Yi Sun-sin, a Korean admiral, in 1545, both at approximate locations.",
+          "text": "Sejong the Great, creator of Hangul, was born here in 1397, and Yi Sun-sin, a Korean admiral, in 1545.",
           "cites": [
             {
               "ref": "P2",
@@ -1490,7 +1495,7 @@
           ]
         },
         {
-          "text": "The Imjin War, two Japanese invasions of Korea, ran from 1592 CE to 1598 CE and ended with the withdrawal of Japanese forces after a military stalemate in Korea's southern provinces; its placement here is approximate.",
+          "text": "The Imjin War, two Japanese invasions of Korea, ran from 1592 CE to 1598 CE and ended with the withdrawal of Japanese forces after a military stalemate in Korea's southern provinces.",
           "cites": [
             {
               "ref": "E1",
@@ -1502,7 +1507,7 @@
       ],
       [
         {
-          "text": "Gojong of the Korean Empire was born here in 1852, at an approximate location.",
+          "text": "Gojong of the Korean Empire was born here in 1852.",
           "cites": [
             {
               "ref": "P4",
@@ -1522,13 +1527,8 @@
           ]
         },
         {
-          "text": "Korea negotiated treaties with the United Kingdom in 1883, Russia in 1884 and Japan in 1885; like the Imo Incident, they are placed only approximately.",
+          "text": "Korea negotiated treaties with the United Kingdom in 1883, Russia in 1884 and Japan in 1885.",
           "cites": [
-            {
-              "ref": "E2",
-              "qid": "Q709191",
-              "label": "Imo Incident"
-            },
             {
               "ref": "E3",
               "qid": "Q7888196",
@@ -1547,7 +1547,7 @@
           ]
         },
         {
-          "text": "The Donghak Peasant Revolution took place in Korea from 1894 CE to 1895 CE, also at an approximate location.",
+          "text": "The Donghak Peasant Revolution took place in Korea from 1894 CE to 1895 CE.",
           "cites": [
             {
               "ref": "E6",
@@ -1577,7 +1577,7 @@
           ]
         },
         {
-          "text": "The Eulsa Treaty of 1905 made Korea a protectorate of Imperial Japan; its placement is approximate.",
+          "text": "The Eulsa Treaty of 1905 made Korea a protectorate of Imperial Japan.",
           "cites": [
             {
               "ref": "E9",
@@ -1587,7 +1587,7 @@
           ]
         },
         {
-          "text": "On August 1, 1907, in reaction to its disbandment, the Korean army rebelled against Japanese forces at the Namdaemun Gate in Seoul and was suppressed; this placement is approximate too.",
+          "text": "On August 1, 1907, in reaction to its disbandment, the Korean army rebelled against Japanese forces at the Namdaemun Gate in Seoul and was suppressed.",
           "cites": [
             {
               "ref": "E10",
@@ -1607,7 +1607,7 @@
       "to": 1500,
       "cell": "851ec903fffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
@@ -1622,7 +1622,7 @@
           ]
         },
         {
-          "text": "Andronikos V Palaiologos was born here in 1400, and Konstantinos XI Palaiologos in 1404, both at approximate locations.",
+          "text": "Andronikos V Palaiologos was born here in 1400, and Konstantinos XI Palaiologos in 1404.",
           "cites": [
             {
               "ref": "P5",
@@ -1647,7 +1647,7 @@
           ]
         },
         {
-          "text": "Wikidata records a Byzantine-Ottoman war from 1421 to 1424, placed approximately.",
+          "text": "Wikidata records a Byzantine-Ottoman war from 1421 to 1424.",
           "cites": [
             {
               "ref": "E4",
@@ -1669,13 +1669,18 @@
       ],
       [
         {
-          "text": "Konstantinos XI Palaiologos, the last Byzantine emperor, died in battle at the fall of Constantinople on 29 May 1453, and Wikidata dates the founding of Istanbul here to the same year.",
+          "text": "Konstantinos XI Palaiologos, the last Byzantine emperor, died in battle at the fall of Constantinople on 29 May 1453.",
           "cites": [
             {
               "ref": "P3",
               "qid": "Q37142",
               "label": "Konstantinos XI Palaiologos"
-            },
+            }
+          ]
+        },
+        {
+          "text": "Wikidata dates the founding of Istanbul here to 1453.",
+          "cites": [
             {
               "ref": "P1",
               "qid": "Q406",
@@ -1684,7 +1689,7 @@
           ]
         },
         {
-          "text": "On April 18, 1454, the Ottoman Empire and the Republic of Venice signed the Treaty of Constantinople, the first treaty signed by Mehmed the Conqueror after the capture of the city; its placement is approximate.",
+          "text": "On April 18, 1454, the Ottoman Empire and the Republic of Venice signed the Treaty of Constantinople, the first treaty signed by Mehmed the Conqueror after the capture of the city.",
           "cites": [
             {
               "ref": "E6",
@@ -1709,7 +1714,7 @@
           ]
         },
         {
-          "text": "In 1479 another Treaty of Constantinople ended the sixteen-year-long war between the Republic of Venice and the Ottoman Empire, and Wikidata records a further treaty in 1482, both placed approximately.",
+          "text": "In 1479 another Treaty of Constantinople ended the sixteen-year-long war between the Republic of Venice and the Ottoman Empire, and Wikidata records a treaty of the same name in 1482.",
           "cites": [
             {
               "ref": "E7",
@@ -1724,12 +1729,22 @@
           ]
         },
         {
-          "text": "The Synod of Constantinople in 1484, also approximately placed, was the first synod to condemn the Council of Florence.",
+          "text": "The Synod of Constantinople in 1484 was the first synod to condemn the Council of Florence.",
           "cites": [
             {
               "ref": "E9",
               "qid": "Q4231480",
               "label": "Synod of Constantinople (1484)"
+            }
+          ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
             }
           ]
         }
@@ -1744,12 +1759,12 @@
       "to": 1600,
       "cell": "838b61fffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "The semi-legendary Inca-Chanka war between Cusco and the Chanka chiefdom is dated 1401 CE to 1500 CE, at an approximate location.",
+          "text": "The semi-legendary Inca-Chanka war between Cusco and the Chanka chiefdom is dated 1401 CE to 1500 CE.",
           "cites": [
             {
               "ref": "E1",
@@ -1759,7 +1774,7 @@
           ]
         },
         {
-          "text": "A Battle of Cusco is recorded in 1438, placed approximately.",
+          "text": "A Battle of Cusco is recorded in 1438.",
           "cites": [
             {
               "ref": "E2",
@@ -1769,7 +1784,7 @@
           ]
         },
         {
-          "text": "Túpac Inca Yupanqui was born here in 1441, Manco Inca in 1500, and Túpac Huallpa in 1510, all at approximate locations.",
+          "text": "Túpac Inca Yupanqui was born here in 1441, Manco Inca in 1500, and Túpac Huallpa in 1510.",
           "cites": [
             {
               "ref": "P4",
@@ -1791,7 +1806,7 @@
       ],
       [
         {
-          "text": "In 1533 a Battle of Cusco was fought between the Spanish Conquistadors and forces of the Incas, and battles at Anta and Capi, placed approximately, date to that year.",
+          "text": "In 1533 a Battle of Cusco was fought between the Spanish Conquistadors and forces of the Incas, and battles at Anta and Capi date to that year.",
           "cites": [
             {
               "ref": "E4",
@@ -1821,7 +1836,7 @@
           ]
         },
         {
-          "text": "Sacsayhuaman and Yucay saw battles in 1536, at approximate locations.",
+          "text": "Sacsayhuaman and Yucay saw battles in 1536.",
           "cites": [
             {
               "ref": "E8",
@@ -1866,7 +1881,7 @@
           ]
         },
         {
-          "text": "Inca Garcilaso de la Vega, later a chronicler, was born here in 1539, at an approximate location.",
+          "text": "Inca Garcilaso de la Vega, later a chronicler, was born here in 1539.",
           "cites": [
             {
               "ref": "P2",
@@ -1894,6 +1909,16 @@
               "label": "Spanish conquest of the Inca Empire"
             }
           ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
         }
       ]
     ]
@@ -1906,12 +1931,22 @@
       "to": 1650,
       "cell": "842e615ffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
           "text": "This account draws on the most notable of the 27 documented events here.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1961,7 +1996,7 @@
           ]
         },
         {
-          "text": "Their league, placed only approximately, operated until 1493, when a new invasion forced its members to reaccept the shogunate's authority.",
+          "text": "Their league operated until 1493, when a new invasion forced its members to reaccept the shogunate's authority.",
           "cites": [
             {
               "ref": "E1",
@@ -1973,7 +2008,7 @@
       ],
       [
         {
-          "text": "The Eiroku Incident, a 1565 battle, has an approximate location, and the Battle of Yasugawara is recorded in 1570.",
+          "text": "The Eiroku Incident was a 1565 battle, and the Battle of Yasugawara is recorded in 1570.",
           "cites": [
             {
               "ref": "E5",
@@ -1998,7 +2033,7 @@
           ]
         },
         {
-          "text": "The Siege of Makishima Castle, a 1573 battle, is also placed approximately.",
+          "text": "The Siege of Makishima Castle was a 1573 battle.",
           "cites": [
             {
               "ref": "E8",
@@ -2028,7 +2063,7 @@
           ]
         },
         {
-          "text": "Emperor Go-Mizunoo was born here in 1596, at an approximate location.",
+          "text": "Emperor Go-Mizunoo was born here in 1596.",
           "cites": [
             {
               "ref": "P2",
@@ -2058,7 +2093,7 @@
           ]
         },
         {
-          "text": "Empress Meishō was born here in 1624, Go-Kōmyō in 1633 and Go-Sai in 1638, all at approximate locations.",
+          "text": "Empress Meishō was born here in 1624, Go-Kōmyō in 1633 and Go-Sai in 1638.",
           "cites": [
             {
               "ref": "P1",
@@ -2088,12 +2123,12 @@
       "to": 1900,
       "cell": "837b59fffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "Only 5 events and 2 people and places are documented here, and 4 of the 5 events have approximate locations, so this account is short.",
+          "text": "Only 5 events and 2 people and places are documented here, so this account is short, and 4 of the 5 events have approximate locations.",
           "cites": [
             {
               "ref": "C",
@@ -2125,26 +2160,6 @@
         {
           "text": "On 5 March 1589, Portuguese and Zimba forces under Tomé Coutinho fought the Ottomans, and the Portuguese reconquered the city and captured Mir Ali Beg.",
           "cites": [
-            {
-              "ref": "E3",
-              "qid": "Q128812160",
-              "label": "Battle of Mombasa"
-            }
-          ]
-        },
-        {
-          "text": "The placement of these battles on the globe is approximate.",
-          "cites": [
-            {
-              "ref": "E1",
-              "qid": "Q121047056",
-              "label": "Battle of Mombasa"
-            },
-            {
-              "ref": "E2",
-              "qid": "Q121076382",
-              "label": "Battle of Mombasa"
-            },
             {
               "ref": "E3",
               "qid": "Q128812160",
@@ -2185,7 +2200,7 @@
           ]
         },
         {
-          "text": "In 1899, a famine struck central Kenya around Mount Kenya, and its placement here is approximate.",
+          "text": "In 1899, a famine struck central Kenya around Mount Kenya.",
           "cites": [
             {
               "ref": "E5",
@@ -2322,12 +2337,22 @@
       "to": 1810,
       "cell": "836725fffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
           "text": "Only 8 events and 3 people and places are documented here, so this account is short.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -2347,7 +2372,7 @@
           ]
         },
         {
-          "text": "Alexandre Pétion was born here in 1770 and Jean-Pierre Boyer in 1776, though the placement of both births is approximate.",
+          "text": "Alexandre Pétion was born here in 1770 and Jean-Pierre Boyer in 1776.",
           "cites": [
             {
               "ref": "P1",
@@ -2409,7 +2434,7 @@
           ]
         },
         {
-          "text": "The Siege of Jacmel, a four-and-half month long siege during the War of the South, ran from 1799 to 1800, and its placement here is approximate.",
+          "text": "The Siege of Jacmel, a four-and-half month long siege during the War of the South, ran from 1799 to 1800.",
           "cites": [
             {
               "ref": "E6",
@@ -2444,7 +2469,7 @@
           ]
         },
         {
-          "text": "In 1807 came the Battle of Sibert, whose placement is also approximate.",
+          "text": "In 1807 came the Battle of Sibert.",
           "cites": [
             {
               "ref": "E8",
@@ -2464,12 +2489,22 @@
       "to": 1815,
       "cell": "851fb467fffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
           "text": "Of 41 documented events here, only the most notable appear.",
+          "cites": [
+            {
+              "ref": "C",
+              "qid": null,
+              "label": "this area's lists"
+            }
+          ]
+        },
+        {
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -2509,7 +2544,7 @@
           ]
         },
         {
-          "text": "The Revolt of 1 Prairial Year III, on 20 May 1795, was the final major popular uprising of the French Revolution, its location approximate.",
+          "text": "The Revolt of 1 Prairial Year III, on 20 May 1795, was the final major popular uprising of the French Revolution.",
           "cites": [
             {
               "ref": "E4",
@@ -2529,7 +2564,7 @@
           ]
         },
         {
-          "text": "In 1797, the Coup of 18 Fructidor ousted the monarchists from the legislature, its location approximate.",
+          "text": "In 1797, the Coup of 18 Fructidor ousted the monarchists from the legislature.",
           "cites": [
             {
               "ref": "E5",
@@ -2539,7 +2574,7 @@
           ]
         },
         {
-          "text": "Eugène Delacroix was born here in 1798, at an approximate location.",
+          "text": "Eugène Delacroix was born here in 1798.",
           "cites": [
             {
               "ref": "P4",
@@ -2581,7 +2616,7 @@
           ]
         },
         {
-          "text": "George Sand was born here in 1804, Alexis de Tocqueville in 1805, and Napoleon III in 1808, all at approximate locations.",
+          "text": "George Sand was born here in 1804, Alexis de Tocqueville in 1805, and Napoleon III in 1808.",
           "cites": [
             {
               "ref": "P2",
@@ -2601,7 +2636,7 @@
           ]
         },
         {
-          "text": "Bernard Courtois discovered iodine in 1811, the location approximate.",
+          "text": "Bernard Courtois discovered iodine in 1811.",
           "cites": [
             {
               "ref": "E9",
@@ -2621,7 +2656,7 @@
           ]
         },
         {
-          "text": "The Treaty of Paris was signed on 30 May 1814 and the Second Treaty of Paris on 20 November 1815, both at approximate locations.",
+          "text": "The Treaty of Paris was signed on 30 May 1814 and the Second Treaty of Paris on 20 November 1815.",
           "cites": [
             {
               "ref": "E10",
@@ -2773,42 +2808,22 @@
       "to": 1990,
       "cell": "8531aa43fffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
         {
-          "text": "This area has 18 documented events; of the 12 told here, all but the 1900 battle and siege, the May Fourth Movement and the 1989 protests are approximately placed.",
+          "text": "This area has 18 documented events; 12 are told here, and some locations are approximate.",
           "cites": [
             {
               "ref": "C",
               "qid": null,
               "label": "this area's lists"
-            },
-            {
-              "ref": "E1",
-              "qid": "Q4087313",
-              "label": "Battle of Peking"
-            },
-            {
-              "ref": "E2",
-              "qid": "Q4337436",
-              "label": "Siege of the International Legations"
-            },
-            {
-              "ref": "E5",
-              "qid": "Q279790",
-              "label": "May Fourth Movement"
-            },
-            {
-              "ref": "E12",
-              "qid": "Q99717",
-              "label": "1989 Tiananmen Square protests and massacre"
             }
           ]
         },
         {
-          "text": "In 1900 Boxers and Qing Dynasty troops besieged the foreign legations in Peking for 55 days, until the Eight-Nation Alliance relieved the siege.",
+          "text": "In 1900 Boxers and Qing Dynasty troops besieged the foreign legations in Peking for 55 days, until the Eight-Nation Alliance relieved them.",
           "cites": [
             {
               "ref": "E1",
@@ -2833,7 +2848,7 @@
           ]
         },
         {
-          "text": "Puyi, the last Qing emperor, was born here in 1906, approximately placed.",
+          "text": "Puyi, the last Qing emperor, was born here in 1906.",
           "cites": [
             {
               "ref": "P3",
@@ -2885,7 +2900,7 @@
       ],
       [
         {
-          "text": "Xi Jinping was born here in 1953, Ai Weiwei in 1957, and Jet Li in 1963, all approximately placed.",
+          "text": "Xi Jinping was born here in 1953, Ai Weiwei in 1957, and Jet Li in 1963.",
           "cites": [
             {
               "ref": "P1",
@@ -2905,7 +2920,7 @@
           ]
         },
         {
-          "text": "Red August, beginning in August 1966 during the Cultural Revolution, was a period of political violence and massacres in Beijing; official statistics published in 1980 said Red Guards killed 1,772, those of November 1985 gave 10,275 deaths.",
+          "text": "Red August, beginning in August 1966 during the Cultural Revolution, was a period of political violence and massacres in Beijing.",
           "cites": [
             {
               "ref": "E9",
@@ -2930,7 +2945,7 @@
           ]
         },
         {
-          "text": "Zhang Ziyi was born here in 1979, approximately placed.",
+          "text": "Zhang Ziyi was born here in 1979.",
           "cites": [
             {
               "ref": "P4",
@@ -2940,7 +2955,17 @@
           ]
         },
         {
-          "text": "From 15 April to 4 June 1989, students and workers protested in Tiananmen Square, until government troops occupied it in the Tiananmen Square massacre.",
+          "text": "Official statistics published in 1980 said Red Guards killed 1,772 during Red August; those of November 1985 gave 10,275 deaths.",
+          "cites": [
+            {
+              "ref": "E9",
+              "qid": "Q79546163",
+              "label": "Red August"
+            }
+          ]
+        },
+        {
+          "text": "From 15 April to 4 June 1989, protests led by students and workers were held in Tiananmen Square; on the night of 3 June the Chinese government deployed troops to occupy the square in what is referred to as the Tiananmen Square massacre.",
           "cites": [
             {
               "ref": "E12",

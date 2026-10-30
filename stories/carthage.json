@@ -1,25 +1,25 @@
 {
   "id": "carthage",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 2,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
       { "text": "Hanno the Navigator, a Carthaginian explorer, was born here in the fifth century BCE, and the general Hamilcar Barca around 275 BCE.", "cites": ["P4", "P3"] },
       { "text": "During the First Punic War, a Roman army under Marcus Atilius Regulus won the Battle of Adys.", "cites": ["E2"] },
       { "text": "In spring 255 BCE, a Carthaginian army led by Xanthippus defeated Regulus at the Battle of Bagradas.", "cites": ["E1"] },
-      { "text": "The sons of Hamilcar Barca, Hannibal and Hasdrubal, were born here in 247 BCE and 245 BCE.", "cites": ["P1", "P3", "P5"] },
-      { "text": "These birthplaces are placed approximately.", "cites": ["P4", "P3", "P1", "P5"] }
+      { "text": "Hannibal and Hasdrubal, sons of Hamilcar Barca, were born here in 247 BCE and 245 BCE.", "cites": ["P1", "P3", "P5"] }
     ],
     [
-      { "text": "The Mercenary War, a mutiny by troops employed by Carthage, ran from 240 BCE to 238 BCE, placed approximately.", "cites": ["E3"] },
+      { "text": "The Mercenary War was a mutiny by troops employed by Carthage.", "cites": ["E3"] },
       { "text": "Early in 240 BCE, both sides were routed at the Battle of Utica.", "cites": ["E5"] },
       { "text": "Later in 240 BCE, Hamilcar Barca defeated rebels led by Spendius at the Battle of the Bagradas River.", "cites": ["E4"] },
-      { "text": "A Siege of Carthage, placed approximately, is recorded in 239 BCE, and in October 238 BCE Hamilcar Barca besieged rebels under Mathos at Tunis.", "cites": ["E6", "E7"] },
-      { "text": "In 204 BCE a Roman army under Publius Cornelius Scipio unsuccessfully besieged Utica, and in 203 BCE he defeated allied Carthaginian and Numidian armies at the Great Plains and at Utica.", "cites": ["E8", "E9", "E10"] },
-      { "text": "Terence, the Roman comic playwright, was born here in 185 BCE, placed approximately.", "cites": ["P2"] },
+      { "text": "A Siege of Carthage is recorded in 239 BCE, and in October 238 BCE Hamilcar Barca besieged rebels under Mathos at Tunis.", "cites": ["E6", "E7"] },
+      { "text": "In 204 BCE a Roman army under Publius Cornelius Scipio began an unsuccessful siege of Utica, and in 203 BCE he fought allied Carthaginian and Numidian armies at the Great Plains and at Utica, both heavy defeats for Carthage.", "cites": ["E8", "E9", "E10"] },
+      { "text": "Terence, the Roman comic playwright, was born here in 185 BCE.", "cites": ["P2"] },
       { "text": "In 149 BCE a large Roman army landed at Utica, and at the Battle of Lake Tunis the Carthaginians launched fire ships that destroyed most of the Roman fleet.", "cites": ["E11", "E12"] },
-      { "text": "The Siege of Carthage, the main engagement of the Third Punic War, lasted nearly three years, 149 BCE to 146 BCE.", "cites": ["E11"] }
+      { "text": "The Siege of Carthage, the main engagement of the Third Punic War, lasted nearly three years, 149 BCE to 146 BCE.", "cites": ["E11"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] }
     ]
   ]
 }

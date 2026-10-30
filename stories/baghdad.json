@@ -1,24 +1,24 @@
 {
   "id": "baghdad",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 2,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events are documented here, along with 55 people and places, and 5 of the 8 events have approximate locations.", "cites": ["C"] },
+      { "text": "Only 8 events are documented here, along with 55 people and places, and some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Baghdad was founded in 762 CE.", "cites": ["P1"] },
-      { "text": "The jurist Ahmad ibn Hanbal was born here in 780 CE and the future caliph al-Ma'mun in 786 CE, both at approximate locations.", "cites": ["P2", "P4"] },
+      { "text": "The jurist Ahmad ibn Hanbal was born here in 780 CE and the future caliph al-Ma'mun in 786 CE.", "cites": ["P2", "P4"] },
       { "text": "The siege of Baghdad, part of a civil war between al-Amin and al-Ma'mun for the Abbasid Caliphate, lasted from August 812 until September 813.", "cites": ["E1"] },
       { "text": "Al-Ma'mun reigned from 813 until 833 and promoted the flowering of learning and the sciences in Baghdad.", "cites": ["P4"] },
-      { "text": "The traveller Ahmad ibn Fadlan was born here in 879 CE and the historian Al-Mas'udi around 896 CE, also at approximate locations.", "cites": ["P5", "P3"] }
+      { "text": "The traveller Ahmad ibn Fadlan was born here in 879 CE and the historian Al-Mas'udi around 896 CE.", "cites": ["P5", "P3"] }
     ],
     [
-      { "text": "A battle of Baghdad is recorded in 932 CE, at an approximate location, with no further detail.", "cites": ["E2"] },
-      { "text": "In 942 CE the Hamdanids defeated the Baridis near al-Mada'in in a four-day battle for control over Baghdad, placed approximately.", "cites": ["E3"] },
-      { "text": "In 946 CE the Buyids under Mu'izz al-Dawla expelled the Hamdanids from Baghdad after months of fighting within the city, also placed approximately.", "cites": ["E4"] },
-      { "text": "Seljuk forces blockaded the Abbasid capital for fifty days in 1136 CE, at an approximate location, and besieged it again in 1157 CE, when Caliph al-Muqtafi successfully defended it.", "cites": ["E5", "E6"] },
+      { "text": "A battle of Baghdad is recorded in 932 CE, with no further detail.", "cites": ["E2"] },
+      { "text": "In 942 CE the Hamdanids defeated the Baridis near al-Mada'in in a four-day battle for control over Baghdad.", "cites": ["E3"] },
+      { "text": "In 946 CE the Buyids under Mu'izz al-Dawla expelled the Hamdanids from Baghdad after months of fighting within the city.", "cites": ["E4"] },
+      { "text": "Seljuk forces blockaded the Abbasid capital for fifty days in 1136 CE and besieged it again in 1157 CE, when Caliph al-Muqtafi successfully defended it.", "cites": ["E5", "E6"] },
       { "text": "In 1258 CE a Mongol army under Hulegu took and sacked Baghdad, and the caliph al-Musta'sim was killed alongside hundreds of thousands of his subjects.", "cites": ["E7"] },
-      { "text": "A sédition de Karkh is also recorded in 1258 CE, at an approximate location, with no further detail.", "cites": ["E8"] }
+      { "text": "A sédition de Karkh is also recorded in 1258 CE, with no further detail.", "cites": ["E8"] }
     ]
   ]
 }

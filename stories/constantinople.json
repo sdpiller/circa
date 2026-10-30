@@ -1,22 +1,24 @@
 {
   "id": "constantinople",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 2,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
       { "text": "The siege of Constantinople from 1394 to 1402 was a long blockade of the capital of the Byzantine Empire by the Ottoman sultan Bayezid I.", "cites": ["E1"] },
-      { "text": "Andronikos V Palaiologos was born here in 1400, and Konstantinos XI Palaiologos in 1404, both at approximate locations.", "cites": ["P5", "P3"] },
+      { "text": "Andronikos V Palaiologos was born here in 1400, and Konstantinos XI Palaiologos in 1404.", "cites": ["P5", "P3"] },
       { "text": "In 1411, Constantinople was besieged during the Ottoman Interregnum, which followed the defeat of Bayezid I by Timur.", "cites": ["E3"] },
-      { "text": "Wikidata records a Byzantine-Ottoman war from 1421 to 1424, placed approximately.", "cites": ["E4"] },
+      { "text": "Wikidata records a Byzantine-Ottoman war from 1421 to 1424.", "cites": ["E4"] },
       { "text": "In 1422, the Ottoman Empire laid siege to Constantinople as a result of the Byzantine Emperor Manuel II's attempts to interfere in the succession of Ottoman Sultans.", "cites": ["E5"] }
     ],
     [
-      { "text": "Konstantinos XI Palaiologos, the last Byzantine emperor, died in battle at the fall of Constantinople on 29 May 1453, and Wikidata dates the founding of Istanbul here to the same year.", "cites": ["P3", "P1"] },
-      { "text": "On April 18, 1454, the Ottoman Empire and the Republic of Venice signed the Treaty of Constantinople, the first treaty signed by Mehmed the Conqueror after the capture of the city; its placement is approximate.", "cites": ["E6"] },
+      { "text": "Konstantinos XI Palaiologos, the last Byzantine emperor, died in battle at the fall of Constantinople on 29 May 1453.", "cites": ["P3"] },
+      { "text": "Wikidata dates the founding of Istanbul here to 1453.", "cites": ["P1"] },
+      { "text": "On April 18, 1454, the Ottoman Empire and the Republic of Venice signed the Treaty of Constantinople, the first treaty signed by Mehmed the Conqueror after the capture of the city.", "cites": ["E6"] },
       { "text": "The Grand Bazaar dates here to 1455 and Topkapı Palace to 1460, and from the 1460s the palace served as the administrative center of the Ottoman Empire.", "cites": ["P4", "P2"] },
-      { "text": "In 1479 another Treaty of Constantinople ended the sixteen-year-long war between the Republic of Venice and the Ottoman Empire, and Wikidata records a further treaty in 1482, both placed approximately.", "cites": ["E7", "E8"] },
-      { "text": "The Synod of Constantinople in 1484, also approximately placed, was the first synod to condemn the Council of Florence.", "cites": ["E9"] }
+      { "text": "In 1479 another Treaty of Constantinople ended the sixteen-year-long war between the Republic of Venice and the Ottoman Empire, and Wikidata records a treaty of the same name in 1482.", "cites": ["E7", "E8"] },
+      { "text": "The Synod of Constantinople in 1484 was the first synod to condemn the Council of Florence.", "cites": ["E9"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] }
     ]
   ]
 }

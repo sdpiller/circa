@@ -1,28 +1,29 @@
 {
   "id": "athens",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 2,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events are documented here, with 59 people and places; 5 of the 8 have approximate locations.", "cites": ["C"] },
-      { "text": "Sophocles was born here in 496 BCE and Pericles in 494 BCE, both at approximate locations.", "cites": ["P3", "P5"] },
-      { "text": "In 480 BCE the Achaemenid Empire captured Athens, then razed the Acropolis, the Old Temple of Athena, and the Older Parthenon.", "cites": ["E1"] },
+      { "text": "Only 8 events are documented here, with 59 people and places, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Sophocles was born here in 496 BCE and Pericles in 494 BCE.", "cites": ["P3", "P5"] },
+      { "text": "In 480 BCE the Achaemenid Empire captured Athens.", "cites": ["E1"] },
+      { "text": "It subsequently razed the Acropolis, the Old Temple of Athena, and the Older Parthenon.", "cites": ["E1"] },
       { "text": "One year later, the Greek coalition retook Athens.", "cites": ["E1"] },
-      { "text": "Socrates was born here in 470 BCE, placed approximately.", "cites": ["P2"] },
-      { "text": "Pericles led Athens as its preeminent orator and statesman roughly from 461 to 429 BCE.", "cites": ["P5"] },
-      { "text": "Aristophanes was born here in 445 BCE, also placed approximately.", "cites": ["P4"] }
+      { "text": "Socrates was born here in 470 BCE.", "cites": ["P2"] },
+      { "text": "Pericles led Athens as its preeminent orator and statesman roughly from 461 BCE to 429 BCE.", "cites": ["P5"] },
+      { "text": "Aristophanes was born here in 445 BCE.", "cites": ["P4"] }
     ],
     [
-      { "text": "Spartan invasions of Attica ran from 431 BCE to 425 BCE, and the Plague of Athens from 430 BCE to 426 BCE, both placed approximately.", "cites": ["E2", "E3"] },
+      { "text": "Spartan invasions of Attica ran from 431 BCE to 425 BCE, and the Plague of Athens from 430 BCE to 426 BCE.", "cites": ["E2", "E3"] },
       { "text": "The plague killed an estimated 75,000 to 100,000 people, around 25% of the population.", "cites": ["E3"] },
-      { "text": "Plato was born here between 429 BCE and 420 BCE, at an approximate location.", "cites": ["P1"] },
-      { "text": "In 420 BCE an earthquake disrupted the Athenian assembly, also placed approximately.", "cites": ["E4"] },
+      { "text": "Plato was born here between 429 BCE and 420 BCE.", "cites": ["P1"] },
+      { "text": "In 420 BCE an earthquake disrupted the Athenian assembly.", "cites": ["E4"] },
       { "text": "In 404 BCE came the Siege of Athens.", "cites": ["E6"] },
       { "text": "At the Battle of Munichia, exiles under Thrasybulus held a hill in Piraeus, and the defeated Thirty Tyrants fled to Eleusis.", "cites": ["E5"] },
-      { "text": "In 403 BCE, at the Battle of Piraeus, placed approximately, a Spartan force narrowly defeated the exiles, and a settlement then allowed the reestablishment of democratic government in Athens.", "cites": ["E7"] },
+      { "text": "In 403 BCE, at the Battle of Piraeus, a Spartan force narrowly defeated the exiles, and a settlement then allowed the reestablishment of democratic government in Athens.", "cites": ["E7"] },
       { "text": "In 399 BCE Socrates was accused of impiety and corrupting the youth and sentenced to death.", "cites": ["P2"] },
-      { "text": "The Athenian-Macedonian War followed from 340 BCE to 338 BCE, also placed approximately.", "cites": ["E8"] }
+      { "text": "The Athenian-Macedonian War ran from 340 BCE to 338 BCE.", "cites": ["E8"] }
     ]
   ]
 }

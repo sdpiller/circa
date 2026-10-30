@@ -1,24 +1,24 @@
 {
   "id": "seoul",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 2,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 10 events are documented here, along with 49 people and places, and 8 of the 10 events have approximate locations.", "cites": ["C"] },
+      { "text": "Only 10 events are documented here, along with 49 people and places, and some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Seoul was founded in 1395.", "cites": ["P1"] },
-      { "text": "Sejong the Great, creator of Hangul, was born here in 1397, and Yi Sun-sin, a Korean admiral, in 1545, both at approximate locations.", "cites": ["P2", "P3"] },
-      { "text": "The Imjin War, two Japanese invasions of Korea, ran from 1592 CE to 1598 CE and ended with the withdrawal of Japanese forces after a military stalemate in Korea's southern provinces; its placement here is approximate.", "cites": ["E1"] }
+      { "text": "Sejong the Great, creator of Hangul, was born here in 1397, and Yi Sun-sin, a Korean admiral, in 1545.", "cites": ["P2", "P3"] },
+      { "text": "The Imjin War, two Japanese invasions of Korea, ran from 1592 CE to 1598 CE and ended with the withdrawal of Japanese forces after a military stalemate in Korea's southern provinces.", "cites": ["E1"] }
     ],
     [
-      { "text": "Gojong of the Korean Empire was born here in 1852, at an approximate location.", "cites": ["P4"] },
+      { "text": "Gojong of the Korean Empire was born here in 1852.", "cites": ["P4"] },
       { "text": "In 1882 soldiers of the Joseon Army began the Imo Incident, an uprising in Seoul.", "cites": ["E2"] },
-      { "text": "Korea negotiated treaties with the United Kingdom in 1883, Russia in 1884 and Japan in 1885; like the Imo Incident, they are placed only approximately.", "cites": ["E2", "E3", "E4", "E5"] },
-      { "text": "The Donghak Peasant Revolution took place in Korea from 1894 CE to 1895 CE, also at an approximate location.", "cites": ["E6"] },
+      { "text": "Korea negotiated treaties with the United Kingdom in 1883, Russia in 1884 and Japan in 1885.", "cites": ["E3", "E4", "E5"] },
+      { "text": "The Donghak Peasant Revolution took place in Korea from 1894 CE to 1895 CE.", "cites": ["E6"] },
       { "text": "On 23 July 1894, during its ceasefire, Imperial Japanese forces occupied Gyeongbokgung palace to establish a pro-Japanese government.", "cites": ["E7"] },
       { "text": "On 8 October 1895, Queen Min, the consort of Gojong, was assassinated by Japanese agents at the royal palace Gyeongbokgung in Seoul.", "cites": ["E8"] },
-      { "text": "The Eulsa Treaty of 1905 made Korea a protectorate of Imperial Japan; its placement is approximate.", "cites": ["E9"] },
-      { "text": "On August 1, 1907, in reaction to its disbandment, the Korean army rebelled against Japanese forces at the Namdaemun Gate in Seoul and was suppressed; this placement is approximate too.", "cites": ["E10"] }
+      { "text": "The Eulsa Treaty of 1905 made Korea a protectorate of Imperial Japan.", "cites": ["E9"] },
+      { "text": "On August 1, 1907, in reaction to its disbandment, the Korean army rebelled against Japanese forces at the Namdaemun Gate in Seoul and was suppressed.", "cites": ["E10"] }
     ]
   ]
 }

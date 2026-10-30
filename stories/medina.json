@@ -1,25 +1,25 @@
 {
   "id": "medina",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 2,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events and 44 people and places are documented here; 2 of the events have approximate locations.", "cites": ["C"] },
-      { "text": "In 617 the Aws and the Khazraj, the dominant tribes of Medina, fought the Yawm al-Buath, their final armed conflict; its placement is approximate.", "cites": ["E1"] },
+      { "text": "Only 8 events and 44 people and places are documented here, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "In 617 the Aws and the Khazraj, the dominant tribes of Medina, fought each other at the Yawm al-Buath, the final armed conflict between them before their conversion to Islam.", "cites": ["E1"] },
       { "text": "The Prophet's Mosque, built by Muhammad, is dated here to 622.", "cites": ["P2"] },
       { "text": "The siege of the Banu Qaynuqa, a Jewish tribe expelled by Muhammad for breaking the Constitution of Medina, occurred in April 624.", "cites": ["E2"] },
-      { "text": "In 624 Muhammad took 300 men to Buhran, where the Banu Sulaym fled; its placement is approximate.", "cites": ["E3"] },
+      { "text": "In 624 Muhammad took 300 men to Buhran, where the Banu Sulaym fled.", "cites": ["E3"] },
       { "text": "On 23 March 625 the early Muslims fought the Quraysh at the Battle of Uhud, north of Medina.", "cites": ["E4"] },
-      { "text": "Hasan ibn Ali, a grandson of Muhammad, was born here in 625, and his younger brother Husayn ibn Ali in 626, both at approximate locations.", "cites": ["P3", "P1"] },
-      { "text": "In 627, at the Battle of the Trench, the Muslims defended themselves in Medina by digging a trench around it.", "cites": ["E5"] },
+      { "text": "Hasan ibn Ali, a grandson of Muhammad, was born here in 625, and his younger brother Husayn ibn Ali in 626.", "cites": ["P3", "P1"] },
+      { "text": "In 627, at the Battle of the Trench, the Muslims defended themselves in Medina by digging a trench around their settlement.", "cites": ["E5"] },
       { "text": "In mid-August 632 forces of Caliph Abu Bakr fought rebellious Arab tribes at the Battle of Abraq in the Nejd region.", "cites": ["E6"] }
     ],
     [
-      { "text": "Abd al-Malik ibn Marwan, later the fifth Umayyad caliph, was born here in 646, at an approximate location.", "cites": ["P5"] },
+      { "text": "Abd al-Malik ibn Marwan, later the fifth Umayyad caliph, was born here in 646.", "cites": ["P5"] },
       { "text": "In 656 the caliph Uthman ibn Affan was assassinated at the end of a siege upon his house.", "cites": ["E7"] },
       { "text": "On 26 August 683 the Umayyad army of Yazid I fought the rebel defenders of Medina at the Battle of al-Harrah.", "cites": ["E8"] },
-      { "text": "Jaafar Al-Sadiq, a Muslim scholar and Imam, was born here in 699, at an approximate location.", "cites": ["P4"] }
+      { "text": "Jaafar Al-Sadiq, a Muslim scholar and Imam, was born here in 699.", "cites": ["P4"] }
     ]
   ]
 }
