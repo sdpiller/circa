@@ -69,23 +69,8 @@ Redesigned with the owner; the full design is `docs/superpowers/specs/2026-10-29
 
 Acceptance: (a) zooming from orbit to city scale shows a plain globe, then a grid that refines smoothly and stops at r5; (b) clicking the Athens cell for 500 to 300 BCE shows plausible events and people with descriptions, expandable paragraphs, and hover cards with attribution; (c) clicking bare ocean gives a plain "nothing documented" line; (d) a sparse cell (for example in the Sahel or the Amazon basin) shows its few items honestly; (e) stacked dots fan out into a web and each leg opens its item; (f) no console errors; (g) cell and area queries measured and logged.
 
-### Phase 5: Grounded narrative
-Shown at the top of the area box. Changes from the 2026-10-29 design (section 3.3 of the spec): input is the cell's top about 12 events plus top about 5 people and places; the server fetches any missing Wikipedia extracts before writing; no story below 3 events; the story credits Wikipedia and Wikidata. The cache key is the H3 cell id (it encodes resolution) + range + `prompt_version` + model.
-
-Build `/lib/narrative`:
-- Input: top about 15 events (id, label, years, category, location confidence, short Wikipedia extract), the range, and the scale used.
-- Prompt rules for Claude:
-  - Use ONLY the supplied events. No outside facts, no extra dates or names, no invented causal links.
-  - 120 to 250 words, chronological, plain prose.
-  - Cite every claim with the event id, like [E3].
-  - State the scale, and note approximate locations where relevant.
-  - If coverage is sparse, say so explicitly instead of filling gaps.
-- Post-validate: extract citations, reject or strip any id not supplied, and fail loudly in tests.
-- Cache key: H3 cell + resolution + range + `prompt_version` + model. Check cache first.
-- Per-session rate limit and a cap on events passed in.
-- Eval script with about 10 fixed cases (Marathon plain, Knossos, Delphi, Rome, a sparse rural area, an empty ocean, an inherited-location-heavy area) checking citation validity and flagging any year or proper name in the output that is absent from the input.
-
-Acceptance: eval passes. Repeat clicks hit the cache. Sparse areas yield a candid short narrative. Do not skip or weaken the eval to make progress.
+### Phase 5: Featured stories (revised 2026-10-29)
+Replaced. There is no live generation: the owner has no API budget, so about twenty stories are written offline in Claude Code sessions, checked mechanically against frozen inputs, reviewed, and committed. A Featured list in the app flies to each one. The full design is `docs/superpowers/specs/2026-10-29-featured-stories-design.md`; what was built and measured is decisions.md entry 30.
 
 ### Phase 6: Visual polish
 - Play button: the range window sweeps through time; events fade in and out as it passes; pause and speed controls. This is the highest-value visual.
@@ -95,7 +80,7 @@ Acceptance: eval passes. Repeat clicks hit the cache. Sparse areas yield a candi
 Acceptance: playback runs without jank.
 
 ### Phase 7 (optional): Deploy
-Run locally first. SQLite on serverless is awkward: prefer a host with a persistent volume, or ship the DB file read-only. Protect the narrative endpoint with rate limiting because it spends API credit.
+Run locally first. SQLite on serverless is awkward: prefer a host with a persistent volume, or ship the DB file read-only.
 
 ## 4. Backlog (ideas deliberately deferred; do not start without the owner's go-ahead)
 
@@ -111,10 +96,9 @@ Run locally first. SQLite on serverless is awkward: prefer a host with a persist
 - Whether QLever's Wikidata endpoint is available and suitable.
 - Exact MapLibre globe-projection API and current version.
 - Wikidata year-zero and precision handling details.
-- Current Anthropic SDK usage and the model name `claude-sonnet-5-5`.
 - Wikipedia summary endpoint shape and rate limits.
 - Basemap provider free-tier terms.
 
 ## 6. Definition of done for v1
 
-A stranger can open the app, spin to the Mediterranean, pick 500 to 300 BCE, click near Athens, and get a cited, accurate narrative within a few seconds. Clicking somewhere with no data gives an honest empty state. The README explains setup, the ETL command, env vars, and data attributions.
+A stranger can open the app, spin to the Mediterranean, pick Athens, 500 to 300 BCE from Featured (or select that cell and range by hand), and read a cited, accurate story within a second. Clicking somewhere with no data gives an honest empty state. The README explains setup, the ETL command, env vars, and data attributions.

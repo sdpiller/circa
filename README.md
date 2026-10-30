@@ -1,15 +1,15 @@
 # Chronoglobe
 
-A 3D globe of human history. Spin and zoom the globe, pick a year range (about 3500 BCE to today), and see notable historical events as dots. Click an area to get the events there, plus a short narrative written by Claude that is grounded only in those events and cites each one.
+A 3D globe of human history. Spin and zoom the globe, pick a year range (about 3500 BCE to today), and see notable historical events as dots. Click an area to get the events there. For twenty featured places and eras, the box opens with a short story written by Claude from the Wikipedia and Wikidata text of the items it cites, with a clickable citation on every sentence.
 
-The narrative is the point; the globe is how you get to it.
+The story is the point; the globe is how you get to it.
 
 ## Status
 
 Work in progress, built in phases (see [docs/PLAN.md](docs/PLAN.md)).
 
-- **Done (Phases 0 to 3):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items (events, settlement foundings, structures and sites, notable births, and discoveries), the events API, and the globe: spin and zoom, pick a year range, hover a dot for its name and date.
-- **Not built yet:** the area panel (click for the events in an area) and the narratives.
+- **Done (Phases 0 to 5):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items (events, settlement foundings, structures and sites, notable births, and discoveries), the events API, the globe with an H3 grid and optional dots, the area box (events, people and places, Wikipedia paragraphs and hover cards), and twenty featured stories with a Featured list.
+- **Not built yet:** visual polish and deployment (Phases 6 and 7).
 
 ## Requirements
 
@@ -28,8 +28,6 @@ Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since P
 | Variable | Needed for | Notes |
 | --- | --- | --- |
 | `WIKIMEDIA_CONTACT` | Data fetch, area box | An email or URL. Wikimedia's User-Agent policy requires a contact on every request. |
-| `ANTHROPIC_API_KEY` | Narratives (later phase) | Never commit it. |
-| `ANTHROPIC_MODEL` | Narratives (later phase) | Defaults to `claude-sonnet-5-5`. |
 | `BASEMAP_STYLE_URL` | Globe (optional) | Defaults to OpenFreeMap's dark style (free, no key). Read at build time. Do not use the public OpenStreetMap tile servers. |
 
 ## Commands
@@ -70,6 +68,8 @@ How it works, briefly:
 
 `npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 180 MB). It normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
 
+After every rebuild, run `npm run story:check`. It confirms each published featured story still cites items that exist, with the same labels and years, and prints a stale story's id and reason (exit 1). Ranking drift only warns.
+
 On Windows, stop the dev server before rebuilding: the final rename fails while another process has the database open. Check that it really stopped: killing `npm run dev` can leave Next's worker process running, still holding the file.
 
 ## Events API
@@ -87,10 +87,12 @@ The reasoning behind these choices, including the Wikidata year-zero trap and wh
 ## Repository layout
 
 ```
-app/         Next.js app: the globe (app/ui) and the events API (app/api/events)
+app/         Next.js app: the globe (app/ui) and the APIs (app/api)
 lib/dots.ts  Dot legend groups, colours, and the GeoJSON the globe draws
 lib/time/    Year conventions: no year 0, BCE as negative years, imprecise-date intervals
 lib/db/      Database schema, row validation, connection, and the events query
+lib/narrative/  Featured-story checker, input builder, publish, and staleness check
+stories/     Featured stories, frozen inputs, writing rules, published.json
 etl/         Fetch, normalize, build, load, and audit scripts, plus classes.json
 tests/       Unit tests and live API fixtures
 docs/        PLAN.md, decisions.md, data-audit.md
@@ -100,7 +102,7 @@ data/        Local data, gitignored
 ## Data and attribution
 
 - **Wikidata:** event data (labels, dates, coordinates, sitelink counts) comes from [Wikidata](https://www.wikidata.org), available under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-- **Wikipedia:** later phases will show short extracts from Wikipedia articles and use them to ground narratives. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the app will credit and link the source article wherever an extract or a narrative based on one appears.
+- **Wikipedia:** the area box shows short extracts from Wikipedia articles, and the featured stories are written from them. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the app credits and links the source article wherever an extract or a story based on one appears.
 - **Query services:** data is fetched through the [Wikidata Query Service](https://query.wikidata.org) and [QLever](https://qlever.dev) (University of Freiburg).
 - **Basemap:** [OpenFreeMap](https://openfreemap.org), © [OpenMapTiles](https://openmaptiles.org), data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. Credited in the app footer and the map's attribution control.
 - **Map library:** [MapLibre GL JS](https://maplibre.org) (BSD 3-Clause).
