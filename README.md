@@ -40,6 +40,7 @@ Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since P
 | `npm run etl` | Fetch whatever is missing, then build the database. One command from nothing to `data/chronoglobe.db`. |
 | `npm run etl:fetch` | Download event data from Wikidata into `data/raw/`. See below. |
 | `npm run etl:load` | Build `data/chronoglobe.db` from `data/raw/` (about 7 seconds). |
+| `npm run story:input -- <id>` | Freeze a featured entry's area into `stories/inputs/<id>.json` for writing a story. Needs `WIKIMEDIA_CONTACT`, and refuses to overwrite an input that has a story unless `--force`. |
 | `npm run story:publish` | Check every story against its frozen input and write `stories/published.json`. |
 | `npm run story:check` | Run after `etl:load`: reports published stories whose cited items changed (stale, exit 1) and areas whose top items drifted. |
 | `npm run audit` | Rebuild the tables in `docs/data-audit.md` from `data/raw/`. |
@@ -102,7 +103,7 @@ data/        Local data, gitignored
 ## Data and attribution
 
 - **Wikidata:** event data (labels, dates, coordinates, sitelink counts) comes from [Wikidata](https://www.wikidata.org), available under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-- **Wikipedia:** the area box shows short extracts from Wikipedia articles, and the featured stories are written from them. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the app credits and links the source article wherever an extract or a story based on one appears.
+- **Wikipedia:** the area box shows short extracts from Wikipedia articles, and the featured stories are written from them. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the story credit names Wikipedia and Wikidata with links to those sites, and each cited item links to its own article from its row in the box.
 - **Query services:** data is fetched through the [Wikidata Query Service](https://query.wikidata.org) and [QLever](https://qlever.dev) (University of Freiburg).
 - **Basemap:** [OpenFreeMap](https://openfreemap.org), © [OpenMapTiles](https://openmaptiles.org), data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. Credited in the app footer and the map's attribution control.
 - **Map library:** [MapLibre GL JS](https://maplibre.org) (BSD 3-Clause).

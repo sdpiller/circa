@@ -1,6 +1,6 @@
 # Featured stories: design (Phase 5, revised)
 
-Date: 2026-10-29. Status: ready for owner review (builder check done). Replaces the Phase 5 text in `docs/PLAN.md` and section 3.3's `POST /api/area/story` in `docs/superpowers/specs/2026-10-29-area-panel-design.md`. Read `CLAUDE.md`, that spec (sections 2.2 and 2.3), and `docs/decisions.md` entries 28 and 29 first; their conventions hold unless this document says otherwise.
+Date: 2026-10-29. Status: approved and built, see decisions.md entry 30. Replaces the Phase 5 text in `docs/PLAN.md` and section 3.3's `POST /api/area/story` in `docs/superpowers/specs/2026-10-29-area-panel-design.md`. Read `CLAUDE.md`, that spec (sections 2.2 and 2.3), and `docs/decisions.md` entries 28 and 29 first; their conventions hold unless this document says otherwise.
 
 ## 1. Intent
 
@@ -150,11 +150,11 @@ Pure functions, unit-tested, run on every committed story inside `npm test` (no 
 
 Checker tests: one passing fixture, and one failing fixture per failure class (unknown ref, uncited sentence, invented number, wrong era, invented name, fact cited to the wrong item, too long, em dash), each asserting the specific failure.
 
-What the checker cannot catch, and who covers it: relocated deeds, wrong relationships between correct names, invented causal links, spelled-out numbers. The reviewer (6.5 step 4) and the owner's read at the gate.
+What the checker cannot catch, and who covers it: relocated deeds, wrong relationships between correct names, invented causal links, "a decade later", "a century later", "twice", names written in lowercase, and an ordinal against a cardinal (3rd against 3). The reviewer (6.5 step 4) and the owner's read at the gate.
 
 ### 6.7 Staying current after a rebuild
 
-- `npm run story:check` (needs the database): for each featured entry, re-run the area query and confirm every cited qid is still in the box's lists for that cell and range, and that each cited item's label and years text are unchanged. Any failure makes the story stale: it prints the story id and reason and exits non-zero. Ranking drift is not staleness: if new or re-ranked items would change the top 17, it prints an "input drift" warning but passes, because the story is still true about what it cites. Extracts are not compared (that would need the network). *My call: a routine rebuild should not force twenty rewrites.* Run after `etl:load`; mention it in the README's ETL section.
+- `npm run story:check` (needs the database): for each featured entry, re-run the area query and confirm every cited qid is still in the box's lists for that cell and range, and that each cited item's label and years text are unchanged. Any failure makes the story stale: it prints the story id and reason and exits non-zero. Ranking drift is not staleness: if new or re-ranked items would change the top 17, it prints an "input drift" warning but passes, because the story is still true about what it cites. `story:check` also warns, without making a story stale, on a changed context sentence or location confidence. Extracts are not compared (that would need the network). *My call: a routine rebuild should not force twenty rewrites.* Run after `etl:load`; mention it in the README's ETL section.
 - The runtime guard in 4.2 keeps a stale story off screen until it is rewritten.
 
 ## 7. Changes to existing code and docs

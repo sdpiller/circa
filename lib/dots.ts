@@ -4,7 +4,7 @@
  * Colour encodes four groups, not the seven categories (decisions.md entry 26): on a map every pair
  * of colours can sit side by side, and at most four colours stay distinct for colour-blind readers
  * on the dark basemap. Events get three vivid hues; foundings, structures, and births share one
- * gray, so the events the narrative is about stand out from their context.
+ * gray, so the events a story is about stand out from their context.
  */
 import type { Dot } from "./db/events.ts";
 import { formatRange } from "./time/index.ts";

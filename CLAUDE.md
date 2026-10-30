@@ -48,7 +48,7 @@ Accounts, editing or crowdsourcing, historical borders, real-time data, mobile a
 - Next.js (App Router) + TypeScript, strict mode
 - MapLibre GL JS with globe projection (check current docs for how to enable it)
 - SQLite via better-sqlite3
-- h3-js for area cells and cache keys
+- h3-js for area cells
 - zod for validating external data and request params
 - vitest for tests
 
