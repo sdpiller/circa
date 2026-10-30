@@ -8,7 +8,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 5 complete, at the gate (2026-10-30): twenty featured stories, written offline and checked mechanically, with a Featured list that flies to each one (decisions.md entries 30 and 31). Awaiting the owner's read of the stories and go-ahead for Phase 6. (Update this line at every phase gate.)
+Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 is in design on branch phase-6-polish; nothing is built yet. (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
