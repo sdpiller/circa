@@ -13,7 +13,7 @@ Companion to `CLAUDE.md`. `CLAUDE.md` holds the standing rules and conventions. 
 ### Goals
 - Smooth globe with a two-handle time-range control.
 - Events from Wikidata, ranked by notability, served from OUR OWN local database (never live Wikidata queries at request time).
-- Click an area: event list plus a grounded, cited narrative.
+- Click an area: the event list; a featured place also gets a grounded, cited story.
 - Honest handling of sparse and biased data.
 - Good-looking visuals (see Phase 6).
 
@@ -26,7 +26,7 @@ Prior art exists, so a plain "events on a map with a slider" is not novel:
 - Histography: interactive timeline of events pulled from Wikipedia (older reviews, unverified current state).
 - OpenHistoricalMap: time slider over historical map objects (borders, buildings), not events.
 
-Our differentiator is: **click an area, pick a range, get a grounded narrative of what happened there**. The globe is the vehicle; the narrative quality is the product. Invest accordingly and do not compete on borders.
+Our differentiator is: **click an area, pick a range, get a grounded narrative of what happened there**. The globe is the vehicle; the narrative quality is the product. Invest accordingly and do not compete on borders. Since decisions.md entry 30 this holds only for the twenty featured stories, because there is no budget for live generation.
 
 ## 3. Phases
 
