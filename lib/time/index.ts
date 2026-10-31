@@ -130,3 +130,14 @@ export function yearToSlider(year: number): number {
   const [p1, y1] = SLIDER_ANCHORS[i];
   return Math.round(p0 + ((a - y0) / (y1 - y0)) * (p1 - p0));
 }
+
+/** Number of years in an inclusive historical range. There is no year 0, so -1 to 1 is 2 years. */
+export function yearCount(from: number, to: number): number {
+  return historicalToAstronomical(to) - historicalToAstronomical(from) + 1;
+}
+
+/** The middle year of a range, rounded toward the earlier year. Never 0. */
+export function midYear(from: number, to: number): number {
+  const mid = Math.floor((historicalToAstronomical(from) + historicalToAstronomical(to)) / 2);
+  return astronomicalToHistorical(mid);
+}

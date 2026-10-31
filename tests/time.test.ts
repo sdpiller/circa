@@ -6,7 +6,9 @@ import {
   effectiveInterval,
   formatYear,
   historicalToAstronomical,
+  midYear,
   overlaps,
+  yearCount,
   yearFromEntityTime,
   yearFromSparqlTime,
 } from "../lib/time/index.ts";
@@ -152,5 +154,26 @@ describe("formatYear", () => {
   it("formats BCE and CE years", () => {
     expect(formatYear(-490)).toBe("490 BCE");
     expect(formatYear(79)).toBe("79 CE");
+  });
+});
+
+describe("yearCount", () => {
+  it("counts inclusively and skips year 0", () => {
+    expect(yearCount(-100, 100)).toBe(200);
+    expect(yearCount(5, 5)).toBe(1);
+    expect(yearCount(-1, 1)).toBe(2);
+  });
+});
+
+describe("midYear", () => {
+  it("takes the middle of a range", () => {
+    expect(midYear(-500, -300)).toBe(-400);
+    expect(midYear(5, 5)).toBe(5);
+  });
+
+  it("never returns year 0", () => {
+    expect(midYear(-100, 100)).not.toBe(0);
+    expect(midYear(-1, 1)).not.toBe(0);
+    expect(midYear(-2, -1)).not.toBe(0);
   });
 });
