@@ -37,9 +37,12 @@ function segmentKm(lon: number, lat: number, a: Position, b: Position): number {
   const kx = 111.32 * Math.cos((lat * Math.PI) / 180);
   const ky = 110.57;
   const wrap = (d: number) => (d > 180 ? d - 360 : d < -180 ? d + 360 : d);
-  const ax = wrap(a[0] - lon) * kx;
+  // Wrap one endpoint relative to the point, then place the other relative to the first, so an edge
+  // keeps its true length instead of sweeping across the antipodal meridian past the point.
+  const adx = wrap(a[0] - lon);
+  const ax = adx * kx;
   const ay = (a[1] - lat) * ky;
-  const bx = wrap(b[0] - lon) * kx;
+  const bx = (adx + wrap(b[0] - a[0])) * kx;
   const by = (b[1] - lat) * ky;
   const dx = bx - ax;
   const dy = by - ay;

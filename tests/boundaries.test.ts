@@ -146,6 +146,25 @@ describe("nearestProvince", () => {
     expect(nearestProvince([farEast], -179.9, 0.5, 50)?.id).toBe("EAST");
     expect(nearestProvince([farEast], -179.9, 0.5, 20)).toBeNull();
   });
+
+  it("does not snap to an edge that straddles the antipode of the point", () => {
+    // Alaska-like: a ring at lon -170 to -150 whose box spans nearly every longitude. The query is at
+    // lon 18, whose antipode is -162, between the ring's two corners, at about the same latitude.
+    const geometry = { type: "Polygon", coordinates: [[[-170, 58], [-150, 58], [-150, 60], [-170, 60], [-170, 58]]] };
+    const alaska = { id: "ALASKA", name: "Alaska", country: "C", lon: -160, lat: 59, west: -179.9, south: 58, east: 179.9, north: 60, area: 9e6, geojson: JSON.stringify(geometry) };
+    expect(nearestProvince([alaska], 18, 59.4, 150)).toBeNull();
+    expect(nearestProvince([alaska], 2.2, 59.4, 150)).toBeNull();
+  });
+
+  it("measures a segment that crosses 180 near the point", () => {
+    // A ring whose south edge runs from 179 east across the antimeridian to -179, at latitude 1.
+    const geometry = { type: "Polygon", coordinates: [[[179, 1], [-179, 1], [-179, 2], [179, 2], [179, 1]]] };
+    const row = { id: "X", name: "X", country: "C", lon: 180, lat: 1.5, west: -180, south: 1, east: 180, north: 2, area: 1, geojson: JSON.stringify(geometry) };
+    // 0.5 degrees south of the edge, about 55 km, from either side of 180
+    expect(nearestProvince([row], 180, 0.5, 80)?.id).toBe("X");
+    expect(nearestProvince([row], -179.5, 0.5, 80)?.id).toBe("X");
+    expect(nearestProvince([row], 179.5, 0.5, 40)).toBeNull();
+  });
 });
 
 /** A minimal zip writer, so the reader is tested against the format and not against itself. */
