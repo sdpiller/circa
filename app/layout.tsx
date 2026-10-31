@@ -3,7 +3,7 @@ import { Fraunces, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const display = Fraunces({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const text = Newsreader({ subsets: ["latin"], variable: "--font-text", display: "swap" });
+const text = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-text", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Chronoglobe",

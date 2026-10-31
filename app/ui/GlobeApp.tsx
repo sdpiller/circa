@@ -1,12 +1,14 @@
 "use client";
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import type { AreaAnswer } from "../../lib/db/area.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
+import type { PublishedStory } from "../../lib/narrative/publish.ts";
 import { areaReducer, initialArea, outlineOf, requestUrl } from "../../lib/selection.ts";
 import type { YearRange } from "../../lib/time/index.ts";
 import { AreaPanel } from "./AreaPanel.tsx";
 import { GlobeMap } from "./GlobeMap.tsx";
 import { RangeControl } from "./RangeControl.tsx";
+import { StoriesList } from "./StoriesList.tsx";
 import styles from "./globe.module.css";
 
 // Dragging the range slider changes the range on every step: wait for a pause before asking.
@@ -14,6 +16,7 @@ const FETCH_DEBOUNCE_MS = 120;
 
 export function GlobeApp({ styleUrl }: { styleUrl: string }) {
   const [area, dispatch] = useReducer(areaReducer, initialArea);
+  const [panelFocus, setPanelFocus] = useState(0); // raised to hand the panel keyboard focus
   const url = requestUrl(area);
   const answeredUrl = area.answer?.url;
   const panelOpen = area.point !== null;
@@ -39,12 +42,19 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
 
   const onClick = useCallback((point: Position) => dispatch({ type: "click", point }), []);
   const onRange = useCallback((range: YearRange) => dispatch({ type: "drag", range }), []);
+  const onChoose = useCallback((story: PublishedStory) => {
+    dispatch({ type: "choose", point: story.point, range: { from: story.entry.from, to: story.entry.to } });
+    setPanelFocus((n) => n + 1);
+  }, []);
 
   return (
     <main className={`${styles.app} ${panelOpen ? styles.appPanelOpen : ""}`}>
       <GlobeMap styleUrl={styleUrl} outline={outlineOf(area)} panelOpen={panelOpen} onClick={onClick} />
 
-      <h1 className={styles.wordmark}>Chronoglobe</h1>
+      <header className={styles.masthead}>
+        <h1 className={styles.wordmark}>Chronoglobe</h1>
+        <StoriesList onChoose={onChoose} />
+      </header>
 
       <section className={styles.rangePanel} aria-label="Year range">
         <RangeControl range={area.range} onChange={onRange} />
@@ -72,7 +82,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
         </ul>
       </details>
 
-      <AreaPanel area={area} dispatch={dispatch} />
+      <AreaPanel area={area} dispatch={dispatch} focusRequest={panelFocus} />
     </main>
   );
 }

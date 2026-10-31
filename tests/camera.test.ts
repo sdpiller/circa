@@ -14,9 +14,9 @@ describe("frameOutline", () => {
   });
 
   it("fits a tall box to the free height: the dates' room and the margins come off", () => {
-    // 716 free less 90 of margins leaves a radius of 313 / sin(half height), near enough for a small box.
+    // 730 free less 90 of margins leaves a radius of 320 / sin(half height), near enough for a small box.
     const { zoom } = frameOutline([-1, -5, 1, 5], VIEW);
-    const radius = 313 / Math.sin((5 * Math.PI) / 180);
+    const radius = 320 / Math.sin((5 * Math.PI) / 180);
     expect(zoom).toBeCloseTo(Math.log2((radius * 2 * Math.PI) / 512), 3);
   });
 

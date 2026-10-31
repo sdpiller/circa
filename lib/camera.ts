@@ -5,8 +5,8 @@
  * map did not yet hold. Here the answer depends on the bounds and the window alone.
  */
 
-/** Room the dates take at the bottom of the map. */
-export const RANGE_H = 184;
+/** Room the dates take at the bottom of the map. The same value as --range-h in globe.module.css. Measured: 169.3. */
+export const RANGE_H = 170;
 
 /** Space kept between an outline's bounds and the edges of the free area. */
 const MARGIN_X = 60;

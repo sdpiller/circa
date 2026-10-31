@@ -10,6 +10,7 @@ import { frameOutline, RANGE_H } from "../../lib/camera.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
 import { apparentZoom, FADE_MS, LABEL_GROUPS, labelGroupOn } from "../../lib/labels.ts";
 import type { MapOutline } from "../../lib/selection.ts";
+import { easeOut, still } from "./motion.ts";
 import styles from "./globe.module.css";
 
 /** Map paint values, matching the palette in globals.css and spec 3.2. */
@@ -28,8 +29,6 @@ const SLIDE_MS = 460;
 const FLY_MS = 1500;
 const OUTLINE_FADE_MS = 500;
 const OFF_GLOBE_PX = 4;
-const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
-const still = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 /** The same value as --panel-width in globe.module.css. */
 const panelWidth = () => Math.min(420, window.innerWidth * 0.36);
 
@@ -97,10 +96,16 @@ export function GlobeMap({
         center: [24, 24],
         zoom: 1.75, // the whole globe
         attributionControl: { compact: true },
+        // North stays up: frameOutline assumes it, and spec 3.1 lists no rotate control.
+        dragRotate: false,
+        pitchWithRotate: false,
+        touchPitch: false,
       });
+      m.keyboard.disableRotation();
+      m.touchZoomRotate.disableRotation();
       map = m;
       const el = container.current;
-      const fade = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : FADE_MS;
+      const fade = still() ? 0 : FADE_MS;
       const on = LABEL_GROUPS.map(() => false);
 
       const layersOf = (ids: string[]) => ids.filter((id) => m.getLayer(id));

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { EVENTS_STEP, OTHERS_STEP } from "../lib/box.ts";
 import type { AreaAnswer } from "../lib/db/area.ts";
 import type { Position } from "../lib/geo/geometry.ts";
-import { areaReducer, initialArea, outlineOf, requestUrl, shownAnswer, type AreaAction, type AreaState } from "../lib/selection.ts";
+import { areaReducer, initialArea, outlineOf, requestUrl, shownAnswer, tweenRange, type AreaAction, type AreaState } from "../lib/selection.ts";
 
 const ATHENS: Position = [23.72, 37.98];
 const THESSALY: Position = [22.4, 39.6];
@@ -196,5 +196,41 @@ describe("outlineOf", () => {
 
   it("gives two clicks in the same region different keys", () => {
     expect(outlineOf(clicked(ATHENS))?.key).not.toBe(outlineOf(clicked(THESSALY))?.key);
+  });
+});
+
+describe("tweenRange", () => {
+  const steps = Array.from({ length: 101 }, (_, i) => i / 100);
+
+  it("is the first range at 0 and the second at 1", () => {
+    expect(tweenRange(CLASSICAL, ROMAN, 0)).toEqual(CLASSICAL);
+    expect(tweenRange(CLASSICAL, ROMAN, 1)).toEqual(ROMAN);
+  });
+
+  it("counts in astronomical years: halfway from 2 BCE to 1 CE is 1 BCE", () => {
+    expect(tweenRange({ from: -2, to: -2 }, { from: 1, to: 1 }, 0.5)).toEqual({ from: -1, to: -1 });
+  });
+
+  it("never returns year 0 from -100 to 100, in whole years, whichever end moves", () => {
+    const ranges = [
+      [{ from: -100, to: -100 }, { from: 100, to: 100 }],
+      [{ from: -100, to: 100 }, { from: 100, to: 100 }],
+      [{ from: -100, to: -100 }, { from: -100, to: 100 }],
+    ];
+    for (const [a, b] of ranges)
+      for (const t of steps) {
+        const { from, to } = tweenRange(a, b, t);
+        for (const year of [from, to]) {
+          expect(year).not.toBe(0);
+          expect(Number.isInteger(year)).toBe(true);
+        }
+      }
+  });
+
+  it("keeps the start no later than the end all the way", () => {
+    for (const t of steps) {
+      const { from, to } = tweenRange({ from: -2500, to: -500 }, { from: 750, to: 1260 }, t);
+      expect(from).toBeLessThanOrEqual(to);
+    }
   });
 });

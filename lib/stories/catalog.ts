@@ -1,5 +1,4 @@
 import type { AreaItem } from "../db/area.ts";
-import type { FeaturedEntry } from "../narrative/types.ts";
 import type { PublishedStory } from "../narrative/publish.ts";
 import { yearCount } from "../time/index.ts";
 import published from "../../stories/published.json" with { type: "json" };
@@ -7,8 +6,8 @@ import published from "../../stories/published.json" with { type: "json" };
 // The published file is already validated by tests/stories.test.ts, so it is cast, not re-parsed.
 export const PUBLISHED = published as unknown as readonly PublishedStory[];
 
-export const FEATURED: readonly FeaturedEntry[] = PUBLISHED.map((s) => s.entry).sort(
-  (a, b) => a.from - b.from || a.id.localeCompare(b.id),
+export const STORIES: readonly PublishedStory[] = [...PUBLISHED].sort(
+  (a, b) => a.entry.from - b.entry.from || a.entry.id.localeCompare(b.entry.id),
 );
 
 export type Intent = "click" | "range";

@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { AreaItem } from "../lib/db/area.ts";
 import type { PublishedStory } from "../lib/narrative/publish.ts";
-import { FEATURED, missingCites, storyFor } from "../lib/stories/catalog.ts";
+import { missingCites, PUBLISHED, STORIES, storyFor } from "../lib/stories/catalog.ts";
 
 const story = (id: string, provinces: string[], from: number, to: number, qids: (string | null)[]): PublishedStory => ({
   entry: { id, place: "Somewhere", from, to },
@@ -76,10 +76,11 @@ describe("missingCites", () => {
   });
 });
 
-describe("FEATURED", () => {
-  it("is ordered by from", () => {
-    const froms = FEATURED.map((e) => e.from);
+describe("STORIES", () => {
+  it("holds every published story, ordered by start year", () => {
+    const froms = STORIES.map((s) => s.entry.from);
     expect(froms).toEqual([...froms].sort((x, y) => x - y));
+    expect(STORIES).toHaveLength(PUBLISHED.length);
   });
 });
 

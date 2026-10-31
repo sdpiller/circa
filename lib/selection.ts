@@ -8,7 +8,7 @@ import type { AreaAnswer } from "./db/area.ts";
 import type { Position } from "./geo/geometry.ts";
 import type { Selection } from "./outline/resolve.ts";
 import type { Intent } from "./stories/catalog.ts";
-import type { YearRange } from "./time/index.ts";
+import { astronomicalToHistorical, historicalToAstronomical, type YearRange } from "./time/index.ts";
 
 export type AreaState = {
   point: Position | null;
@@ -76,6 +76,18 @@ export function outlineOf(s: AreaState): MapOutline | null {
   if (!body || body.selection.kind === "none") return null;
   const { fill, lines, bounds } = body.selection;
   return { fill, lines, bounds, fly: s.fly, key: `${s.point} ${body.from} ${body.to}` };
+}
+
+/** How long the dates and handles take to reach a range a story or list entry set (spec 3.4). */
+export const TWEEN_MS = 620;
+
+/** The range at t from 0 to 1 between two others. Runs in astronomical years, which have a year 0, so the answer never does. */
+export function tweenRange(a: YearRange, b: YearRange, t: number): YearRange {
+  const at = (x: number, y: number) => {
+    const from = historicalToAstronomical(x);
+    return astronomicalToHistorical(Math.round(from + (historicalToAstronomical(y) - from) * t));
+  };
+  return { from: at(a.from, b.from), to: at(a.to, b.to) };
 }
 
 export function areaReducer(s: AreaState, a: AreaAction): AreaState {

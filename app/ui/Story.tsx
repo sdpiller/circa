@@ -15,16 +15,23 @@ export function Story({ story, onCite }: { story: PublishedStory; onCite: (qid: 
     <div className={styles.story}>
       {story.paragraphs.map((para, i) => (
         <p key={i}>
-          {para.map((sentence, j) => (
-            <span key={j}>
-              {sentence.text}
-              {sentence.cites.map((c) => (
-                <button key={c.ref} type="button" className={styles.cite} aria-label={c.label} title={c.label} onClick={() => onCite(c.qid)}>
-                  {numbers.get(c.ref)}
-                </button>
-              ))}{" "}
-            </span>
-          ))}
+          {para.map((sentence, j) => {
+            // The last word and the markers stay on one line, so a marker never starts a line alone.
+            const cut = sentence.text.lastIndexOf(" ") + 1;
+            return (
+              <span key={j}>
+                {sentence.text.slice(0, cut)}
+                <span className={styles.noWrap}>
+                  {sentence.text.slice(cut)}
+                  {sentence.cites.map((c) => (
+                    <button key={c.ref} type="button" className={styles.cite} aria-label={c.label} title={c.label} onClick={() => onCite(c.qid)}>
+                      {numbers.get(c.ref)}
+                    </button>
+                  ))}
+                </span>{" "}
+              </span>
+            );
+          })}
         </p>
       ))}
       <p className={styles.storyCredit}>
