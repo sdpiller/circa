@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import { Fraunces, Newsreader } from "next/font/google";
 import "./globals.css";
+
+const display = Fraunces({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+const text = Newsreader({ subsets: ["latin"], variable: "--font-text", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Chronoglobe",
@@ -8,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${text.variable}`}>
       <body>{children}</body>
     </html>
   );

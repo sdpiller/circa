@@ -12,20 +12,33 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
     <main className={styles.app}>
       <GlobeMap styleUrl={styleUrl} />
 
-      <aside className={`${styles.panel} ${styles.legendPanel}`}>
-        <h1 className={styles.title}>Chronoglobe</h1>
-        <p className={styles.caption}>Documented history is not the same as history: coverage is uneven worldwide.</p>
-      </aside>
+      <h1 className={styles.wordmark}>Chronoglobe</h1>
 
-      <section className={`${styles.panel} ${styles.rangePanel}`} aria-label="Year range">
+      <section className={styles.rangePanel} aria-label="Year range">
         <RangeControl range={range} onChange={setRange} />
+        <p className={styles.caption}>Documented history is not the same as history: coverage is uneven worldwide.</p>
       </section>
 
-      <footer className={styles.footer}>
-        Event data: <a href="https://www.wikidata.org">Wikidata</a> (CC0). Basemap: <a href="https://openfreemap.org">OpenFreeMap</a>,{" "}
-        <a href="https://openmaptiles.org">© OpenMapTiles</a>, data <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a> contributors.
-        Text and pictures: <a href="https://en.wikipedia.org">Wikipedia</a> (CC BY-SA 4.0).
-      </footer>
+      <details className={styles.sources}>
+        <summary>Sources</summary>
+        <ul>
+          <li>
+            Historical outlines: <a href="https://github.com/Seshat-Global-History-Databank/cliopatria">Cliopatria</a> (
+            <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>), shapes processed; and{" "}
+            <a href="https://github.com/aourednik/historical-basemaps">historical-basemaps</a> (GPL-3.0).
+          </li>
+          <li>
+            Modern boundaries: <a href="https://www.naturalearthdata.com">Natural Earth</a> (public domain).
+          </li>
+          <li>
+            Events: <a href="https://www.wikidata.org">Wikidata</a> (CC0). Text and pictures: <a href="https://en.wikipedia.org">Wikipedia</a> (CC BY-SA 4.0).
+          </li>
+          <li>
+            Basemap: <a href="https://openfreemap.org">OpenFreeMap</a>, <a href="https://openmaptiles.org">© OpenMapTiles</a>, data{" "}
+            <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a> contributors.
+          </li>
+        </ul>
+      </details>
     </main>
   );
 }

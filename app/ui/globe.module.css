@@ -1,140 +1,58 @@
+/* Cream, thin rules, no rounded cards. Palette variables live in globals.css. */
+
 .app {
   position: fixed;
   inset: 0;
   overflow: hidden;
+  background: var(--paper);
 }
 
 /* Two classes, so MapLibre's own `.maplibregl-map { position: relative }` never wins on stylesheet order. */
 .app > .map {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  transition: opacity 900ms ease-out;
 }
 
-.panel {
+/* Added once the style has loaded: the globe fades in. */
+.app > .map.ready {
+  opacity: 1;
+}
+
+.wordmark {
   position: absolute;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  backdrop-filter: blur(6px);
-}
-
-/* Legend, top left */
-.legendPanel {
-  top: 16px;
-  left: 16px;
-  width: 260px;
-  padding: 14px 16px;
-  max-height: calc(100% - 32px); /* keeps the coverage caption on screen when Featured and dots are open */
-  overflow-y: auto;
-}
-
-.title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-/* Featured stories: a closed-by-default list of buttons between the title and the dot toggle. */
-.featured {
-  margin-bottom: 10px;
-}
-
-.featured summary {
-  cursor: pointer;
-  color: var(--text-secondary);
-}
-
-.featuredNote {
-  margin: 6px 0 8px;
-  color: var(--text-muted);
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.featuredList {
-  list-style: none;
-  display: grid;
-  gap: 4px;
-  max-height: 240px;
-  overflow-y: auto;
-  padding: 4px; /* room for the focus outline, which the scroller would otherwise clip */
-  margin: -4px;
-}
-
-.featuredList button {
-  width: 100%;
-  text-align: left;
-  font: inherit;
-  color: var(--text-secondary);
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-
-.featuredList button:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  color: var(--text-secondary);
-  cursor: pointer;
-}
-
-.legend {
-  list-style: none;
-  display: grid;
-  gap: 6px;
-  color: var(--text-secondary);
-}
-
-.legend li {
-  display: grid;
-  grid-template-columns: 12px 1fr auto;
-  align-items: center;
-  gap: 8px;
-}
-
-.swatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.hollow {
-  border: 1.5px solid var(--text-secondary);
-}
-
-.count {
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.status {
-  margin-top: 10px;
-  color: var(--text-primary);
-}
-
-.caption {
-  margin-top: 10px;
-  color: var(--text-muted);
-  font-size: 12px;
-  line-height: 1.4;
+  top: 18px;
+  left: 22px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
 }
 
 /* Year range, bottom centre */
 .rangePanel {
+  position: absolute;
   left: 50%;
-  bottom: 36px;
+  bottom: 40px;
   transform: translateX(-50%);
   width: min(720px, calc(100% - 32px));
-  padding: 12px 18px 14px;
+  padding: 12px 0 0;
+}
+
+.caption {
+  margin-top: 10px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.range {
+  color: var(--ink);
 }
 
 .rangeHeader {
@@ -145,12 +63,14 @@
 }
 
 .rangeLabel {
-  color: var(--text-muted);
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .rangeValue {
-  font-size: 15px;
-  font-weight: 600;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
 }
 
 /* Two range inputs stacked on one track; only the thumbs take pointer events. */
@@ -162,19 +82,18 @@
 .track,
 .trackFill {
   position: absolute;
-  top: 12px;
-  height: 4px;
-  border-radius: 2px;
+  top: 13px;
+  height: 2px;
 }
 
 .track {
   left: 0;
   right: 0;
-  background: #383835;
+  background: var(--rule);
 }
 
 .trackFill {
-  background: var(--text-secondary);
+  background: var(--accent);
 }
 
 .slider input {
@@ -190,30 +109,30 @@
 .slider input::-webkit-slider-thumb {
   appearance: none;
   pointer-events: auto;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--text-primary);
-  border: 2px solid var(--surface);
+  background: var(--paper);
+  border: 2px solid var(--accent);
   cursor: grab;
 }
 
 .slider input::-moz-range-thumb {
   pointer-events: auto;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: var(--text-primary);
-  border: 2px solid var(--surface);
+  background: var(--paper);
+  border: 2px solid var(--accent);
   cursor: grab;
 }
 
 .ticks {
   position: relative;
   height: 16px;
-  margin: 0 9px;
-  color: var(--text-muted);
-  font-size: 11px;
+  margin: 0 8px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .ticks span {
@@ -231,335 +150,71 @@
 
 .presets button {
   font: inherit;
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 13px;
+  color: var(--ink-soft);
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 3px 10px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 2px 6px;
   cursor: pointer;
 }
 
 .presets button:hover {
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  border-bottom-color: var(--ink-soft);
 }
 
 .presets button[aria-pressed="true"] {
-  color: var(--surface);
-  background: var(--text-primary);
-  border-color: var(--text-primary);
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
-.footer {
+/* Credits: a quiet disclosure, bottom left. */
+.sources {
   position: absolute;
-  left: 12px;
-  bottom: 8px;
-  color: var(--text-muted);
-  font-size: 11px;
-}
-
-.footer a {
-  color: var(--text-muted);
-}
-
-/* MapLibre popup, restyled for the dark theme. :global reaches MapLibre's own class names. */
-.tooltip :global(.maplibregl-popup-content) {
-  background: var(--panel);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 10px;
-  font: 13px system-ui, -apple-system, "Segoe UI", sans-serif;
-  max-width: 280px;
-}
-
-.tooltip :global(.maplibregl-popup-content) div {
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-.tooltip :global(.maplibregl-popup-tip) {
-  display: none;
-}
-
-/* The web over a hovered stack. A zero-size box at the stack's centre; legs are placed by --x and --y. */
-.web {
-  position: absolute;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-}
-
-.webGrowing .webLeg {
-  pointer-events: none;
-}
-
-/* Dims the map under the web, so dots beneath its lines do not compete with its legs. The hole at
-   the centre leaves the stack itself undimmed; the edge fades out at the hold radius. */
-.webBackdrop {
-  position: absolute;
-  left: calc(-1 * var(--hold));
-  top: calc(-1 * var(--hold));
-  width: calc(2 * var(--hold));
-  height: calc(2 * var(--hold));
-  border-radius: 50%;
-  background: radial-gradient(circle closest-side, transparent 12px, rgba(12, 12, 12, 0.75) 14px, rgba(12, 12, 12, 0.75) 78%, rgba(12, 12, 12, 0) 100%);
-  animation: webFade 250ms ease-out both;
-}
-
-@keyframes webFade {
-  from {
-    opacity: 0;
-  }
-}
-
-/* Lines and legs grow out from the centre. Near-white at 0.6 composites to #959492 on land (6.4:1). */
-.webLine {
-  position: absolute;
-  left: 0;
-  top: -0.5px;
-  width: var(--len);
-  height: 1px;
-  background: rgba(240, 239, 236, 0.6);
-  transform-origin: 0 50%;
-  transform: rotate(var(--a)) translateX(var(--r0));
-  animation: webLineGrow 250ms ease-out both;
-}
-
-@keyframes webLineGrow {
-  from {
-    transform: rotate(var(--a)) translateX(var(--r0)) scaleX(0);
-  }
-}
-
-/* A 24px hit target around a dot drawn like the map's: group colour, hollow when approximate. */
-.webLeg {
-  position: absolute;
-  left: -12px;
-  top: -12px;
-  width: 24px;
-  height: 24px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: none;
-  cursor: pointer;
-  pointer-events: auto;
-  transform: translate(var(--x), var(--y));
-  animation: webLegGrow 250ms ease-out both;
-}
-
-@keyframes webLegGrow {
-  from {
-    transform: translate(0, 0);
-    opacity: 0;
-  }
-}
-
-.webDot {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--c);
-  border: 1px solid #0c0c0c;
-  opacity: 0.95;
-}
-
-.webDotContext {
-  width: 9px;
-  height: 9px;
-}
-
-.webDotApprox {
-  background: transparent;
-  border: 1.5px solid var(--c);
-  opacity: 1;
-}
-
-.webMore {
-  left: 0;
-  top: 0;
-  width: auto;
-  height: auto;
-  padding: 2px 8px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--panel);
-  color: var(--text-primary);
-  font: 11px system-ui, -apple-system, "Segoe UI", sans-serif;
-  white-space: nowrap;
-  transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%));
-  animation-name: webMoreGrow;
-}
-
-@keyframes webMoreGrow {
-  from {
-    transform: translate(-50%, -50%);
-    opacity: 0;
-  }
-}
-
-.webMore:hover {
-  border-color: var(--text-secondary);
-}
-
-/* Same look and content as the map's dot tooltip, above the hovered leg. */
-.webTip {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: max-content;
-  max-width: 280px;
-  transform: translate(calc(var(--x) - 50%), calc(var(--y) - 100% - 14px));
-  background: var(--panel);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 10px;
-  font: 13px system-ui, -apple-system, "Segoe UI", sans-serif;
-  pointer-events: none;
-}
-
-.webTip div {
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-/* The area box, top right: below the zoom buttons' column, above the year range, off the map's centre. */
-.slot {
-  display: contents;
-}
-
-.box {
-  top: 16px;
-  right: 52px;
-  width: 360px;
-  max-height: calc(100% - 226px); /* clears the year range panel below */
-  z-index: 1; /* a hover card hanging below the box draws over the year range panel */
-  display: flex;
-  flex-direction: column;
-}
-
-.nothing {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 10px 12px 16px;
-}
-
-.nothing p {
-  flex: 1;
-  padding-top: 3px;
-}
-
-.boxHeader {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 10px 10px 16px;
-  border-bottom: 1px solid var(--border);
-}
-
-.boxTitle {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  padding-top: 3px;
-}
-
-.close {
-  width: 28px;
-  height: 28px;
-  flex: none;
-  font: 20px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--text-secondary);
-  background: none;
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.close:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-}
-
-.boxBody {
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 4px 16px 12px;
-}
-
-.boxSection {
-  margin: 12px 0 6px;
+  left: 22px;
+  bottom: 12px;
+  max-width: min(360px, calc(100% - 44px));
+  color: var(--muted);
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-muted);
 }
 
-.events {
+.sources summary {
+  cursor: pointer;
+}
+
+.sources ul {
   list-style: none;
+  margin-top: 6px;
+  padding: 8px 10px;
   display: grid;
-  gap: 2px;
-}
-
-.eventRow {
-  display: grid;
-  grid-template-columns: 10px 1fr;
-  gap: 10px;
-  width: 100%;
-  padding: 6px 6px 6px 4px;
-  text-align: left;
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.eventRow:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.eventRow .swatch {
-  margin-top: 4px;
-}
-
-.swatchApprox {
-  border: 1.5px solid;
-  background: transparent;
-}
-
-.eventYears,
-.eventApprox {
-  display: block;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.eventName {
-  display: block;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.eventDesc {
-  display: block;
-  color: var(--text-secondary);
+  gap: 6px;
   line-height: 1.4;
+  background: var(--paper);
+  border: 1px solid var(--rule);
 }
 
-/* The item a dot click asked for. */
+.sources a {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+  .rangePanel {
+    bottom: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app > .map {
+    transition: none;
+  }
+}
+
+/* Parts the area box (Task 9) renders again. */
+
 .focused > button {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 3px 0 0 var(--text-primary);
+  background: var(--paper-sunk);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .summary {
@@ -567,7 +222,7 @@
   gap: 6px;
   margin: 2px 6px 8px 24px;
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--ink-soft);
 }
 
 .summary a {
@@ -575,54 +230,31 @@
 }
 
 .muted {
-  color: var(--text-muted);
-}
-
-.more {
-  margin-top: 6px;
-  padding: 3px 10px;
-  font: inherit;
-  font-size: 12px;
-  color: var(--text-secondary);
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  cursor: pointer;
-}
-
-.more:hover {
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
 }
 
 /* People and places: a wrapping list of names. Neither the list nor the scroller is positioned, so
    a hover card is placed against the box itself and the scroller does not clip it. */
-.names {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
 .nameButton {
-  padding: 2px 8px;
+  padding: 2px 6px;
   font: inherit;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
   cursor: default;
 }
 
 .nameButton:hover,
 .nameButton[aria-expanded="true"] {
-  color: var(--text-primary);
-  border-color: var(--text-muted);
+  color: var(--ink);
+  border-bottom-color: var(--ink-soft);
 }
 
 .focused > .nameButton {
   box-shadow: none;
-  color: var(--surface);
-  background: var(--text-primary);
+  color: var(--accent);
+  background: var(--paper-sunk);
 }
 
 .hoverCard {
@@ -631,10 +263,9 @@
   display: flex;
   gap: 10px;
   padding: 10px 12px;
-  background: #1a1a19;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 6px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: 0 6px 20px rgba(36, 31, 26, 0.12);
   line-height: 1.4;
 }
 
@@ -654,62 +285,30 @@
   width: 72px;
   height: 72px;
   object-fit: cover;
-  border-radius: 4px;
 }
 
 .cardName {
-  font-weight: 600;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 500;
 }
 
 .cardDesc {
-  color: var(--text-secondary);
+  color: var(--ink-soft);
 }
 
 .cardExtract {
-  color: var(--text-secondary);
-  font-size: 13px;
-}
-
-.boxFooter {
-  padding: 8px 16px 10px;
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--text-muted);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .webBackdrop,
-  .webLine,
-  .webLeg {
-    animation: none;
-  }
-}
-
-@media (max-width: 900px) {
-  .box {
-    width: 300px;
-  }
-}
-
-@media (max-width: 640px) {
-  .legendPanel {
-    width: calc(100% - 32px);
-  }
-
-  .rangePanel {
-    bottom: 28px;
-  }
+  color: var(--ink-soft);
+  font-size: 14px;
 }
 
 /* Featured story: prose at the top of the box, with small numbered citation markers. */
 .story {
   margin-bottom: 8px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--text-primary);
+  border-bottom: 1px solid var(--rule);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
 }
 
 .story p {
@@ -718,34 +317,33 @@
 
 .cite {
   margin: 0 1px 0 2px;
-  padding: 0 4px;
+  padding: 0 3px;
   font: inherit;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.5;
   vertical-align: super;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+  background: transparent;
   border: 0;
-  border-radius: 4px;
   cursor: pointer;
 }
 
 .cite:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--paper-sunk);
 }
 
 .cite:focus-visible {
-  outline: 2px solid var(--text-primary);
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
 
 .story .storyCredit {
   margin: 0;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
-  color: var(--text-muted);
+  color: var(--muted);
 }
 
 .storyCredit a {
-  color: var(--text-muted);
+  color: var(--muted);
 }
