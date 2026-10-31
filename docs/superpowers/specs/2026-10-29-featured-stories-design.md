@@ -44,6 +44,8 @@ Keyboard: the list is a list of buttons; Enter on an entry does the same as a cl
 
 ### 4.2 The story in the box
 
+*Superseded in part (Phase 6, 2026-10-30): a story is matched by the click point, its provinces and the range, not by a cell, and the click can move the range to the story's exact years. See section 4.2 of `docs/superpowers/specs/2026-10-30-phase-6-redesign-design.md` and decisions.md entry 32. The rest of this section (placement, citations, credit, guard) still holds.*
+
 When the box's cell and range exactly equal a featured entry's `cell`, `from`, and `to`, the story appears between the header and the Events heading, whatever way the user got there (Featured list or a manual click with the same range). Otherwise there is no story section at all; the box is unchanged from Phase 4.
 
 The Featured list is the reliable way to a story. The slider cannot land exactly on most featured years (13 of the 20 ranges have an endpoint such as 1789 or 1390 that no slider position produces), so once the user nudges the range, the way back is the list. *My call: accepted. Moving featured ranges to slider-reachable years would cut real events (Paris would lose 1789), and snapping the slider is a UI change nobody asked for.* The range readout must show the exact featured years after a Featured choice, not the nearest slider years.
@@ -106,6 +108,8 @@ If the frozen input for a pick turns out unusable (for example the top items are
 
 ### 6.2 Input format (`stories/inputs/<id>.json`)
 
+*Superseded in part (Phase 6): `entry.cell` is kept in the frozen inputs as a plain string that nothing reads, and `etl/story-input.ts` was removed. A twenty-first story needs a new generator built around provinces. See section 5.5 of `docs/superpowers/specs/2026-10-30-phase-6-redesign-design.md` and decisions.md entry 32.*
+
 - Entry fields (id, place, cell, from, to), `generatedAt`, and the database row count it was built from.
 - `items`: up to 17 entries, events first (refs `E1` to `E12`, numbered in the order the box lists events: by year), then people and places (`P1` to `P5`, by sitelinks). Each has: `ref`, `qid`, `label`, `kind`, `description` (Wikidata, may be null), `years` (the text `formatRange` shows, for example "430 to 426 BCE"), `start_year`, `end_year`, `loc_confidence`, `wikipedia_title`, and `extract` (the full plain-text Wikipedia extract, or null when there is no article or the summary is missing).
 - `eventsTotal` and `othersTotal` from the area query, so the writer knows whether the 12 are all there is.
@@ -153,6 +157,8 @@ Checker tests: one passing fixture, and one failing fixture per failure class (u
 What the checker cannot catch, and who covers it: relocated deeds, wrong relationships between correct names, invented causal links, "a decade later", "a century later", "twice", names written in lowercase, and an ordinal against a cardinal (3rd against 3). The reviewer (6.5 step 4) and the owner's read at the gate.
 
 ### 6.7 Staying current after a rebuild
+
+*Superseded (Phase 6): `story:check` now works from cited items and provinces, and the input drift and regenerated `C` checks are gone. See section 5.5 of `docs/superpowers/specs/2026-10-30-phase-6-redesign-design.md` and decisions.md entry 32.*
 
 - `npm run story:check` (needs the database): for each featured entry, re-run the area query and confirm every cited qid is still in the box's lists for that cell and range, and that each cited item's label and years text are unchanged. Any failure makes the story stale: it prints the story id and reason and exits non-zero. Ranking drift is not staleness: if new or re-ranked items would change the top 17, it prints an "input drift" warning but passes, because the story is still true about what it cites. `story:check` also warns, without making a story stale, on a changed context sentence or location confidence. Extracts are not compared (that would need the network). *My call: a routine rebuild should not force twenty rewrites.* Run after `etl:load`; mention it in the README's ETL section.
 - The runtime guard in 4.2 keeps a stale story off screen until it is rewritten.

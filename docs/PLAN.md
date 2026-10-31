@@ -48,7 +48,9 @@ Acceptance: the report exists and states plainly where coverage is thin, and rec
 Acceptance: one command rebuilds the DB from scratch. Row counts match the audit within reason. Spot checks pass (Marathon, Thermopylae, Vesuvius, Constantinople have sensible years and coordinates). Tests cover normalization edge cases.
 
 ### Phase 2: Events API with level of detail
-`GET /api/events?west&south&east&north&from&to&zoom`
+*Superseded in Phase 6: `GET /api/events` was removed with the dots (decisions.md entry 32). This section is kept as history.*
+
+`GET /api/events?west&south&east&north&from&to&zoom` (as built then)
 - Validate params with zod.
 - Handle bounding boxes that cross the antimeridian (done as one query with two longitude ranges, not two queries; see decisions.md entry 25).
 - Filter by overlap, order by `sitelinks` descending, limit N by zoom band (starting guess: about 150 at world scale to about 600 at city scale; tune by eye).
@@ -57,6 +59,8 @@ Acceptance: one command rebuilds the DB from scratch. Row counts match the audit
 Acceptance: query time well under 100 ms in the largest zoom band. Tests include an antimeridian case and an overlap case with century-precision events.
 
 ### Phase 3: Globe UI
+*Superseded in Phase 6: the dots, legend, preset chips and dark basemap were replaced by the cream globe (decisions.md entry 32). Kept as history.*
+
 - MapLibre globe with a dark, minimal basemap.
 - Dots colored by category, hollow for inherited locations. (Done as four legend groups, not seven categories: three event colours plus a gray for foundings, structures, and births. See decisions.md entry 26.) Refetch on move end and range change (debounced).
 - Two-handle range control on a NON-LINEAR scale (more resolution for recent centuries than deep antiquity), plus preset chips such as "Classical Greece (500 to 300 BCE)".
@@ -65,6 +69,8 @@ Acceptance: query time well under 100 ms in the largest zoom band. Tests include
 Acceptance: spinning, zooming, scrubbing feel smooth. Zooming into Greece for 500 to 300 BCE shows plausible events. No console errors.
 
 ### Phase 4: Grid view and area box (revised 2026-10-29)
+*The H3 grid, dots, stacks and web were removed in Phase 6. The area box, its lists, Wikipedia paragraphs and hover cards stayed. Kept as history.*
+
 Redesigned with the owner; the full design is `docs/superpowers/specs/2026-10-29-area-panel-design.md` (decisions.md entry 28). In short: a plain globe from orbit; from about zoom 3 an H3 grid of cells that hold items in the range, finest cell r5; dots optional, never from orbit, overlapping dots merge into a stack that fans out into a web on hover; clicking a cell or dot opens a box with events (Wikidata one-liner, Wikipedia paragraph on expand) and then people and places (names, hover card with picture). Wikipedia summaries are fetched server-side and cached in SQLite. The old widening fallback ladder is retired.
 
 Acceptance: (a) zooming from orbit to city scale shows a plain globe, then a grid that refines smoothly and stops at r5; (b) clicking the Athens cell for 500 to 300 BCE shows plausible events and people with descriptions, expandable paragraphs, and hover cards with attribution; (c) clicking bare ocean gives a plain "nothing documented" line; (d) a sparse cell (for example in the Sahel or the Amazon basin) shows its few items honestly; (e) stacked dots fan out into a web and each leg opens its item; (f) no console errors; (g) cell and area queries measured and logged.
@@ -72,12 +78,12 @@ Acceptance: (a) zooming from orbit to city scale shows a plain globe, then a gri
 ### Phase 5: Featured stories (revised 2026-10-29)
 Replaced. There is no live generation: the owner has no API budget, so about twenty stories are written offline in Claude Code sessions, checked mechanically against frozen inputs, reviewed, and committed. A Featured list in the app flies to each one. The full design is `docs/superpowers/specs/2026-10-29-featured-stories-design.md`; what was built and measured is decisions.md entry 30.
 
-### Phase 6: Visual polish
-- Play button: the range window sweeps through time; events fade in and out as it passes; pause and speed controls. This is the highest-value visual.
-- Density heat layer by era (toggle). Largely covered by the grid's shading since the 2026-10-29 redesign; keep only if the owner still wants it after seeing the grid.
-- Smooth fly-to when selecting an area; loading and error states.
+### Phase 6: Redesign (replaced 2026-10-30)
+Built as a redesign, not polish. The globe starts blank on warm paper; clicking anywhere reveals an outline of the region that mattered in the chosen years (Cliopatria, then historical-basemaps, then the modern country, built from Natural Earth provinces, capped at 800 km), with a reading column of events, people and places, and the twenty stories reachable by clicking or from a Stories list. The full design is `docs/superpowers/specs/2026-10-30-phase-6-redesign-design.md`; what was built and measured is decisions.md entry 32.
 
-Acceptance: playback runs without jank.
+Dropped by the owner: the play button ("I never imagined pressing play. This isn't a game.") and the density heat layer (the blank globe rules it out). Both are non-goals now, not backlog.
+
+Acceptance: the list in section 6 of the spec.
 
 ### Phase 7 (optional): Deploy
 Run locally first. SQLite on serverless is awkward: prefer a host with a persistent volume, or ship the DB file read-only.
@@ -85,10 +91,10 @@ Run locally first. SQLite on serverless is awkward: prefer a host with a persist
 ## 4. Backlog (ideas deliberately deferred; do not start without the owner's go-ahead)
 
 - Physical record layer (the owner's original idea, closer to Picterra): earthquakes from the USGS catalog, fire hotspots from NASA FIRMS (free key, roughly 2000 onward), land cover change from CORINE Land Cover (Europe, a few snapshots 1990 to 2018), forest loss from Hansen/Global Forest Watch, surface water change from JRC Global Surface Water. Use precomputed datasets only, no custom ML.
-- Historical borders (for example, the aourednik/historical-basemaps GeoJSON set; verify license and accuracy). Contentious and already done by Chronas and OHM.
+- Authoritative historical borders. Partly done in Phase 6 as approximate outlines (Cliopatria and historical-basemaps, decisions.md entry 32); anything beyond that is contentious and already done by Chronas and OHM.
 - Pleiades gazetteer for ancient places; extra sources for non-European coverage gaps.
 - Historical imagery basemap (for example Esri World Imagery Wayback); verify terms before use.
-- Shareable permalinks for area plus range.
+- Shareable permalinks for area plus range. (The area URL exists for the API; a page-level permalink does not.)
 
 ## 5. Unverified assumptions (check these, do not trust them)
 
@@ -101,4 +107,4 @@ Run locally first. SQLite on serverless is awkward: prefer a host with a persist
 
 ## 6. Definition of done for v1
 
-A stranger can open the app, spin to the Mediterranean, pick Athens, 500 to 300 BCE from Featured (or select that cell and range by hand), and read a cited, accurate story within a second. Clicking somewhere with no data gives an honest empty state. The README explains setup, the ETL command, env vars, and data attributions.
+A stranger can open the app, spin to the Mediterranean, pick Athens, 500 to 300 BCE from the Stories list (or set the range by hand and click in Attica), and read a cited, accurate story within a second. Clicking somewhere with no data gives an honest empty state. The README explains setup, the ETL command, env vars, and data attributions.

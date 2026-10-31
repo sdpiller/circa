@@ -1,6 +1,6 @@
 # Chronoglobe
 
-A 3D globe of human history. Spin and zoom the globe, pick a year range (about 3500 BCE to today), and see notable historical events as dots. Click an area to get the events there. For twenty featured places and eras, the box opens with a short story written by Claude from the Wikipedia and Wikidata text of the items it cites, with a clickable citation on every sentence.
+A 3D globe of human history. The globe starts blank, on warm paper. Pick a year range (about 3500 BCE to today) and click anywhere: an outline appears around the region that mattered in those years, and a reading column lists the notable events, people and places inside it. For twenty featured places and eras, the column opens with a short story written by Claude from the Wikipedia and Wikidata text of the items it cites, with a clickable citation on every sentence.
 
 The story is the point; the globe is how you get to it.
 
@@ -8,8 +8,9 @@ The story is the point; the globe is how you get to it.
 
 Work in progress, built in phases (see [docs/PLAN.md](docs/PLAN.md)).
 
-- **Done (Phases 0 to 5):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items (events, settlement foundings, structures and sites, notable births, and discoveries), the events API, the globe with an H3 grid and optional dots, the area box (events, people and places, Wikipedia paragraphs and hover cards), and twenty featured stories with a Featured list.
-- **Not built yet:** visual polish and deployment (Phases 6 and 7).
+- **Done (Phases 0 to 6):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items, historical outlines built from three open boundary datasets, the cream globe with names by zoom, the area panel (events, people and places, Wikipedia paragraphs and hover cards), and twenty featured stories reachable by clicking or from a Stories list.
+- **Not built yet:** deployment (Phase 7).
+- **Outlines are approximate.** They are built from modern provinces and labelled as such. They are not authoritative maps.
 
 ## Requirements
 
@@ -28,7 +29,7 @@ Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since P
 | Variable | Needed for | Notes |
 | --- | --- | --- |
 | `WIKIMEDIA_CONTACT` | Data fetch, area box | An email or URL. Wikimedia's User-Agent policy requires a contact on every request. |
-| `BASEMAP_STYLE_URL` | Globe (optional) | Defaults to OpenFreeMap's dark style (free, no key). Read at build time. Do not use the public OpenStreetMap tile servers. |
+| `BASEMAP_STYLE_URL` | Globe (optional) | Defaults to OpenFreeMap's positron style (free, no key), recoloured to cream in the browser. Read at build time. Do not use the public OpenStreetMap tile servers. |
 
 ## Commands
 
@@ -37,13 +38,14 @@ Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since P
 | `npm test` | Run the unit tests (vitest). |
 | `npm run typecheck` | Generate Next.js route types and run the TypeScript compiler. |
 | `npm run lint` | Run ESLint. |
-| `npm run etl` | Fetch whatever is missing, then build the database. One command from nothing to `data/chronoglobe.db`. |
+| `npm run etl` | Fetch whatever is missing (events, then boundaries), then build the database. One command from nothing to `data/chronoglobe.db`. It does not run the story steps. |
 | `npm run etl:fetch` | Download event data from Wikidata into `data/raw/`. See below. |
-| `npm run etl:load` | Build `data/chronoglobe.db` from `data/raw/` (about 7 seconds). |
+| `npm run etl:boundaries` | Download the three boundary datasets (Natural Earth, Cliopatria, historical-basemaps) into `data/raw/boundaries/`, pinned to commits. See below. |
+| `npm run etl:load` | Build `data/chronoglobe.db` from `data/raw/`, including provinces, regions and each event's province. Also rewrites [docs/region-names.md](docs/region-names.md). |
 | `npm run story:publish` | Check every story against its frozen input, place it by the provinces of its cited items (needs the database), and write `stories/published.json`. |
 | `npm run story:check` | Run after `etl:load`: reports published stories whose cited items changed (stale, exit 1) or whose point or provinces no longer match the database (out of date, exit 1, fix with `story:publish`). |
 | `npm run audit` | Rebuild the tables in `docs/data-audit.md` from `data/raw/`. |
-| `npm run bench:events` | Time events API queries against the real database, per zoom band. |
+| `npm run bench:area` | Time click queries against the real database and check the outline and lists they return (target 150 ms; decisions.md entry 32 has what it measured). |
 | `npm run dev` | Start the Next.js dev server on http://localhost:3000. |
 
 ## Fetching the data
@@ -64,38 +66,50 @@ How it works, briefly:
 - Every batch is saved as its own file under `data/raw/` (gitignored). If a run stops, rerunning it skips what is already there and continues.
 - A full run makes about a thousand small queries and takes roughly an hour. The raw files take well over 100 MB.
 
+## Fetching the boundaries
+
+```bash
+npm run etl:boundaries
+```
+
+Three datasets, each pinned to a commit in `etl/boundaries.ts` and saved under `data/raw/boundaries/` (gitignored). Files already on disk are skipped. The downloads are large (Cliopatria alone is 173 MB unzipped), so the first run takes a while.
+
 ## Building the database
 
-`npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 180 MB). It normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
+`npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 175 MB). It loads the boundary data (regions are simplified at 0.02 degrees and coordinates rounded to 3 decimals), assigns each event to the province holding it (or the nearest within 150 km), normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
+
+The order after a rebuild is `npm run etl:load`, then `npm run story:check`, and `npm run story:publish` only if `story:check` says a story is out of date. `story:publish` needs the database.
 
 After every rebuild, run `npm run story:check`. It confirms each published featured story still cites items that exist, with the same labels and years and a province, and prints a stale story's id and reason (exit 1). If the stored point or provinces changed, it says so (exit 1) and `npm run story:publish` fixes it.
 
 On Windows, stop the dev server before rebuilding: the final rename fails while another process has the database open. Check that it really stopped: killing `npm run dev` can leave Next's worker process running, still holding the file.
 
-## Events API
+## Area API
 
-`GET /api/events?west=&south=&east=&north=&from=&to=&zoom=` returns the dots for a viewport.
+`GET /api/area?lat=&lon=&from=&to=&intent=` answers one click.
 
-- `west`, `south`, `east`, `north`: the visible bounding box in degrees. A box with `west` greater than `east` crosses the antimeridian; unwrapped longitudes such as `-200` are accepted.
-- `from`, `to`: the year range, as whole years with BCE negative (490 BCE is `-490`). There is no year 0. Both must lie between -3500 and 2026. An item matches if its date interval overlaps the range, so a date known only to the century matches any range that touches that century.
-- `zoom`: the MapLibre zoom level (0 to 24). It sets how many dots come back: 150 at globe scale up to 600 at city scale, split across kinds (events 40%, foundings 20%, structures 15%, births 15%, discoveries 10%), each ranked by how many Wikipedia language editions cover it.
+- `lat`, `lon`: the click, with `lon` between -180 and 180.
+- `from`, `to`: the year range, as whole years with BCE negative (490 BCE is `-490`). There is no year 0. An item matches if its date interval overlaps the range.
+- `intent`: `click` (a story opens if the click is in one of its provinces and the ranges overlap enough) or `range` (a slider change or a Stories entry: a story shows only on an exact match).
+- `eventsLimit`, `othersLimit` (optional): how many events, and how many people and places, to list. They default to 25 and 30.
 
-The response is `{ quotas, events }`, where each event has `qid`, `label`, `kind`, `category`, `start_year`, `end_year`, `lat`, `lon`, `loc_confidence`, and `sitelinks`. Invalid parameters give a 400 with a list of issues. The `Server-Timing` header reports the database time.
+The response holds `selection` (kind historical, modern or none, with its name, source, scale facts and outline GeoJSON), `storyId` (or null), the `from` and `to` actually used (a click can move the range to a story's years), and the `events` and `others` lists with their totals. Invalid parameters give a 400 with a list of issues. `GET /api/summary?qid=` returns the Wikipedia extract for an item.
 
-The reasoning behind these choices, including the Wikidata year-zero trap and why the queries are shaped the way they are, is in [docs/decisions.md](docs/decisions.md).
+The reasoning behind these choices, including the Wikidata year-zero trap, how a click picks its outline, and what was measured, is in [docs/decisions.md](docs/decisions.md), entries 25 to 32.
 
 ## Repository layout
 
 ```
 app/         Next.js app: the globe (app/ui) and the APIs (app/api)
-lib/dots.ts  Dot legend groups, colours, and the GeoJSON the globe draws
 lib/time/    Year conventions: no year 0, BCE as negative years, imprecise-date intervals
-lib/db/      Database schema, row validation, connection, and the events query
-lib/narrative/  Featured-story checker, input builder, publish, and staleness check
+lib/geo/     Point in polygon, distance, area, and merging provinces into an outline
+lib/outline/ Which region a click gets, and the scale line
+lib/db/      Database schema, row validation, connection, and the area query
+lib/narrative/  Featured-story checker, publish, and staleness check
 stories/     Featured stories, frozen inputs, writing rules, published.json
-etl/         Fetch, normalize, build, load, and audit scripts, plus classes.json
+etl/         Fetch, boundaries, normalize, build, load, story, bench, and audit scripts, plus classes.json
 tests/       Unit tests and live API fixtures
-docs/        PLAN.md, decisions.md, data-audit.md
+docs/        PLAN.md, decisions.md, data-audit.md, region-names.md
 data/        Local data, gitignored
 ```
 
@@ -104,7 +118,10 @@ data/        Local data, gitignored
 - **Wikidata:** event data (labels, dates, coordinates, sitelink counts) comes from [Wikidata](https://www.wikidata.org), available under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 - **Wikipedia:** the area box shows short extracts from Wikipedia articles, and the featured stories are written from them. Wikipedia text is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the story credit names Wikipedia and Wikidata with links to those sites, and each cited item links to its own article from its row in the box.
 - **Query services:** data is fetched through the [Wikidata Query Service](https://query.wikidata.org) and [QLever](https://qlever.dev) (University of Freiburg).
-- **Basemap:** [OpenFreeMap](https://openfreemap.org), © [OpenMapTiles](https://openmaptiles.org), data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. Credited in the app footer and the map's attribution control.
+- **Natural Earth:** admin-1 provinces from [Natural Earth](https://www.naturalearthdata.com), public domain. Every outline is built from them.
+- **Cliopatria:** historical polities from [Cliopatria](https://github.com/Seshat-Global-History-Databank/cliopatria) (Seshat Global History Databank), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The shapes are processed: matched to provinces and merged.
+- **historical-basemaps:** historical atlas regions from [historical-basemaps](https://github.com/aourednik/historical-basemaps), GPL-3.0. Some of its labels are broad ("Semites", "Bantu"); the panel says so. Once the app is public, the processed outline data derived from it must be available under GPL-3.0 with credit. That is a Phase 7 task, and this is not legal advice.
+- **Basemap:** [OpenFreeMap](https://openfreemap.org), © [OpenMapTiles](https://openmaptiles.org), data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. Credited in the app footer and the map's attribution control. The app also credits the three boundary datasets above.
 - **Map library:** [MapLibre GL JS](https://maplibre.org) (BSD 3-Clause).
 
 Coverage is uneven: Wikidata documents some regions and eras far better than others. Documented history is not the same as history.
