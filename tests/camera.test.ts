@@ -1,3 +1,4 @@
+import maplibre from "maplibre-gl/package.json" with { type: "json" };
 import { describe, expect, it } from "vitest";
 import { frameOutline, MAX_FLY_ZOOM, MIN_FLY_ZOOM } from "../lib/camera.ts";
 
@@ -23,6 +24,14 @@ describe("frameOutline", () => {
     const { zoom } = frameOutline([-15, -1, 15, 1], VIEW);
     const radius = 450 / Math.sin((15 * Math.PI) / 180);
     expect(zoom).toBeCloseTo(Math.log2((radius * 2 * Math.PI) / 512), 2);
+  });
+
+  it("finds a box's widest point when it is not a corner", () => {
+    // Widest on the equator: sin 60 = 0.866 of the radius, against 0.557 at the corners. Tall enough a window
+    // that width is what limits; at 900 high the height limits, and the corners give the same zoom.
+    const { zoom } = frameOutline([-60, -50, 60, 50], { width: 1440, height: 1200, panelWidth: 420 });
+    const radius = 450 / Math.sin((60 * Math.PI) / 180);
+    expect(zoom).toBeCloseTo(Math.log2((radius * 2 * Math.PI) / 512), 6);
   });
 
   it("gets closer as the panel leaves more room, when width is what limits", () => {
@@ -51,5 +60,15 @@ describe("frameOutline", () => {
   it("does not break on a single point or a window with no free room", () => {
     expect(frameOutline([10, 10, 10, 10], VIEW).zoom).toBe(MAX_FLY_ZOOM);
     expect(frameOutline(GREECE, { width: 300, height: 200, panelWidth: 108 }).zoom).toBe(MIN_FLY_ZOOM);
+  });
+});
+
+describe("the MapLibre version frameOutline was measured against", () => {
+  it("is still the installed one", () => {
+    // The tests above re-derive the formula, so they would pass even if MapLibre changed its scaling.
+    expect(
+      maplibre.version,
+      "frameOutline copies MapLibre's globe radius relation. Re-check getGlobeRadiusPixels in globe_utils.ts and re-measure framing, then update this version.",
+    ).toBe("6.16.0");
   });
 });
