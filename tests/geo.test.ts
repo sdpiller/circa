@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { bboxOf, distanceKm, pointInGeometry, ringAreaKm2 } from "../lib/geo/geometry.ts";
 import type { AreaGeometry, Position, Ring } from "../lib/geo/geometry.ts";
-import { MIN_PIECE_KM2, NEAR_PIECE_KM, boundaryLines, buildOutline, frameBounds, simplifyRing } from "../lib/geo/outline.ts";
+import { MIN_PIECE_KM2, NEAR_PIECE_KM, boundaryLines, buildOutline, frameBounds, simplifyRing, type OutlineInput } from "../lib/geo/outline.ts";
 
 /** A closed square ring from its south-west corner. */
 function square(x: number, y: number, size = 1, clockwise = false): Ring {
@@ -176,6 +176,40 @@ describe("frameBounds", () => {
     const east: Ring = [[175, 0], [180, 0], [180, 5], [175, 5], [175, 0]];
     const west: Ring = [[-180, 0], [-170, 0], [-170, 5], [-180, 5], [-180, 0]];
     expect(frameBounds([east, west], 178)).toEqual([175, 0, 190, 5]);
+  });
+});
+
+describe("buildOutline listing provinces inside the outline", () => {
+  // Eight squares around the square at (1, 1), whose edges all cancel: it has none on the outer boundary.
+  const frame: OutlineInput[] = [0, 1, 2].flatMap((x) => [0, 1, 2].filter((y) => x !== 1 || y !== 1).map((y) => ({ id: `f${x}${y}`, geometry: poly(square(x, y)) })));
+
+  it("lists a province wholly inside the outline", () => {
+    const out = buildOutline([...frame, { id: "core", geometry: poly(square(1, 1)) }], [0.5, 0.5], none);
+    expect(out.rings).toHaveLength(1);
+    expect(out.keptIds).toContain("core");
+  });
+
+  it("lists a province whose first polygon is an exclave outside the outline", () => {
+    const split: AreaGeometry = { type: "MultiPolygon", coordinates: [[square(40, 40, 0.01)], [square(1, 1)]] };
+    const out = buildOutline([...frame, { id: "core", geometry: split }], [1.5, 1.5], none);
+    expect(out.keptIds).toContain("core");
+  });
+
+  it("lists a province whose first vertex sits on the outer boundary", () => {
+    // Its corner at (3, 1) lies on the frame's east side, where a ray cast is undefined.
+    const wedge = poly([[3, 1], [2, 2], [1, 1], [2, 0], [3, 1]]);
+    const north = poly([[0, 3], [0, 1], [1, 1], [2, 2], [3, 1], [3, 3], [0, 3]]);
+    const south = poly([[0, 1], [0, -1], [3, -1], [3, 1], [2, 0], [1, 1], [0, 1]]);
+    const out = buildOutline([{ id: "wedge", geometry: wedge }, { id: "north", geometry: north }, { id: "south", geometry: south }], [0.5, 2], none);
+    expect(out.keptIds).toContain("wedge");
+  });
+});
+
+describe("buildOutline pieces over the antimeridian", () => {
+  it("keeps a piece just across 180 from the clicked one", () => {
+    const west = { id: "west", geometry: poly(square(179, 0, 0.5)) };
+    const east = { id: "east", geometry: poly(square(-179.5, 0, 0.5)) };
+    expect(buildOutline([west, east], [179.2, 0.2], none).keptIds.sort()).toEqual(["east", "west"]);
   });
 });
 

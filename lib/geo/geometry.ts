@@ -19,9 +19,9 @@ export function polygonsOf(g: AreaGeometry): Ring[][] {
 export function pointInRing(lon: number, lat: number, ring: Ring): boolean {
   let inside = false;
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const [xi, yi] = ring[i];
-    const [xj, yj] = ring[j];
-    if (yi > lat !== yj > lat && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+    const a = ring[i];
+    const b = ring[j];
+    if (a[1] > lat !== b[1] > lat && lon < ((b[0] - a[0]) * (lat - a[1])) / (b[1] - a[1]) + a[0]) inside = !inside;
   }
   return inside;
 }
