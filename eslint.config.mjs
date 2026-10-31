@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Local, not project code:
     ".remember/**",
+    ".superpowers/**",
     "data/**",
   ]),
 ]);
