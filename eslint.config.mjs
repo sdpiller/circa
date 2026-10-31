@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
     // Local, not project code:
     ".remember/**",
     ".superpowers/**",
+    ".playwright-mcp/**",
     "data/**",
   ]),
 ]);
