@@ -6,9 +6,11 @@ import type Database from "better-sqlite3";
 import { getResolution } from "h3-js";
 import { z } from "zod";
 import { cellAcrossKm, isGridCell, type Res } from "../cells.ts";
-import { year } from "./events.ts";
+import { isQueryableYear, MAX_YEAR, MIN_YEAR } from "../time/index.ts";
 import type { EventRow } from "./schema.ts";
 
+const num = z.string().trim().min(1, "required").pipe(z.coerce.number());
+const year = num.pipe(z.number().refine(isQueryableYear, `must be a whole year from ${MIN_YEAR} to ${MAX_YEAR}, and never 0`));
 const limit = z.string().trim().min(1).pipe(z.coerce.number()).pipe(z.number().int().min(1).max(200));
 
 /** Query string of GET /api/area. Years use historical numbering (1 BCE = -1). */

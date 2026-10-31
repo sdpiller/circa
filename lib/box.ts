@@ -73,16 +73,6 @@ export function firstSentences(text: string, n = 2): string {
   return t;
 }
 
-/**
- * How far to pan the map left (positive px) so a point at map x `x` sits `margin` px left of a
- * panel starting at map x `panelLeft`. Zero when it is already clear, or when the panel leaves no
- * room for it at all.
- */
-export function panToClear(x: number, panelLeft: number, margin: number): number {
-  const limit = panelLeft - margin;
-  return limit > 0 && x > limit ? x - limit : 0;
-}
-
 export type Rect = { top: number; bottom: number; left: number; width: number };
 /** Room a hover card needs below its name before it opens above instead (about its usual height). */
 export const CARD_ROOM_PX = 240;

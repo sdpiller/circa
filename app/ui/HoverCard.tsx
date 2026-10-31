@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { cardPlacement, firstSentences, wikidataUrl } from "../../lib/box.ts";
 import type { AreaItem } from "../../lib/db/area.ts";
-import { dotMeta, what } from "../../lib/dots.ts";
+import { itemMeta, what } from "../../lib/items.ts";
 import { formatRange } from "../../lib/time/index.ts";
 import styles from "./globe.module.css";
 import { useSummary } from "./useSummary.ts";
@@ -121,7 +121,7 @@ function HoverCard({ id, item, place }: { id: string; item: AreaItem; place: CSS
   const s = useSummary(item.qid, item.wikipedia_title !== null);
   const summary = s.state === "ok" ? s.summary : null;
   const description = summary?.description ?? item.description;
-  const meta = dotMeta({ years: formatRange(item.start_year, item.end_year), what: what(item), approx: item.loc_confidence === "inherited" });
+  const meta = itemMeta({ years: formatRange(item.start_year, item.end_year), what: what(item), approx: item.loc_confidence === "inherited" });
   return (
     <div id={id} className={styles.hoverCard} style={place}>
       {summary?.thumbnail && (

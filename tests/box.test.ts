@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { AREA_LIMIT_MAX, EVENTS_STEP, OTHERS_STEP, areaUrl, cardPlacement, firstSentences, moreControl, panToClear, summaryApiUrl, wikidataUrl } from "../lib/box.ts";
-import { what } from "../lib/dots.ts";
+import { AREA_LIMIT_MAX, EVENTS_STEP, OTHERS_STEP, areaUrl, cardPlacement, firstSentences, moreControl, summaryApiUrl, wikidataUrl } from "../lib/box.ts";
+import { what } from "../lib/items.ts";
 
 describe("areaUrl", () => {
   it("builds the area query with limits", () => {
@@ -89,22 +89,6 @@ describe("what", () => {
     expect(what({ kind: "structure", category: "other" })).toBe("dated");
     expect(what({ kind: "founding", category: "founding" })).toBe("founded");
     expect(what({ kind: "discovery", category: "science" })).toBe("discovered here");
-  });
-});
-
-describe("panToClear", () => {
-  it("pans a point under the panel just far enough to sit the margin left of it", () => {
-    expect(panToClear(1100, 988, 24)).toBe(136);
-    expect(panToClear(965, 988, 24)).toBe(1);
-  });
-
-  it("leaves a point that is already clear", () => {
-    expect(panToClear(964, 988, 24)).toBe(0);
-    expect(panToClear(200, 988, 24)).toBe(0);
-  });
-
-  it("does nothing when the panel leaves no room", () => {
-    expect(panToClear(300, 10, 24)).toBe(0);
   });
 });
 
