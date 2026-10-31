@@ -1,6 +1,6 @@
 /** Historical region lookups for the area API. */
 import type Database from "better-sqlite3";
-import { pointInGeometry, type AreaGeometry } from "../geo/geometry.ts";
+import { pointInGeometry, type AreaGeometry, type Position } from "../geo/geometry.ts";
 import type { RegionRow } from "../outline/choose.ts";
 
 type Statements = { containing: Database.Statement; polity: Database.Statement; atlas: Database.Statement };
@@ -11,7 +11,7 @@ function statementsFor(db: Database.Database): Statements {
   if (!s) {
     s = {
       containing: db.prepare(`SELECT id, source, name, from_year, to_year, area, geojson FROM regions
-        WHERE from_year <= @to AND to_year >= @from AND west <= @lon AND east >= @lon AND south <= @lat AND north >= @lat`),
+        WHERE from_year <= @to AND to_year >= @from AND west <= @east AND east >= @west AND south <= @north AND north >= @south`),
       polity: db.prepare("SELECT geojson FROM regions WHERE id = ?"),
       atlas: db.prepare("SELECT geojson FROM regions WHERE source = 'basemaps' AND name = ? AND from_year = ? AND to_year = ?"),
     };
@@ -20,20 +20,28 @@ function statementsFor(db: Database.Database): Statements {
   return s;
 }
 
+/** The regions that overlap the range and contain the point. */
+export function regionsContaining(db: Database.Database, lon: number, lat: number, from: number, to: number): RegionRow[] {
+  return regionsContainingEach(db, [[lon, lat]], from, to)[0];
+}
+
 /**
- * The regions that overlap the range and contain the point. Parsing is the cost here, so a caller that
- * asks about two nearby points can pass the same `parsed` map to both.
+ * The same for each of several nearby points, in one pass. Parsing is the cost of a click, and a geometry
+ * held for a second look survives garbage collection, so each row is parsed once and let go.
  */
-export function regionsContaining(db: Database.Database, lon: number, lat: number, from: number, to: number, parsed = new Map<number, AreaGeometry>()): RegionRow[] {
-  const rows = statementsFor(db).containing.all({ lon, lat, from, to }) as (RegionRow & { geojson: string })[];
-  const geometry = (r: RegionRow & { geojson: string }) => {
-    let g = parsed.get(r.id);
-    if (!g) parsed.set(r.id, (g = JSON.parse(r.geojson) as AreaGeometry));
-    return g;
-  };
-  return rows
-    .filter((r) => pointInGeometry(lon, lat, geometry(r)))
-    .map(({ id, source, name, from_year, to_year, area }) => ({ id, source, name, from_year, to_year, area }));
+export function regionsContainingEach(db: Database.Database, points: Position[], from: number, to: number): RegionRow[][] {
+  const lons = points.map((p) => p[0]);
+  const lats = points.map((p) => p[1]);
+  const box = { west: Math.min(...lons), east: Math.max(...lons), south: Math.min(...lats), north: Math.max(...lats) };
+  const rows = statementsFor(db).containing.all({ ...box, from, to }) as (RegionRow & { geojson: string })[];
+  const found: RegionRow[][] = points.map(() => []);
+  for (const { geojson, ...row } of rows) {
+    const geometry = JSON.parse(geojson) as AreaGeometry;
+    points.forEach(([lon, lat], i) => {
+      if (pointInGeometry(lon, lat, geometry)) found[i].push(row);
+    });
+  }
+  return found;
 }
 
 /** The shapes of a chosen region: that row for Cliopatria, every piece of its name and snapshot for the atlas. */

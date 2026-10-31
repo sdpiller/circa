@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { provinceAt, provinceGeometry, provinceIndex } from "../lib/db/provinces.ts";
-import { regionsContaining, regionShapes } from "../lib/db/regions.ts";
+import { regionsContaining, regionsContainingEach, regionShapes } from "../lib/db/regions.ts";
 import type { AreaGeometry, Position } from "../lib/geo/geometry.ts";
 import type { ProvinceRow } from "../lib/geo/provinces.ts";
 import type { NewRegion } from "../etl/boundaries-parse.ts";
@@ -215,6 +215,12 @@ describe("province and region lookups", () => {
     expect(regionsContaining(db, 1.5, 1.5, -500, -300)).toEqual([]);
     expect(regionsContaining(db, 0.5, 0.5, -300, 100).map((r) => r.name).sort()).toEqual(["Ell", "Later"]);
     expect(regionsContaining(db, 0.5, 0.5, -500, -300)[0]).not.toHaveProperty("geojson");
+  });
+
+  it("regionsContainingEach answers for each point on its own", () => {
+    const db = makeGeoDb([], strip(), [region("basemaps", "West", -500, -300, box(0, 0, 1, 1)), region("basemaps", "East", -500, -300, box(5, 0, 6, 1))]);
+    const names = regionsContainingEach(db, [[0.5, 0.5], [5.5, 0.5], [3.5, 0.5]], -500, -300).map((rows) => rows.map((r) => r.name));
+    expect(names).toEqual([["West"], ["East"], []]);
   });
 
   it("regionShapes gives one row for Cliopatria and all of a snapshot's pieces for the atlas", () => {

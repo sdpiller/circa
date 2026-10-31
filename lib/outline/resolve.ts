@@ -4,7 +4,7 @@
  */
 import type Database from "better-sqlite3";
 import { provinceGeometry, provinceIndex, type ProvinceEntry } from "../db/provinces.ts";
-import { regionsContaining, regionShapes } from "../db/regions.ts";
+import { regionsContainingEach, regionShapes } from "../db/regions.ts";
 import { bboxOf, distanceKm, pointInGeometry, polygonsOf, type AreaGeometry, type Position, type Ring } from "../geo/geometry.ts";
 import { boundaryLines, buildOutline, frameBounds, simplifyRing } from "../geo/outline.ts";
 import type { ProvinceRow } from "../geo/provinces.ts";
@@ -34,11 +34,8 @@ export type Selection = {
 
 /** Steps 2 to 4 of the rule at the click, then once more at the clicked province's representative point, because old shapes miss coasts. */
 function findRegion(db: Database.Database, q: { lon: number; lat: number; from: number; to: number; clicked: ProvinceRow }): RegionRow | null {
-  const parsed = new Map<number, AreaGeometry>();
-  return (
-    chooseRegion(regionsContaining(db, q.lon, q.lat, q.from, q.to, parsed), q.from, q.to) ??
-    chooseRegion(regionsContaining(db, q.clicked.lon, q.clicked.lat, q.from, q.to, parsed), q.from, q.to)
-  );
+  const [atClick, atPoint] = regionsContainingEach(db, [[q.lon, q.lat], [q.clicked.lon, q.clicked.lat]], q.from, q.to);
+  return chooseRegion(atClick, q.from, q.to) ?? chooseRegion(atPoint, q.from, q.to);
 }
 
 function regionTest(shapes: AreaGeometry[]): (p: ProvinceEntry) => boolean {

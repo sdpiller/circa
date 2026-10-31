@@ -28,6 +28,8 @@ const CLICKS: Click[] = [
   { name: "Slovenia, many provinces", lon: 14.5, lat: 46.05, from: 1800, to: 1900 },
   { name: "Britain, all time", lon: -1.5, lat: 53.0, ...ALL_TIME },
   // The slowest kind found by a sweep of 1,500 random clicks: 500 years ending near today read the most and largest region rows.
+  { name: "Macedonia, recent", lon: 22.22, lat: 41.37, from: 1500, to: 1999 },
+  { name: "Bulgaria, recent", lon: 22.85, lat: 42.61, from: 1527, to: 2026 },
   { name: "Malta, recent", lon: 14.45, lat: 35.91, from: 1527, to: 2026 },
   { name: "Genoa, recent", lon: 9.21, lat: 44.34, from: 1500, to: 1999 },
   // Asia
