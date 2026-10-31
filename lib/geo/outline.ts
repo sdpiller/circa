@@ -20,18 +20,32 @@ type Edge = { a: string; b: string; pa: Position; pb: Position };
 
 /** Nearest vertex distance between two rings, sampling at most 80 vertices of each. */
 function ringGapKm(a: Ring, b: Ring): number {
-  const sa = Math.max(1, Math.floor(a.length / MAX_SAMPLES));
-  const sb = Math.max(1, Math.floor(b.length / MAX_SAMPLES));
+  const sa = Math.max(1, Math.ceil(a.length / MAX_SAMPLES));
+  const sb = Math.max(1, Math.ceil(b.length / MAX_SAMPLES));
   let best = Infinity;
   for (let i = 0; i < a.length; i += sa) for (let j = 0; j < b.length; j += sb) best = Math.min(best, distanceKm(a[i], b[j]));
   return best;
 }
 
+/**
+ * Up to nine edge midpoints of a ring. A ring that touches a larger one at a vertex has that vertex
+ * on the larger ring's boundary, where a ray cast is undefined. Midpoints are off it, and a majority
+ * vote absorbs an edge that happens to run along the boundary.
+ */
+function probePoints(ring: Ring): Position[] {
+  const edges = ring.length - 1;
+  const step = Math.max(1, Math.ceil(edges / 9));
+  const out: Position[] = [];
+  for (let i = 0; i < edges; i += step) out.push([(ring[i][0] + ring[i + 1][0]) / 2, (ring[i][1] + ring[i + 1][1]) / 2]);
+  return out;
+}
+
+/** `openChains` counts walks that dead-ended and were dropped: with clean input it is 0. */
 export function buildOutline(
   provinces: OutlineInput[],
   click: Position,
   exempt: ReadonlySet<string>,
-): { rings: Ring[]; keptIds: string[]; areaKm2: number } {
+): { rings: Ring[]; keptIds: string[]; areaKm2: number; openChains: number } {
   // Every edge of every ring of every province, holes too: a hole filled by another province cancels away.
   const edges = new Map<string, Edge>();
   const counts = new Map<string, number>();
@@ -77,6 +91,7 @@ export function buildOutline(
   const used = new Set<string>();
   const edgeRing = new Map<string, number>();
   const all: Ring[] = [];
+  let openChains = 0;
   const nextEdge = (v: string) => at.get(v)?.find((k) => !used.has(k));
   for (const first of left) {
     if (used.has(first)) continue;
@@ -109,19 +124,22 @@ export function buildOutline(
       }
       cur = to;
     }
+    // Out of edges away from where the walk began: a dead end, dropped.
+    if (pathEdges.length > 0) openChains++;
   }
 
   // A ring inside an odd number of larger rings is a hole. Drop it.
   const areas = all.map(ringAreaKm2);
   const solid: number[] = [];
   all.forEach((ring, i) => {
+    const probes = probePoints(ring);
     let depth = 0;
     for (let j = 0; j < all.length; j++) {
-      if (j !== i && areas[j] > areas[i] && pointInRing(ring[0][0], ring[0][1], all[j])) depth++;
+      if (j !== i && areas[j] > areas[i] && probes.filter((p) => pointInRing(p[0], p[1], all[j])).length * 2 > probes.length) depth++;
     }
     if (depth % 2 === 0) solid.push(i);
   });
-  if (solid.length === 0) return { rings: [], keptIds: [], areaKm2: 0 };
+  if (solid.length === 0) return { rings: [], keptIds: [], areaKm2: 0, openChains };
 
   // The clicked piece: the ring holding the click, or the nearest ring (a coastal click).
   let clicked = solid.find((i) => pointInRing(click[0], click[1], all[i]));
@@ -160,7 +178,7 @@ export function buildOutline(
     .map((prov) => prov.id);
 
   // The area on screen: outer rings only, so a hole inside counts.
-  return { rings, keptIds, areaKm2: kept.reduce((sum, i) => sum + areas[i], 0) };
+  return { rings, keptIds, areaKm2: kept.reduce((sum, i) => sum + areas[i], 0), openChains };
 }
 
 /** Iterative Douglas-Peucker on a closed ring (first and last vertex equal), so long coastlines cannot overflow the stack. */

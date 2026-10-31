@@ -178,3 +178,30 @@ describe("frameBounds", () => {
     expect(frameBounds([east, west], 178)).toEqual([175, 0, 190, 5]);
   });
 });
+
+describe("buildOutline holes touching the outer ring", () => {
+  it("drops a hole that touches the outer ring at one vertex", () => {
+    const outer: Ring = [[0, 0], [10, 0], [10, 5], [10, 10], [0, 10], [0, 0]];
+    const diamond: Ring = [[10, 5], [7, 2], [4, 5], [7, 8], [10, 5]];
+    const out = buildOutline([{ id: "a", geometry: poly(outer, diamond) }], [8, 8], none);
+    expect(out.rings).toHaveLength(1);
+    expect(out.areaKm2).toBeCloseTo(ringAreaKm2(outer), 3);
+  });
+});
+
+describe("buildOutline openChains", () => {
+  it("is 0 for clean input", () => {
+    const out = buildOutline([{ id: "a", geometry: poly(square(0, 0)) }, { id: "b", geometry: poly(square(1, 0)) }], [0.5, 0.5], none);
+    expect(out.openChains).toBe(0);
+  });
+
+  it("counts a dead end when an edge is seen three times (overlapping provinces)", () => {
+    // b and c are the same square, so the edge a shares with them is seen three times and all copies go.
+    const out = buildOutline(
+      [{ id: "a", geometry: poly(square(0, 0)) }, { id: "b", geometry: poly(square(1, 0)) }, { id: "c", geometry: poly(square(1, 0)) }],
+      [0.5, 0.5],
+      none,
+    );
+    expect(out.openChains).toBeGreaterThan(0);
+  });
+});
