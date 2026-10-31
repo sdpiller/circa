@@ -5,7 +5,9 @@
  */
 import { inflateRawSync } from "node:zlib";
 import { z } from "zod";
-import { bboxOf, pointInGeometry, polygonsOf, ringAreaKm2, type AreaGeometry, type Position, type Ring } from "../lib/geo/geometry.ts";
+import { bboxOf, polygonsOf, ringAreaKm2, type AreaGeometry, type Position, type Ring } from "../lib/geo/geometry.ts";
+import { simplifyRing } from "../lib/geo/outline.ts";
+import type { ProvinceRow } from "../lib/geo/provinces.ts";
 import type { RegionRow } from "../lib/outline/choose.ts";
 import { astronomicalToHistorical, formatRange, historicalToAstronomical, MAX_YEAR, MIN_YEAR } from "../lib/time/index.ts";
 
@@ -27,20 +29,6 @@ export function geometryAreaKm2(g: AreaGeometry): number {
 }
 
 // ---------- provinces ----------
-
-export type ProvinceRow = {
-  id: string;
-  name: string;
-  country: string;
-  lon: number;
-  lat: number;
-  west: number;
-  south: number;
-  east: number;
-  north: number;
-  area: number;
-  geojson: string;
-};
 
 const ProvinceFeature = z.object({
   properties: z.object({
@@ -77,9 +65,23 @@ export type NewRegion = Omit<RegionRow, "id"> & {
   geojson: string;
 };
 
+/**
+ * Regions are only used for containment, and parsing them is the largest cost of a click, so they are
+ * stored simplified and with few decimals. Cliopatria's coordinates carry 15 digits; short numbers parse
+ * about three times faster. Three decimals is about 100 m, finer than the tolerance.
+ */
+const REGION_TOLERANCE_DEG = 0.02;
+
+function simplified(g: AreaGeometry): AreaGeometry {
+  const short = (x: number) => Math.round(x * 1000) / 1000;
+  const polygon = (rings: Ring[]) => rings.map((ring) => simplifyRing(ring, REGION_TOLERANCE_DEG).map((p): Position => [short(p[0]), short(p[1])]));
+  return g.type === "Polygon" ? { type: "Polygon", coordinates: polygon(g.coordinates) } : { type: "MultiPolygon", coordinates: g.coordinates.map(polygon) };
+}
+
 function regionBase(geometry: AreaGeometry) {
-  const [west, south, east, north] = bboxOf(geometry);
-  return { west, south, east, north, geojson: JSON.stringify(geometry) };
+  const stored = simplified(geometry);
+  const [west, south, east, north] = bboxOf(stored);
+  return { west, south, east, north, geojson: JSON.stringify(stored) };
 }
 
 const CliopatriaFeature = z.object({
@@ -150,77 +152,6 @@ export function snapshotRanges(years: number[]): { year: number; from: number; t
     const to = i === ys.length - 1 ? MAX_YEAR : astronomicalToHistorical(Math.floor((historicalToAstronomical(year) + historicalToAstronomical(ys[i + 1])) / 2));
     return { year, from, to };
   });
-}
-
-// ---------- nearest province ----------
-
-type Prepared = { row: ProvinceRow; geometry: AreaGeometry };
-const preparedCache = new WeakMap<readonly ProvinceRow[], Prepared[]>();
-
-function prepare(provinces: readonly ProvinceRow[]): Prepared[] {
-  let p = preparedCache.get(provinces);
-  if (!p) {
-    p = provinces.map((row) => ({ row, geometry: JSON.parse(row.geojson) as AreaGeometry }));
-    preparedCache.set(provinces, p);
-  }
-  return p;
-}
-
-/** Distance in km from a point to a segment, on a local flat projection (fine at a few hundred km). */
-function segmentKm(lon: number, lat: number, a: Position, b: Position): number {
-  const kx = 111.32 * Math.cos((lat * Math.PI) / 180);
-  const ky = 110.57;
-  const wrap = (d: number) => (d > 180 ? d - 360 : d < -180 ? d + 360 : d);
-  const ax = wrap(a[0] - lon) * kx;
-  const ay = (a[1] - lat) * ky;
-  const bx = wrap(b[0] - lon) * kx;
-  const by = (b[1] - lat) * ky;
-  const dx = bx - ax;
-  const dy = by - ay;
-  const len2 = dx * dx + dy * dy;
-  const t = len2 === 0 ? 0 : Math.max(0, Math.min(1, -(ax * dx + ay * dy) / len2));
-  return Math.hypot(ax + t * dx, ay + t * dy);
-}
-
-function ringDistanceKm(lon: number, lat: number, ring: Ring): number {
-  let best = Infinity;
-  for (let i = 0; i < ring.length - 1; i++) best = Math.min(best, segmentKm(lon, lat, ring[i], ring[i + 1]));
-  return best;
-}
-
-/** The province containing the point, or null. Where provinces overlap, the smallest wins. */
-export function containingProvince(provinces: readonly ProvinceRow[], lon: number, lat: number): ProvinceRow | null {
-  let inside: ProvinceRow | null = null;
-  for (const p of prepare(provinces)) {
-    const r = p.row;
-    if (lon < r.west || lon > r.east || lat < r.south || lat > r.north) continue;
-    if ((!inside || r.area < inside.area) && pointInGeometry(lon, lat, p.geometry)) inside = r;
-  }
-  return inside;
-}
-
-/** The containing province; else the one whose boundary is nearest, if within maxKm; else null. */
-export function nearestProvince(provinces: readonly ProvinceRow[], lon: number, lat: number, maxKm: number): ProvinceRow | null {
-  const inside = containingProvince(provinces, lon, lat);
-  if (inside) return inside;
-  const prepared = prepare(provinces);
-
-  const dLat = maxKm / 110;
-  const dLon = Math.min(180, maxKm / (111 * Math.max(0.05, Math.cos((lat * Math.PI) / 180))));
-  let best: ProvinceRow | null = null;
-  let bestKm = maxKm;
-  for (const p of prepared) {
-    const r = p.row;
-    if (lat < r.south - dLat || lat > r.north + dLat || lon < r.west - dLon || lon > r.east + dLon) continue;
-    for (const [outer] of polygonsOf(p.geometry)) {
-      const d = ringDistanceKm(lon, lat, outer);
-      if (d <= bestKm) {
-        bestKm = d;
-        best = r;
-      }
-    }
-  }
-  return best;
 }
 
 // ---------- zip ----------

@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { deflateRawSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
-import { applyStrikes, nearestProvince, parseBasemaps, parseCliopatria, parseProvinces, regionNamesDoc, snapshotRanges, unzipEntry, type NewRegion } from "../etl/boundaries-parse.ts";
+import { nearestProvince } from "../lib/geo/provinces.ts";
+import { applyStrikes, parseBasemaps, parseCliopatria, parseProvinces, regionNamesDoc, snapshotRanges, unzipEntry, type NewRegion } from "../etl/boundaries-parse.ts";
 import { historicalToAstronomical, MAX_YEAR, MIN_YEAR } from "../lib/time/index.ts";
 
 const fixture = (name: string): unknown => JSON.parse(readFileSync(join(import.meta.dirname, "fixtures", "boundaries", `${name}.json`), "utf8"));
@@ -29,6 +30,27 @@ describe("parseCliopatria", () => {
     expect(r.area).toBe(123456);
     expect([r.west, r.south, r.east, r.north]).toEqual([10, 40, 14, 44]);
     expect(JSON.parse(r.geojson).type).toBe("Polygon");
+  });
+});
+
+describe("region geometry", () => {
+  // A coast of 200 wiggles of 0.001 degrees along the south edge of a 10 by 10 box, holding one hole.
+  const coast = Array.from({ length: 201 }, (_, i) => [i * 0.05, i % 2 ? -0.001 : 0]);
+  const outer = [...coast, [10, 10], [0, 10], coast[0]];
+  const hole = [[4, 4], [5, 4], [5, 5], [4, 5], [4, 4]];
+  const geometry = { type: "Polygon", coordinates: [outer, hole] };
+  const raw = JSON.stringify(geometry).length;
+
+  it("is simplified on load, for Cliopatria and the atlas alike, because it is only used for containment", () => {
+    const clio = parseCliopatria({ features: [{ properties: { Name: "Coastal", FromYear: 1, ToYear: 2, Area: null, Type: "POLITY" }, geometry }] })[0];
+    const atlas = parseBasemaps({ features: [{ properties: { NAME: "Coastal" }, geometry }] }, { from: 1, to: 2 })[0];
+    for (const r of [clio, atlas]) {
+      const g = JSON.parse(r.geojson);
+      expect(r.geojson.length).toBeLessThan(raw / 5);
+      expect(g.coordinates[0][0]).toEqual(g.coordinates[0].at(-1));
+      expect(g.coordinates[1]).toEqual(hole);
+      expect(r.area).toBeGreaterThan(1_000_000); // measured before simplifying
+    }
   });
 });
 
@@ -115,6 +137,14 @@ describe("nearestProvince", () => {
     expect(nearestProvince(provinces, 23.7, 37.0, 150)?.id).toBe("GRC-2884");
     expect(nearestProvince(provinces, 23.7, 37.0, 50)).toBeNull();
     expect(nearestProvince(provinces, 23.7, 33, 150)).toBeNull();
+  });
+
+  it("looks across the antimeridian", () => {
+    const geometry = { type: "Polygon", coordinates: [[[179, 0], [179.8, 0], [179.8, 1], [179, 1], [179, 0]]] };
+    const farEast = { id: "EAST", name: "East", country: "C", lon: 179.4, lat: 0.5, west: 179, south: 0, east: 179.8, north: 1, area: 8000, geojson: JSON.stringify(geometry) };
+    // 0.3 degrees past 180 from the province's edge, about 33 km at the equator
+    expect(nearestProvince([farEast], -179.9, 0.5, 50)?.id).toBe("EAST");
+    expect(nearestProvince([farEast], -179.9, 0.5, 20)).toBeNull();
   });
 });
 

@@ -13,7 +13,8 @@ import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync 
 import { dirname, join } from "node:path";
 import { z } from "zod";
 import { formatYear } from "../lib/time/index.ts";
-import { applyStrikes, containingProvince, nearestProvince, parseBasemaps, parseCliopatria, parseProvinces, regionNamesDoc, snapshotRanges, unzipEntry, type NewRegion, type ProvinceRow } from "./boundaries-parse.ts";
+import { containingProvince, nearestProvince, type ProvinceRow } from "../lib/geo/provinces.ts";
+import { applyStrikes, parseBasemaps, parseCliopatria, parseProvinces, regionNamesDoc, snapshotRanges, unzipEntry, type NewRegion } from "./boundaries-parse.ts";
 import { basemapSnapshots, CLIOPATRIA_FILE, NATURALEARTH_FILE } from "./boundaries.ts";
 import { DB_PATH, EventRow, SCHEMA_SQL } from "../lib/db/schema.ts";
 import { buildDataset } from "./build.ts";

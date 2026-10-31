@@ -33,7 +33,8 @@ CREATE TABLE events (
 CREATE INDEX idx_events_years ON events(start_year, end_year);
 CREATE INDEX idx_events_geo ON events(lat, lon);
 
-CREATE INDEX idx_events_province ON events(province_id, kind, sitelinks DESC);
+-- Holds every column the area lists filter and sort on, so a wide region reads the index and not 20,000 rows.
+CREATE INDEX idx_events_province ON events(province_id, kind, start_year, end_year, sitelinks, qid);
 
 -- Natural Earth admin-1 provinces: the building blocks of every outline.
 CREATE TABLE provinces (

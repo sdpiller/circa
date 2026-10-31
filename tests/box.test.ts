@@ -3,15 +3,9 @@ import { AREA_LIMIT_MAX, EVENTS_STEP, OTHERS_STEP, areaUrl, cardPlacement, first
 import { itemMeta, what } from "../lib/items.ts";
 
 describe("areaUrl", () => {
-  it("builds the area query with limits", () => {
-    expect(areaUrl({ cell: "851ec9a3fffffff", from: -500, to: -300, eventsLimit: 25, othersLimit: 30 })).toBe(
-      "/api/area?cell=851ec9a3fffffff&from=-500&to=-300&eventsLimit=25&othersLimit=30",
-    );
-  });
-
-  it("adds the focus item when there is one", () => {
-    expect(areaUrl({ cell: "851ec9a3fffffff", from: 1, to: 2026, eventsLimit: 50, othersLimit: 30, focus: "Q123" })).toBe(
-      "/api/area?cell=851ec9a3fffffff&from=1&to=2026&eventsLimit=50&othersLimit=30&focus=Q123",
+  it("builds the area query from a point, a range, an intent and limits", () => {
+    expect(areaUrl({ lat: 37.98, lon: 23.72, from: -500, to: -300, intent: "click", eventsLimit: 25, othersLimit: 30 })).toBe(
+      "/api/area?lat=37.98&lon=23.72&from=-500&to=-300&intent=click&eventsLimit=25&othersLimit=30",
     );
   });
 
@@ -74,11 +68,11 @@ describe("moreControl", () => {
 
   it("returns null when everything is shown", () => {
     expect(moreControl(12, 12, 25, 25)).toBeNull();
-    // the focus item can come on top of the limit
+    // cited items can come on top of the limit
     expect(moreControl(26, 26, 25, 25)).toBeNull();
   });
 
-  it("counts a focus item appended past the limit", () => {
+  it("counts a cited item appended past the limit", () => {
     expect(moreControl(26, 27, 25, 25)).toEqual({ kind: "button", n: 1, next: 50 });
   });
 });

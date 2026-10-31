@@ -8,17 +8,18 @@ export const EVENTS_STEP = 25;
 export const OTHERS_STEP = 30;
 export const AREA_LIMIT_MAX = 200;
 
-export type AreaRequest = { cell: string; from: number; to: number; eventsLimit: number; othersLimit: number; focus?: string };
+export type AreaRequest = { lat: number; lon: number; from: number; to: number; intent: "click" | "range"; eventsLimit: number; othersLimit: number };
 
 export function areaUrl(q: AreaRequest): string {
   const p = new URLSearchParams({
-    cell: q.cell,
+    lat: String(q.lat),
+    lon: String(q.lon),
     from: String(q.from),
     to: String(q.to),
+    intent: q.intent,
     eventsLimit: String(q.eventsLimit),
     othersLimit: String(q.othersLimit),
   });
-  if (q.focus) p.set("focus", q.focus);
   return `/api/area?${p}`;
 }
 
@@ -33,8 +34,8 @@ export function wikidataUrl(qid: string): string {
 
 /**
  * What to offer under a list: a button that raises the limit by one step (never past the cap), or,
- * at the cap, a plain count of the rest. `shown` can exceed `limit` by one when the API appended the
- * focus item.
+ * at the cap, a plain count of the rest. `shown` can exceed `limit` when the API appended a story's
+ * cited items.
  */
 export function moreControl(
   shown: number,
