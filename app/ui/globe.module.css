@@ -1,10 +1,21 @@
 /* Cream, thin rules, no rounded cards. Palette variables live in globals.css. */
 
 .app {
+  --panel-width: min(420px, 36vw); /* the same value as panelWidth() in GlobeMap.tsx */
+  --slide: 460ms cubic-bezier(0.22, 0.61, 0.36, 1);
   position: fixed;
   inset: 0;
   overflow: hidden;
   background: var(--paper);
+}
+
+/* The credits in the map's corner stay clear of the panel. */
+.app :global(.maplibregl-ctrl-bottom-right) {
+  transition: transform var(--slide);
+}
+
+.appPanelOpen :global(.maplibregl-ctrl-bottom-right) {
+  transform: translateX(calc(var(--panel-width) * -1));
 }
 
 /* Two classes, so MapLibre's own `.maplibregl-map { position: relative }` never wins on stylesheet order. */
@@ -38,8 +49,14 @@
   left: 50%;
   bottom: 40px;
   transform: translateX(-50%);
-  width: min(720px, calc(100% - 32px));
+  width: min(720px, calc(100% - var(--panel-width) - 32px));
   padding: 12px 0 0;
+  transition: transform var(--slide);
+}
+
+/* The panel slides in: the dates glide to stay centred in the free space, as the globe does. */
+.appPanelOpen .rangePanel {
+  transform: translateX(calc(-50% - var(--panel-width) / 2));
 }
 
 .caption {
@@ -204,13 +221,211 @@
   }
 }
 
+/* The reading column: over the map, off screen until a click. Not clipped, so a hover card can overhang. */
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: var(--panel-width);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border-left: 1px solid var(--rule);
+  box-shadow: -18px 0 40px -28px rgba(36, 31, 26, 0.28);
+  transform: translateX(102%);
+  transition: transform var(--slide);
+}
+
+.panelOpen {
+  transform: none;
+}
+
+.panelClose {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  font: 22px/1 var(--font-text), Georgia, serif;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 160ms;
+}
+
+.panelClose:hover {
+  color: var(--ink);
+}
+
+.panelHead {
+  flex: none;
+  padding: 24px 44px 14px 30px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.panelName {
+  margin-bottom: 4px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.08;
+  color: var(--accent);
+}
+
+.panelAtlas {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.panelYears {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.panelScale {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Not positioned, so a hover card is placed against the panel and this scroller does not clip it. */
+.panelBody {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 30px 24px;
+  line-height: 1.5;
+}
+
+.panelFooter {
+  flex: none;
+  padding: 8px 30px 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.storyPlace {
+  margin-bottom: 8px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.panelSection {
+  margin: 20px 0 8px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.panelBody > .panelSection:first-child {
+  margin-top: 0;
+}
+
+.events {
+  list-style: none;
+}
+
+.events > li {
+  border-bottom: 1px solid var(--paper-sunk);
+}
+
+.eventRow {
+  display: grid;
+  grid-template-columns: 9px 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 6px 8px 4px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.eventRow:hover {
+  background: var(--paper-sunk);
+}
+
+/* Filled for an exact location, hollow for an inherited one. */
+.mark {
+  width: 9px;
+  height: 9px;
+  margin-top: 7px;
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 50%;
+  background: var(--ink-soft);
+}
+
+.markApprox {
+  background: transparent;
+}
+
+.eventName {
+  display: block;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.eventYears {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.eventDesc {
+  display: block;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.names {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.more {
+  margin-top: 8px;
+  padding: 2px 0;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+}
+
+.more:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink-soft);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .app > .map {
+  .app > .map,
+  .rangePanel,
+  .panel,
+  .app :global(.maplibregl-ctrl-bottom-right) {
     transition: none;
   }
 }
-
-/* Parts the area box (Task 9) renders again. */
 
 .focused > button {
   background: var(--paper-sunk);
