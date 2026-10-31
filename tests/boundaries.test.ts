@@ -179,4 +179,11 @@ describe("regionNamesDoc", () => {
     expect(doc).toMatch(/Struck One.*STRUCK/);
     expect(doc).not.toMatch(/Small.*STRUCK/);
   });
+
+  it("ignores Cliopatria rows, which cannot be struck", () => {
+    const clio: NewRegion = { ...mk("Roman Empire", 9e9, -27, 476), source: "cliopatria" };
+    const doc = regionNamesDoc([mk("Persian Empire", 5, -500, -400), clio], new Set());
+    expect(doc).not.toContain("Roman Empire");
+    expect(doc).toContain("1 distinct names");
+  });
 });

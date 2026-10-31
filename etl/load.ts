@@ -126,8 +126,8 @@ export function runSpotChecks(db: Database.Database): SpotResult[] {
   });
 }
 
-/** Reads the boundary files fetched by etl:boundaries, writes docs/region-names.md, and returns what goes in the database. */
-export function readGeo(): GeoData {
+/** Reads the boundary files fetched by etl:boundaries. Returns what goes in the database and the text of docs/region-names.md, which the caller writes once the build has succeeded. */
+export function readGeo(): GeoData & { namesDoc: string } {
   const snapshots = basemapSnapshots();
   const missing = [NATURALEARTH_FILE, CLIOPATRIA_FILE, ...snapshots.map((s) => s.file)].filter((f) => !existsSync(f));
   if (missing.length) throw new Error(`Boundary files are missing (${missing.length}, first: ${missing[0]}). Run npm run etl:boundaries first.`);
@@ -138,8 +138,7 @@ export function readGeo(): GeoData {
   for (const [i, s] of snapshots.entries()) all.push(...parseBasemaps(JSON.parse(readFileSync(s.file, "utf8")), ranges[i]));
 
   const struck = new Set(z.array(z.string()).parse(JSON.parse(readFileSync(join(import.meta.dirname, "struck-names.json"), "utf8"))));
-  writeFileSync(join(import.meta.dirname, "..", "docs", "region-names.md"), regionNamesDoc(all, struck));
-  return { provinces, regions: applyStrikes(all, struck) };
+  return { provinces, regions: applyStrikes(all, struck), namesDoc: regionNamesDoc(all, struck) };
 }
 
 function main() {
@@ -196,6 +195,7 @@ function main() {
     }
     throw err;
   }
+  writeFileSync(join(import.meta.dirname, "..", "docs", "region-names.md"), geo.namesDoc); // only after the build succeeded
   console.log(`\nWrote ${DB_PATH}: ${rows.length.toLocaleString("en-US")} rows in ${((Date.now() - started) / 1000).toFixed(1)} s`);
   console.log(`  provinces ${geo.provinces.length.toLocaleString("en-US")}, regions ${geo.regions.length.toLocaleString("en-US")} (${names.n} distinct basemaps names)`);
   console.log(`  events in a province ${assigned.inside.toLocaleString("en-US")}, snapped within ${SNAP_KM} km ${assigned.snapped.toLocaleString("en-US")}, unassigned ${assigned.unassigned.toLocaleString("en-US")}`);
