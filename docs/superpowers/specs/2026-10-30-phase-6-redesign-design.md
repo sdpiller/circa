@@ -289,6 +289,10 @@ Stale answers and errors keep the current handling; an error shows a plain line 
 - Warning only: a cited item's location confidence changed (kept from today).
 - **Removed, not replaced:** regenerating the `C` sentence and the "input drift" warning. Both compared the frozen input with a fresh query of the old cell, and that area no longer exists; `C` is now frozen history. The placement sentences it supports depend on cited items, which the location confidence warning already covers.
 
+### 5.6 Camera
+
+Move the camera with animated `padding`, not by resizing the map. An earlier ruling (decisions.md, Phase 5 Task 7) avoided `flyTo` padding because it persists on the camera; here that persistence is what is wanted, since it matches the panel's state. Closing the panel eases the padding back to zero. Frame an outline from its bounds, clamped so a click never zooms in further than about 6.2 or out past about 1.9.
+
 ## 6. Acceptance
 
 1. A stranger opens the app and sees a cream globe with no names, grid or dots.
