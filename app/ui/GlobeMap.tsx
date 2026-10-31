@@ -6,6 +6,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
 import type { GeoJSONSource, Map as MapLibreMap, MapLibreEvent } from "maplibre-gl";
+import { frameOutline, RANGE_H } from "../../lib/camera.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
 import { apparentZoom, FADE_MS, LABEL_GROUPS, labelGroupOn } from "../../lib/labels.ts";
 import type { MapOutline } from "../../lib/selection.ts";
@@ -26,9 +27,6 @@ const COUNTRY_LABELS = ["label_country_1", "label_country_2", "label_country_3"]
 const SLIDE_MS = 460;
 const FLY_MS = 1500;
 const OUTLINE_FADE_MS = 500;
-const RANGE_H = 184;
-const MIN_FLY_ZOOM = 1.9;
-const MAX_FLY_ZOOM = 6.2;
 const OFF_GLOBE_PX = 4;
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 const still = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -51,14 +49,11 @@ function drawOutline(m: MapLibreMap, o: MapOutline) {
 
 /** `flight` comes back on this flight's own moveend, even an interrupted one. Padding, not offset: it stays on the camera. */
 function flyToOutline(m: MapLibreMap, o: MapOutline, flight: number) {
-  const [west, south, east, north] = o.bounds;
   const right = panelWidth();
-  const fit = m.cameraForBounds([[west, south], [east, north]], { padding: { top: 45, left: 60, right: right + 60, bottom: RANGE_H + 45 } });
-  const zoom = Math.max(MIN_FLY_ZOOM, Math.min(MAX_FLY_ZOOM, fit?.zoom ?? MIN_FLY_ZOOM));
+  const box = m.getContainer();
   m.flyTo(
     {
-      center: [(west + east) / 2, (south + north) / 2],
-      zoom,
+      ...frameOutline(o.bounds, { width: box.clientWidth, height: box.clientHeight, panelWidth: right }),
       padding: { top: 0, left: 0, right, bottom: RANGE_H },
       duration: still() ? 0 : FLY_MS,
       curve: 1.35,
