@@ -4,9 +4,17 @@
       "id": "babylon",
       "place": "Babylon",
       "from": -2500,
-      "to": -500,
-      "cell": "832ca2fffffffff"
+      "to": -500
     },
+    "point": [
+      44.42415,
+      32.522907
+    ],
+    "provinces": [
+      "IRQ-3063",
+      "IRQ-3243",
+      "IRQ-3472"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -146,9 +154,17 @@
       "id": "carthage",
       "place": "Carthage",
       "from": -800,
-      "to": -100,
-      "cell": "83386efffffffff"
+      "to": -100
     },
+    "point": [
+      10.312944,
+      36.847009
+    ],
+    "provinces": [
+      "TUN-102",
+      "TUN-104",
+      "TUN-108"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -328,9 +344,15 @@
       "id": "athens",
       "place": "Athens",
       "from": -500,
-      "to": -300,
-      "cell": "851eda77fffffff"
+      "to": -300
     },
+    "point": [
+      23.728055555,
+      37.984166666
+    ],
+    "provinces": [
+      "GRC-2884"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -525,9 +547,15 @@
       "id": "rome",
       "place": "Rome",
       "from": -100,
-      "to": 100,
-      "cell": "851e8053fffffff"
+      "to": 100
     },
+    "point": [
+      12.482777777,
+      41.893055555
+    ],
+    "provinces": [
+      "ITA-5422"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -677,9 +705,19 @@
       "id": "jerusalem",
       "place": "Jerusalem",
       "from": 1,
-      "to": 150,
-      "cell": "832db2fffffffff"
+      "to": 150
     },
+    "point": [
+      35.234156,
+      31.776679
+    ],
+    "provinces": [
+      "ISR-3053",
+      "ISR-3058",
+      "JOR-857",
+      "JOR-858",
+      "WEB+00?"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -814,9 +852,15 @@
       "id": "medina",
       "place": "Medina",
       "from": 570,
-      "to": 700,
-      "cell": "835311fffffffff"
+      "to": 700
     },
+    "point": [
+      39.61,
+      24.47
+    ],
+    "provinces": [
+      "SAU-845"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -966,9 +1010,15 @@
       "id": "lhasa",
       "place": "Lhasa",
       "from": 600,
-      "to": 1950,
-      "cell": "853c7277fffffff"
+      "to": 1950
     },
+    "point": [
+      91.1408186,
+      29.6457567
+    ],
+    "provinces": [
+      "CHN-1662"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -1128,9 +1178,16 @@
       "id": "baghdad",
       "place": "Baghdad",
       "from": 750,
-      "to": 1260,
-      "cell": "842ca2bffffffff"
+      "to": 1260
     },
+    "point": [
+      44.366111111,
+      33.315277777
+    ],
+    "provinces": [
+      "IRQ-3063",
+      "IRQ-3243"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -1280,9 +1337,15 @@
       "id": "tenochtitlan",
       "place": "Tenochtitlan",
       "from": 1300,
-      "to": 1600,
-      "cell": "854995bbfffffff"
+      "to": 1600
     },
+    "point": [
+      -99.13138889,
+      19.435
+    ],
+    "provinces": [
+      "MEX-2727"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -1452,9 +1515,15 @@
       "id": "seoul",
       "place": "Seoul",
       "from": 1390,
-      "to": 1910,
-      "cell": "8430e1dffffffff"
+      "to": 1910
     },
+    "point": [
+      126.99,
+      37.56
+    ],
+    "provinces": [
+      "KOR-2497"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -1604,9 +1673,15 @@
       "id": "constantinople",
       "place": "Constantinople",
       "from": 1400,
-      "to": 1500,
-      "cell": "851ec903fffffff"
+      "to": 1500
     },
+    "point": [
+      28.960277777,
+      41.01
+    ],
+    "provinces": [
+      "TUR-2265"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -1756,9 +1831,15 @@
       "id": "cusco",
       "place": "Cusco",
       "from": 1400,
-      "to": 1600,
-      "cell": "838b61fffffffff"
+      "to": 1600
     },
+    "point": [
+      -71.978611111,
+      -13.516944444
+    ],
+    "provinces": [
+      "PER-571"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -1928,9 +2009,16 @@
       "id": "kyoto",
       "place": "Kyoto",
       "from": 1450,
-      "to": 1650,
-      "cell": "842e615ffffffff"
+      "to": 1650
     },
+    "point": [
+      135.768111111,
+      35.011611111
+    ],
+    "provinces": [
+      "JPN-1850",
+      "JPN-1853"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2110,9 +2198,15 @@
       "id": "mombasa",
       "place": "Mombasa",
       "from": 1490,
-      "to": 1900,
-      "cell": "837b59fffffffff"
+      "to": 1900
     },
+    "point": [
+      39.682055555,
+      -4.071166666
+    ],
+    "provinces": [
+      "KEN-1193"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2207,9 +2301,15 @@
       "id": "panipat",
       "place": "Panipat",
       "from": 1500,
-      "to": 1800,
-      "cell": "853d12cffffffff"
+      "to": 1800
     },
+    "point": [
+      76.972777777,
+      29.401666666
+    ],
+    "provinces": [
+      "IND-2430"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2314,9 +2414,16 @@
       "id": "port-au-prince",
       "place": "Port-au-Prince",
       "from": 1750,
-      "to": 1810,
-      "cell": "836725fffffffff"
+      "to": 1810
     },
+    "point": [
+      -72.340277777,
+      18.546944444
+    ],
+    "provinces": [
+      "HTI-1388",
+      "HTI-1389"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2456,9 +2563,15 @@
       "id": "paris",
       "place": "Paris",
       "from": 1789,
-      "to": 1815,
-      "cell": "851fb467fffffff"
+      "to": 1815
     },
+    "point": [
+      2.335833333,
+      48.861111111
+    ],
+    "provinces": [
+      "FRA-5333"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2638,9 +2751,15 @@
       "id": "isandlwana",
       "place": "Isandlwana",
       "from": 1870,
-      "to": 1900,
-      "cell": "83bcf1fffffffff"
+      "to": 1900
     },
+    "point": [
+      30.536583333,
+      -28.358
+    ],
+    "provinces": [
+      "ZAF-1216"
+    ],
     "writtenAt": "2026-10-29",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2765,9 +2884,15 @@
       "id": "beijing",
       "place": "Beijing",
       "from": 1900,
-      "to": 1990,
-      "cell": "8531aa43fffffff"
+      "to": 1990
     },
+    "point": [
+      116.407526,
+      39.90403
+    ],
+    "provinces": [
+      "CHN-1155"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
@@ -2942,9 +3067,15 @@
       "id": "gallipoli",
       "place": "Gallipoli",
       "from": 1914,
-      "to": 1918,
-      "cell": "831ecafffffffff"
+      "to": 1918
     },
+    "point": [
+      26.2775,
+      40.2375
+    ],
+    "provinces": [
+      "TUR-2239"
+    ],
     "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [

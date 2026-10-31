@@ -1,6 +1,5 @@
 /** Shapes of the featured list, the frozen story inputs, and the stories themselves. */
 import { z } from "zod";
-import { isGridCell } from "../cells.ts";
 import { KINDS } from "../db/schema.ts";
 
 export const FeaturedEntrySchema = z.object({
@@ -8,9 +7,12 @@ export const FeaturedEntrySchema = z.object({
   place: z.string().min(1),
   from: z.number().int(),
   to: z.number().int(),
-  cell: z.string().refine(isGridCell, "must be an H3 cell at resolution 2 to 5"),
 });
 export type FeaturedEntry = z.infer<typeof FeaturedEntrySchema>;
+
+/** A frozen input records the grid cell it was written from. Nothing reads it; it stays so the approved files do not change. */
+export const FrozenEntrySchema = FeaturedEntrySchema.extend({ cell: z.string() });
+export type FrozenEntry = z.infer<typeof FrozenEntrySchema>;
 
 export const FeaturedListSchema = z.array(FeaturedEntrySchema);
 export type FeaturedList = z.infer<typeof FeaturedListSchema>;
@@ -31,7 +33,7 @@ export const InputItemSchema = z.object({
 export type InputItem = z.infer<typeof InputItemSchema>;
 
 export const StoryInputSchema = z.object({
-  entry: FeaturedEntrySchema,
+  entry: FrozenEntrySchema,
   generatedAt: z.string(),
   dbRows: z.number().int(),
   eventsTotal: z.number().int(),

@@ -1,61 +1,54 @@
 /**
- * Staleness after a database rebuild (spec 6.7). Stale: a cited item is gone from the area, or its
- * label or years text changed. Drift: the area's top items differ from the frozen input, with every
- * cited item intact; a warning only. Warnings (never stale): the C sentence would now read differently,
- * or a cited item's location confidence changed.
+ * Staleness after a database rebuild (spec 5.5), judged on the cited items only.
+ * Stale: a cited item is gone, its label or years text changed, or it has no province.
+ * Out of date: the point or provinces recomputed from the database differ from the published ones
+ * (fixed by npm run story:publish). Warning only: a cited item's location confidence changed.
  */
-import type { AreaResult } from "../db/area.ts";
-import { contextText } from "./input.ts";
+import type { AreaItem } from "../db/area.ts";
 import { formatRange } from "../time/index.ts";
-import type { PublishedStory } from "./publish.ts";
+import { citedQids, placeStory, type CitedRow, type PublishedStory } from "./publish.ts";
 import type { StoryInput } from "./types.ts";
 
-/** box is the area at limits 25/30, top at 12/5 (the limits the input was frozen with). */
+export type CitedNow = CitedRow & Pick<AreaItem, "label" | "start_year" | "end_year" | "loc_confidence">;
+
 export function staleness(
   published: PublishedStory,
-  box: AreaResult,
-  top: AreaResult,
   input: StoryInput,
-): { stale: string[]; drift: boolean; warnings: string[] } {
-  const current = new Map([...box.events, ...box.others].map((i) => [i.qid, i]));
+  rows: ReadonlyMap<string, CitedNow>,
+): { stale: string[]; outOfDate: string[]; warnings: string[] } {
   const frozen = new Map(input.items.map((i) => [i.qid, i]));
+  const labels = new Map(published.paragraphs.flat().flatMap((s) => s.cites).map((c) => [c.qid, c.label]));
   const stale: string[] = [];
+  const outOfDate: string[] = [];
   const warnings: string[] = [];
-  let citesContext = false;
-  const seen = new Set<string>();
-  for (const para of published.paragraphs) {
-    for (const sentence of para) {
-      for (const c of sentence.cites) {
-        if (c.qid === null) {
-          if (c.ref === input.context.ref) citesContext = true;
-          continue;
-        }
-        if (seen.has(c.qid)) continue;
-        seen.add(c.qid);
-        const now = current.get(c.qid);
-        if (!now) {
-          stale.push(`${c.qid} (${c.label}) is no longer in the area box`);
-          continue;
-        }
-        const was = frozen.get(c.qid);
-        const years = formatRange(now.start_year, now.end_year);
-        if (now.label !== (was?.label ?? c.label)) {
-          stale.push(`${c.qid} label changed from "${was?.label ?? c.label}" to "${now.label}"`);
-        } else if (was && years !== was.years) {
-          stale.push(`${c.qid} (${c.label}) years changed from "${was.years}" to "${years}"`);
-        } else if (was && now.loc_confidence !== was.loc_confidence) {
-          warnings.push(`${published.entry.id}: ${c.qid} (${c.label}) location confidence changed from ${was.loc_confidence} to ${now.loc_confidence}`);
-        }
-      }
+  const found: CitedNow[] = [];
+  for (const qid of citedQids(published)) {
+    const label = labels.get(qid) ?? qid;
+    const now = rows.get(qid);
+    if (!now) {
+      stale.push(`${qid} (${label}) no longer exists`);
+      continue;
+    }
+    found.push(now);
+    const was = frozen.get(qid);
+    const years = formatRange(now.start_year, now.end_year);
+    if (now.label !== (was?.label ?? label)) {
+      stale.push(`${qid} label changed from "${was?.label ?? label}" to "${now.label}"`);
+    } else if (was && years !== was.years) {
+      stale.push(`${qid} (${label}) years changed from "${was.years}" to "${years}"`);
+    } else if (was && now.loc_confidence !== was.loc_confidence) {
+      warnings.push(`${published.entry.id}: ${qid} (${label}) location confidence changed from ${was.loc_confidence} to ${now.loc_confidence}`);
+    }
+    if (now.province_id === null) stale.push(`${qid} (${label}) no longer has a province`);
+  }
+  if (stale.length === 0 && found.length > 0) {
+    const placement = placeStory(found);
+    if (placement.provinces.join() !== published.provinces.join()) {
+      outOfDate.push(`${published.entry.id}: provinces are now ${placement.provinces.join(", ")}, published ${published.provinces.join(", ")}`);
+    }
+    if (placement.point.join() !== published.point.join()) {
+      outOfDate.push(`${published.entry.id}: point is now ${placement.point.join(", ")}, published ${published.point.join(", ")}`);
     }
   }
-  if (citesContext) {
-    const text = contextText(top.eventsTotal, top.othersTotal, top.events.slice(0, 12));
-    if (text !== input.context.text) {
-      warnings.push(`${published.entry.id}: the C sentence source changed from "${input.context.text}" to "${text}"`);
-    }
-  }
-  const nowTop = new Set([...top.events, ...top.others].map((i) => i.qid));
-  const drift = nowTop.size !== frozen.size || [...frozen.keys()].some((q) => !nowTop.has(q));
-  return { stale, drift, warnings };
+  return { stale, outOfDate, warnings };
 }

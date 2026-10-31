@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { AREA_LIMIT_MAX, EVENTS_STEP, OTHERS_STEP, areaUrl, cardPlacement, firstSentences, moreControl, summaryApiUrl, wikidataUrl } from "../lib/box.ts";
-import { what } from "../lib/items.ts";
+import { itemMeta, what } from "../lib/items.ts";
 
 describe("areaUrl", () => {
   it("builds the area query with limits", () => {
@@ -89,6 +89,15 @@ describe("what", () => {
     expect(what({ kind: "structure", category: "other" })).toBe("dated");
     expect(what({ kind: "founding", category: "founding" })).toBe("founded");
     expect(what({ kind: "discovery", category: "science" })).toBe("discovered here");
+  });
+});
+
+describe("itemMeta", () => {
+  it("joins years, what and the approximate note with a middle dot", () => {
+    expect(itemMeta({ years: "490 BCE", what: "conflict", approx: true })).toBe("490 BCE · conflict · approximate location");
+  });
+  it("leaves out the approximate note when the location is exact", () => {
+    expect(itemMeta({ years: "490 BCE", what: "conflict", approx: false })).toBe("490 BCE · conflict");
   });
 });
 

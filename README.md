@@ -40,9 +40,8 @@ Then edit `.env.local`. `WIKIMEDIA_CONTACT` is needed to fetch data and, since P
 | `npm run etl` | Fetch whatever is missing, then build the database. One command from nothing to `data/chronoglobe.db`. |
 | `npm run etl:fetch` | Download event data from Wikidata into `data/raw/`. See below. |
 | `npm run etl:load` | Build `data/chronoglobe.db` from `data/raw/` (about 7 seconds). |
-| `npm run story:input -- <id>` | Freeze a featured entry's area into `stories/inputs/<id>.json` for writing a story. Needs `WIKIMEDIA_CONTACT`, and refuses to overwrite an input that has a story unless `--force`. |
-| `npm run story:publish` | Check every story against its frozen input and write `stories/published.json`. |
-| `npm run story:check` | Run after `etl:load`: reports published stories whose cited items changed (stale, exit 1) and areas whose top items drifted. |
+| `npm run story:publish` | Check every story against its frozen input, place it by the provinces of its cited items (needs the database), and write `stories/published.json`. |
+| `npm run story:check` | Run after `etl:load`: reports published stories whose cited items changed (stale, exit 1) or whose point or provinces no longer match the database (out of date, exit 1, fix with `story:publish`). |
 | `npm run audit` | Rebuild the tables in `docs/data-audit.md` from `data/raw/`. |
 | `npm run bench:events` | Time events API queries against the real database, per zoom band. |
 | `npm run dev` | Start the Next.js dev server on http://localhost:3000. |
@@ -69,7 +68,7 @@ How it works, briefly:
 
 `npm run etl:load` turns the raw files into `data/chronoglobe.db` (SQLite, about 180 MB). It normalizes every item (dates, location, label), keeps one record per Wikidata item, drops items outside 3500 BCE to today or with dates vaguer than 1,000 years, and validates every row. It builds into a temp file, checks four famous events (Marathon, Thermopylae, Vesuvius in 79, the fall of Constantinople), and only then replaces the old database, so a failed build never breaks a working one. Running it twice gives identical data.
 
-After every rebuild, run `npm run story:check`. It confirms each published featured story still cites items that exist, with the same labels and years, and prints a stale story's id and reason (exit 1). Ranking drift only warns.
+After every rebuild, run `npm run story:check`. It confirms each published featured story still cites items that exist, with the same labels and years and a province, and prints a stale story's id and reason (exit 1). If the stored point or provinces changed, it says so (exit 1) and `npm run story:publish` fixes it.
 
 On Windows, stop the dev server before rebuilding: the final rename fails while another process has the database open. Check that it really stopped: killing `npm run dev` can leave Next's worker process running, still holding the file.
 

@@ -1,27 +1,49 @@
-import type { AreaResult } from "../db/area.ts";
+import type { AreaItem } from "../db/area.ts";
 import type { FeaturedEntry } from "../narrative/types.ts";
 import type { PublishedStory } from "../narrative/publish.ts";
+import { yearCount } from "../time/index.ts";
 import published from "../../stories/published.json";
 
 // The published file is already validated by tests/stories.test.ts, so it is cast, not re-parsed.
-const PUBLISHED = published as readonly PublishedStory[];
+const PUBLISHED = published as unknown as readonly PublishedStory[];
 
 export const FEATURED: readonly FeaturedEntry[] = PUBLISHED.map((s) => s.entry).sort(
   (a, b) => a.from - b.from || a.id.localeCompare(b.id),
 );
 
-/** The story for exactly this cell and range, or null. No near matches: a story describes one box. */
+export type Intent = "click" | "range";
+
+/** Years two inclusive ranges share, or 0. */
+function overlapYears(aFrom: number, aTo: number, bFrom: number, bTo: number): number {
+  const from = Math.max(aFrom, bFrom);
+  const to = Math.min(aTo, bTo);
+  return from <= to ? yearCount(from, to) : 0;
+}
+
+/**
+ * The story for a province and range, or null (spec 4.2). A click opens a story in its province when the
+ * shared years cover half the chosen range or half the story's years; of several, the smallest set of
+ * provinces, then the lower id. A range matches only a story's exact years.
+ */
 export function storyFor(
-  cell: string,
+  provinceId: string,
   from: number,
   to: number,
+  intent: Intent,
   stories: readonly PublishedStory[] = PUBLISHED,
 ): PublishedStory | null {
-  return stories.find((s) => s.entry.cell === cell && s.entry.from === from && s.entry.to === to) ?? null;
+  const matches = stories.filter((s) => {
+    if (!s.provinces.includes(provinceId)) return false;
+    if (intent === "range") return s.entry.from === from && s.entry.to === to;
+    const shared = overlapYears(from, to, s.entry.from, s.entry.to);
+    return shared > 0 && (shared * 2 >= yearCount(from, to) || shared * 2 >= yearCount(s.entry.from, s.entry.to));
+  });
+  matches.sort((a, b) => a.provinces.length - b.provinces.length || (a.entry.id < b.entry.id ? -1 : 1));
+  return matches[0] ?? null;
 }
 
 /** Cited qids (the null one is skipped) that the area no longer returns. */
-export function missingCites(story: PublishedStory, area: AreaResult): string[] {
+export function missingCites(story: PublishedStory, area: { events: AreaItem[]; others: AreaItem[] }): string[] {
   const present = new Set([...area.events, ...area.others].map((i) => i.qid));
   const missing = new Set<string>();
   for (const para of story.paragraphs)

@@ -27,28 +27,11 @@ CREATE TABLE events (
   loc_source TEXT,                 -- P625 | P276 | P131 | P19 | P189
   sitelinks INTEGER NOT NULL,      -- notability proxy
   wikipedia_title TEXT,
-  -- H3 cell ids at the four grid resolutions (decisions.md entry 28), filled by the loader.
-  h3_r2 TEXT NOT NULL,
-  h3_r3 TEXT NOT NULL,
-  h3_r4 TEXT NOT NULL,
-  h3_r5 TEXT NOT NULL,
   -- Natural Earth adm1_code of the province holding the event, or the nearest within the snap distance (etl/load.ts).
   province_id TEXT
 );
 CREATE INDEX idx_events_years ON events(start_year, end_year);
 CREATE INDEX idx_events_geo ON events(lat, lon);
--- Covering index for "top N of one kind in a viewport and range" (decisions.md entry 25).
--- Walks a kind in sitelinks order and filters years and bbox without touching the table.
-CREATE INDEX idx_events_kind_rank ON events(kind, sitelinks DESC, start_year, end_year, lat, lon);
--- Covering indexes for the grid counts (decisions.md entry 29), one per resolution: the cells query reads only its index.
-CREATE INDEX idx_events_cells_r2 ON events(lat, lon, start_year, end_year, kind, h3_r2);
-CREATE INDEX idx_events_cells_r3 ON events(lat, lon, start_year, end_year, kind, h3_r3);
-CREATE INDEX idx_events_cells_r4 ON events(lat, lon, start_year, end_year, kind, h3_r4);
-CREATE INDEX idx_events_cells_r5 ON events(lat, lon, start_year, end_year, kind, h3_r5);
-CREATE INDEX idx_events_r2 ON events(h3_r2);
-CREATE INDEX idx_events_r3 ON events(h3_r3);
-CREATE INDEX idx_events_r4 ON events(h3_r4);
-CREATE INDEX idx_events_r5 ON events(h3_r5);
 
 CREATE INDEX idx_events_province ON events(province_id, kind, sitelinks DESC);
 

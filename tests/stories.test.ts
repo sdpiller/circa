@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { checkStory } from "../lib/narrative/check.ts";
-import { publishStories } from "../lib/narrative/publish.ts";
+import { publishStories, type Placement, type PublishedStory } from "../lib/narrative/publish.ts";
 import { FeaturedListSchema, StoryInputSchema, StorySchema, type StoryInput } from "../lib/narrative/types.ts";
 
 const dir = new URL("../stories/", import.meta.url);
@@ -42,6 +42,23 @@ describe("committed stories", () => {
   });
 
   it("stories/published.json is what publishStories produces (run npm run story:publish)", () => {
-    expect(readJson("published.json")).toEqual(JSON.parse(JSON.stringify(publishStories(featured, stories, inputs))));
+    const published = readJson("published.json") as PublishedStory[];
+    const placements = new Map<string, Placement>(published.map((p) => [p.entry.id, { point: p.point, provinces: p.provinces }]));
+    expect(published).toEqual(JSON.parse(JSON.stringify(publishStories(featured, stories, inputs, placements))));
+  });
+
+  it("every published story has provinces and a finite point", () => {
+    const published = readJson("published.json") as PublishedStory[];
+    expect(published).toHaveLength(20);
+    for (const p of published) {
+      expect(p.provinces.length, p.entry.id).toBeGreaterThan(0);
+      expect(p.point, p.entry.id).toHaveLength(2);
+      expect(p.point.every(Number.isFinite), p.entry.id).toBe(true);
+    }
+  });
+
+  it("frozen inputs keep their cell, and featured.json has none", () => {
+    for (const input of inputs.values()) expect(typeof input.entry.cell).toBe("string");
+    for (const e of featured) expect(e).not.toHaveProperty("cell");
   });
 });

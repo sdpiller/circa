@@ -7,7 +7,6 @@ import { parseProvinces } from "../etl/boundaries-parse.ts";
 import { dedupe, isTooWide } from "../etl/build.ts";
 import { runSpotChecks, SPOT_CHECKS, toRow, writeDatabase } from "../etl/load.ts";
 import type { EventRecord } from "../etl/normalize.ts";
-import { cellsForPoint } from "../lib/cells.ts";
 import { effectiveInterval } from "../lib/time/index.ts";
 
 const rec = (over: Partial<EventRecord>): EventRecord => ({
@@ -103,18 +102,15 @@ describe("writeDatabase", () => {
     db.close();
   });
 
-  it("stores H3 cells r2 to r5 per row and indexes them", () => {
-    const path = join(dir, "cells.db");
-    const athens = toRow(rec({ qid: "Q1", lat: 37.98, lon: 23.72 }));
-    const fiji = toRow(rec({ qid: "Q2", lat: -17.7, lon: 179.95 }));
-    writeDatabase(path, [athens, fiji], {});
+  it("has no H3 columns or indexes", () => {
+    const path = join(dir, "no-cells.db");
+    writeDatabase(path, [toRow(rec({}))], {});
     const db = new Database(path, { readonly: true });
-    for (const r of [athens, fiji]) {
-      const stored = db.prepare("SELECT h3_r2, h3_r3, h3_r4, h3_r5 FROM events WHERE qid = ?").get(r.qid);
-      expect(stored).toEqual(cellsForPoint(r.lat, r.lon));
-    }
+    const columns = (db.prepare("PRAGMA table_info(events)").all() as { name: string }[]).map((c) => c.name);
+    expect(columns.filter((c) => c.startsWith("h3_"))).toEqual([]);
     const indexes = (db.prepare("PRAGMA index_list(events)").all() as { name: string }[]).map((i) => i.name);
-    expect(indexes).toEqual(expect.arrayContaining(["idx_events_r2", "idx_events_r3", "idx_events_r4", "idx_events_r5", "idx_events_cells_r2", "idx_events_cells_r3", "idx_events_cells_r4", "idx_events_cells_r5"]));
+    expect(indexes.filter((n) => /_rd$|cells/.test(n))).toEqual([]);
+    expect(indexes).not.toContain("idx_events_kind_rank");
     db.close();
   });
 
