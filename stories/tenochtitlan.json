@@ -1,11 +1,11 @@
 {
   "id": "tenochtitlan",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "This area has 10 documented events, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "The exact date of the founding of Tenochtitlan, on an island in Lake Texcoco, is unclear, but 1325 was later chosen to celebrate its anniversary.", "cites": ["P1"] },
       { "text": "Moctezuma I, born here in 1398, later became the fifth king of Tenochtitlan.", "cites": ["P5"] },
       { "text": "The Mexico Flood of 1446 is documented here.", "cites": ["E1"] },

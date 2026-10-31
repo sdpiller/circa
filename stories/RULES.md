@@ -1,6 +1,6 @@
 # Writing rules for featured stories
 
-rulesVersion: 2
+rulesVersion: 3
 
 You are writing one short history of one area of the globe for one span of years. Everything you may say is in one input file. Your general knowledge of history is not a source: if the input does not say it, the story does not say it, however sure you are that it is true.
 
@@ -8,7 +8,7 @@ You are writing one short history of one area of the globe for one span of years
 
 The input file (`stories/inputs/<id>.json`) holds:
 
-- `entry`: the place name, the cell, and the year range (`from`, `to`; negative years are BCE).
+- `entry`: the place name and the year range (`from`, `to`; negative years are BCE). Its `cell` is a historical record; ignore it.
 - `items`: up to 12 events (refs `E1`, `E2`, ...) in year order, then up to 5 people and places (refs `P1`, ...) by notability. Each item has a `label`, a `kind`, a Wikidata `description` (may be null), its `years` text, its `loc_confidence`, and its English Wikipedia `extract` (null when there is no article).
 - `context`: one generated sentence with ref `C` that gives how many events and people and places are documented here, and how many of the listed events have approximate locations.
 - `eventsTotal` and `othersTotal`: how many exist in total. If `eventsTotal` is more than the events listed, the story covers the most notable ones only.
@@ -24,7 +24,7 @@ The "source text" of an item is its label, description, years text, the words "a
 - If any item the story cites has an inherited location, say so exactly once, in one sentence near the start or at the end, for example "Some locations in this account are approximate." Do not repeat it sentence by sentence or attach it to single events or births: the box marks each item under the story. That sentence cites `C` when `C` counts at least one approximate event, otherwise the inherited items it covers. Give a count or share only if the cited text states it. If no cited item is inherited, say nothing about placement.
 - People and places: state their tie to this area (born here, founded or built here, as the kind says: `birth` means born here, `founding` means founded here, `structure` means built or dated here). Their later deeds happened elsewhere unless their text says they happened here; do not tell them as if they happened here.
 - Keep to what happened inside the range. Something an extract mentions outside it may be left out, or named as earlier or later.
-- When the box has few events, say so plainly, citing `C`. Never pad.
+- Do not state how many events, people or places are documented here: the panel beside the story lists a wider region, so a count would contradict it. The numbers in `C` describe an earlier, smaller area; never repeat them. Never pad.
 - A year before the common era always carries BCE ("480 BCE"), never bare, so no reader takes it for CE. Write common-era years as the cited text writes them ("1453" or "1453 CE").
 - No em dashes or en dashes. Use commas, colons, or full stops.
 
@@ -45,13 +45,13 @@ Write `stories/<id>.json`:
 ```json
 {
   "id": "<the entry id>",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "<today, YYYY-MM-DD>",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 3 events are documented here, so this account is short.", "cites": ["C"] },
-      { "text": "<a sentence>", "cites": ["E1"] }
+      { "text": "<a sentence>", "cites": ["E1"] },
+      { "text": "<a sentence>", "cites": ["E2", "E3"] }
     ],
     [
       { "text": "<a sentence>", "cites": ["E2", "P1"] }

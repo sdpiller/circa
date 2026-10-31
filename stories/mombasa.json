@@ -1,11 +1,11 @@
 {
   "id": "mombasa",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 5 events and 2 people and places are documented here, so this account is short, and 4 of the 5 events have approximate locations.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "In 1505, Portuguese forces under the first Viceroy of India, Dom Francisco de Almeida, fought the Sultanate of Mombasa, staged a landing and sacked the city.", "cites": ["E1"] },
       { "text": "In 1528, Portuguese forces under Nuno da Cunha, the Portuguese governor of India, fought the Sultanate of Mombasa.", "cites": ["E2"] },
       { "text": "On 5 March 1589, Portuguese and Zimba forces under Tomé Coutinho fought the Ottomans, and the Portuguese reconquered the city and captured Mir Ali Beg.", "cites": ["E3"] },

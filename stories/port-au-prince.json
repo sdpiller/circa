@@ -1,11 +1,10 @@
 {
   "id": "port-au-prince",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events and 3 people and places are documented here, so this account is short.", "cites": ["C"] },
       { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "The 1751 Port-au-Prince earthquake occurred on 21 November in Saint-Domingue, followed by a tsunami.", "cites": ["E1"] },
       { "text": "Alexandre Pétion was born here in 1770 and Jean-Pierre Boyer in 1776.", "cites": ["P1", "P2"] },

@@ -1,11 +1,11 @@
 {
   "id": "baghdad",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events are documented here, along with 55 people and places, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Baghdad was founded in 762 CE.", "cites": ["P1"] },
       { "text": "The jurist Ahmad ibn Hanbal was born here in 780 CE and the future caliph al-Ma'mun in 786 CE.", "cites": ["P2", "P4"] },
       { "text": "The siege of Baghdad, part of a civil war between al-Amin and al-Ma'mun for the Abbasid Caliphate, lasted from August 812 until September 813.", "cites": ["E1"] },

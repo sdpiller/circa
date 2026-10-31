@@ -1,11 +1,10 @@
 {
   "id": "kyoto",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "This account draws on the most notable of the 27 documented events here.", "cites": ["C"] },
       { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Ginkaku-ji, a Zen temple in Kyoto's Sakyo ward, is dated to 1465.", "cites": ["P5"] },
       { "text": "The Ōnin War, a civil war from 1467 to 1477, grew from a dispute between Hosokawa Katsumoto and Yamana Sōzen.", "cites": ["E2"] },

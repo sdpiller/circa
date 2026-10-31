@@ -1,11 +1,11 @@
 {
   "id": "jerusalem",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "This area has 10 documented events, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Prochorus, born here at a date given only as 1 CE to 100 CE, was one of the Seven Deacons chosen to care for the poor of the Christian community in Jerusalem.", "cites": ["P4"] },
       { "text": "Josephus, best known for writing The Jewish War, was born in Jerusalem around 37 CE.", "cites": ["P2"] }
     ],

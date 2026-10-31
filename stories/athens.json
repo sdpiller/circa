@@ -1,11 +1,11 @@
 {
   "id": "athens",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events are documented here, with 59 people and places, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Sophocles was born here in 496 BCE and Pericles in 494 BCE.", "cites": ["P3", "P5"] },
       { "text": "In 480 BCE the Achaemenid Empire captured Athens.", "cites": ["E1"] },
       { "text": "It subsequently razed the Acropolis, the Old Temple of Athena, and the Older Parthenon.", "cites": ["E1"] },

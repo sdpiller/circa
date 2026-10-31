@@ -12,7 +12,7 @@
     "paragraphs": [
       [
         {
-          "text": "Only 8 events are documented here, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -336,7 +336,7 @@
     "paragraphs": [
       [
         {
-          "text": "Only 8 events are documented here, with 59 people and places, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -685,7 +685,7 @@
     "paragraphs": [
       [
         {
-          "text": "This area has 10 documented events, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -822,7 +822,7 @@
     "paragraphs": [
       [
         {
-          "text": "Only 8 events and 44 people and places are documented here, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -974,7 +974,7 @@
     "paragraphs": [
       [
         {
-          "text": "Some locations in this account are approximate, including all 8 documented events.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1136,7 +1136,7 @@
     "paragraphs": [
       [
         {
-          "text": "Only 8 events are documented here, along with 55 people and places, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1288,7 +1288,7 @@
     "paragraphs": [
       [
         {
-          "text": "This area has 10 documented events, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1460,7 +1460,7 @@
     "paragraphs": [
       [
         {
-          "text": "Only 10 events are documented here, along with 49 people and places, and some locations in this account are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -1936,16 +1936,6 @@
     "paragraphs": [
       [
         {
-          "text": "This account draws on the most notable of the 27 documented events here.",
-          "cites": [
-            {
-              "ref": "C",
-              "qid": null,
-              "label": "this area's lists"
-            }
-          ]
-        },
-        {
           "text": "Some locations in this account are approximate.",
           "cites": [
             {
@@ -2128,7 +2118,7 @@
     "paragraphs": [
       [
         {
-          "text": "Only 5 events and 2 people and places are documented here, so this account is short, and 4 of the 5 events have approximate locations.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -2220,20 +2210,10 @@
       "to": 1800,
       "cell": "853d12cffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
-        {
-          "text": "Only 3 events and 1 place are documented here, so this account is short.",
-          "cites": [
-            {
-              "ref": "C",
-              "qid": null,
-              "label": "this area's lists"
-            }
-          ]
-        },
         {
           "text": "The First Battle of Panipat, on 21 April 1526, was fought between the invading forces of Babur and Ibrahim Khan Lodi, the Sultan of Delhi.",
           "cites": [
@@ -2341,16 +2321,6 @@
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
-        {
-          "text": "Only 8 events and 3 people and places are documented here, so this account is short.",
-          "cites": [
-            {
-              "ref": "C",
-              "qid": null,
-              "label": "this area's lists"
-            }
-          ]
-        },
         {
           "text": "Some locations in this account are approximate.",
           "cites": [
@@ -2493,16 +2463,6 @@
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
-        {
-          "text": "Of 41 documented events here, only the most notable appear.",
-          "cites": [
-            {
-              "ref": "C",
-              "qid": null,
-              "label": "this area's lists"
-            }
-          ]
-        },
         {
           "text": "Some locations in this account are approximate.",
           "cites": [
@@ -2813,7 +2773,7 @@
     "paragraphs": [
       [
         {
-          "text": "This area has 18 documented events; 12 are told here, and some locations are approximate.",
+          "text": "Some locations in this account are approximate.",
           "cites": [
             {
               "ref": "C",
@@ -2985,20 +2945,10 @@
       "to": 1918,
       "cell": "831ecafffffffff"
     },
-    "writtenAt": "2026-10-29",
+    "writtenAt": "2026-10-30",
     "writtenBy": "Claude Opus 5.5 in Claude Code",
     "paragraphs": [
       [
-        {
-          "text": "Of the 23 documented events here, this account follows 12 of them.",
-          "cites": [
-            {
-              "ref": "C",
-              "qid": null,
-              "label": "this area's lists"
-            }
-          ]
-        },
         {
           "text": "The Gallipoli campaign, a First World War campaign on the Gallipoli Peninsula, began on 19 February 1915.",
           "cites": [

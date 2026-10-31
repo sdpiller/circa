@@ -1,11 +1,10 @@
 {
   "id": "paris",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Of 41 documented events here, only the most notable appear.", "cites": ["C"] },
       { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "On 17 July 1791, the Champ de Mars Massacre struck a crowd of republican protesters in Paris.", "cites": ["E1"] },
       { "text": "On 10 August 1792, armed revolutionaries stormed the Tuileries Palace, leading France to abolish the monarchy and establish a republic.", "cites": ["E2"] },

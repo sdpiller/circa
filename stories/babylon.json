@@ -1,11 +1,11 @@
 {
   "id": "babylon",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 8 events are documented here, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Babylon, the capital city of Babylonia, has its founding dated to between 3000 BCE and 2001 BCE.", "cites": ["P1"] },
       { "text": "Ammi-Saduqa, a king of Babylon, was born here between 1800 BCE and 1701 BCE.", "cites": ["P5"] }
     ],

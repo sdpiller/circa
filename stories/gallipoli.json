@@ -1,11 +1,10 @@
 {
   "id": "gallipoli",
-  "rulesVersion": 1,
-  "writtenAt": "2026-10-29",
+  "rulesVersion": 3,
+  "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Of the 23 documented events here, this account follows 12 of them.", "cites": ["C"] },
       { "text": "The Gallipoli campaign, a First World War campaign on the Gallipoli Peninsula, began on 19 February 1915.", "cites": ["E1"] },
       { "text": "In 1915, Royal Navy, French, Russian and Australian ships attempted to force a passage through the Dardanelles Straits; the placement of these operations is approximate.", "cites": ["E2"] },
       { "text": "On 25 April 1915, amphibious landings by British and French forces included Cape Helles, and British Empire forces landed at Anzac Cove, beginning the campaign's land phase.", "cites": ["E5", "E3"] },

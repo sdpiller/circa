@@ -1,11 +1,11 @@
 {
   "id": "lhasa",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Some locations in this account are approximate, including all 8 documented events.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Songtsän Gampo, a Tibetan emperor, was born here in 604 CE.", "cites": ["P4"] },
       { "text": "Lhasa, today the capital of Tibet, was founded in 633 CE.", "cites": ["P1"] },
       { "text": "The Potala Palace dates to 637 CE, and Songtsän Gampo moved the capital to it.", "cites": ["P2", "P4"] },

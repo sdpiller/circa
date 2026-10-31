@@ -1,11 +1,11 @@
 {
   "id": "beijing",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "This area has 18 documented events; 12 are told here, and some locations are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "In 1900 Boxers and Qing Dynasty troops besieged the foreign legations in Peking for 55 days, until the Eight-Nation Alliance relieved them.", "cites": ["E1", "E2"] },
       { "text": "Only the Treaty of Peking's name and year, 1905, are documented here.", "cites": ["E3"] },
       { "text": "Puyi, the last Qing emperor, was born here in 1906.", "cites": ["P3"] },

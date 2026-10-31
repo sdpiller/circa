@@ -1,11 +1,11 @@
 {
   "id": "seoul",
-  "rulesVersion": 2,
+  "rulesVersion": 3,
   "writtenAt": "2026-10-30",
   "writtenBy": "Claude Opus 5.5 in Claude Code",
   "paragraphs": [
     [
-      { "text": "Only 10 events are documented here, along with 49 people and places, and some locations in this account are approximate.", "cites": ["C"] },
+      { "text": "Some locations in this account are approximate.", "cites": ["C"] },
       { "text": "Seoul was founded in 1395.", "cites": ["P1"] },
       { "text": "Sejong the Great, creator of Hangul, was born here in 1397, and Yi Sun-sin, a Korean admiral, in 1545.", "cites": ["P2", "P3"] },
       { "text": "The Imjin War, two Japanese invasions of Korea, ran from 1592 CE to 1598 CE and ended with the withdrawal of Japanese forces after a military stalemate in Korea's southern provinces.", "cites": ["E1"] }

@@ -33,6 +33,14 @@ describe("committed stories", () => {
     }
   });
 
+  it("no sentence citing C contains a number", () => {
+    const number = /\d|\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|dozen|twenty|thirty|forty|fifty|hundreds?|thousands?)\b/i;
+    const offending = stories.flatMap((s) =>
+      s.paragraphs.flat().filter((sentence) => sentence.cites.includes("C") && number.test(sentence.text)).map((sentence) => `${s.id}: ${sentence.text}`),
+    );
+    expect(offending).toEqual([]);
+  });
+
   it("stories/published.json is what publishStories produces (run npm run story:publish)", () => {
     expect(readJson("published.json")).toEqual(JSON.parse(JSON.stringify(publishStories(featured, stories, inputs))));
   });
