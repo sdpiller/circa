@@ -32,6 +32,16 @@
   opacity: 1;
 }
 
+/* The style never loaded: one plain line where the globe would be. */
+.mapError {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: var(--ink-soft);
+}
+
 /* Keyboard focus comes back here when the panel closes. The map fills the window, so the ring goes inside. */
 .map :global(.maplibregl-canvas):focus-visible {
   outline-offset: -2px;

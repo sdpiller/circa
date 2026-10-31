@@ -100,6 +100,33 @@ describe("answered", () => {
   });
 });
 
+describe("a failed show more", () => {
+  const more = (s: AreaState) => areaReducer(s, { type: "more", list: "events", next: 50 });
+
+  it("keeps the list and the old limits, so nothing is asked again", () => {
+    const before = clicked();
+    const s = answered(more(before), null);
+    expect(shownAnswer(s)?.body).not.toBeNull();
+    expect(s.answer).toBe(before.answer);
+    expect([s.eventsLimit, s.othersLimit]).toEqual([EVENTS_STEP, OTHERS_STEP]);
+    expect(requestUrl(s)).toBe(before.answer?.url);
+  });
+
+  it("still gives the error when the first load failed", () => {
+    const s = answered(run([{ type: "click", point: ATHENS }]), null);
+    expect(shownAnswer(s)?.body).toBeNull();
+  });
+
+  it("can be tried again, and the longer list then shows", () => {
+    const failed = answered(more(clicked()), null);
+    const retry = more(failed);
+    expect(requestUrl(retry)).not.toBe(failed.answer?.url);
+    const s = answered(retry, answer({ eventsTotal: 80 }));
+    expect(shownAnswer(s)?.body?.eventsTotal).toBe(80);
+    expect(s.eventsLimit).toBe(50);
+  });
+});
+
 describe("drag", () => {
   it("sets intent range and keeps the point, and the old years are out of view", () => {
     const s = areaReducer(clicked(), { type: "drag", range: ROMAN });

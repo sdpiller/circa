@@ -4,7 +4,8 @@ import { regionsContaining, regionsContainingEach, regionShapes } from "../lib/d
 import type { AreaGeometry, Position } from "../lib/geo/geometry.ts";
 import type { ProvinceRow } from "../lib/geo/provinces.ts";
 import type { NewRegion } from "../etl/boundaries-parse.ts";
-import { CAP_KM, resolveOutline, type Selection } from "../lib/outline/resolve.ts";
+import { CAP_KM } from "../lib/outline/scale.ts";
+import { resolveOutline, type Selection } from "../lib/outline/resolve.ts";
 import type { PublishedStory } from "../lib/narrative/publish.ts";
 import { box, makeGeoDb, province, region, story } from "./helpers.ts";
 

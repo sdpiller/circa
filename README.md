@@ -8,7 +8,7 @@ The story is the point; the globe is how you get to it.
 
 Work in progress, built in phases (see [docs/PLAN.md](docs/PLAN.md)).
 
-- **Done (Phases 0 to 6):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items, historical outlines built from three open boundary datasets, the cream globe with names by zoom, the area panel (events, people and places, Wikipedia paragraphs and hover cards), and twenty featured stories reachable by clicking or from a Stories list.
+- **Done (Phases 0 to 5; Phase 6 is built and awaiting the owner's approval):** project scaffold, year-convention library, a Wikidata fetch and data audit ([docs/data-audit.md](docs/data-audit.md)), a local SQLite database of about 255,000 dated, located items, historical outlines built from three open boundary datasets, the cream globe with names by zoom, the area panel (events, people and places, Wikipedia paragraphs and hover cards), and twenty featured stories reachable by clicking or from a Stories list.
 - **Not built yet:** deployment (Phase 7).
 - **Outlines are approximate.** They are built from modern provinces and labelled as such. They are not authoritative maps.
 

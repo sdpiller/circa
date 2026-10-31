@@ -10,10 +10,8 @@ import { boundaryLines, buildOutline, frameBounds, simplifyRing } from "../geo/o
 import type { ProvinceRow } from "../geo/provinces.ts";
 import type { PublishedStory } from "../narrative/publish.ts";
 import { yearCount } from "../time/index.ts";
+import { CAP_KM } from "./scale.ts";
 import { chooseRegion, MAX_SPAN_YEARS, type RegionRow } from "./choose.ts";
-
-/** Provinces farther than this from the click are left out, unless clicked or a story's own. */
-export const CAP_KM = 800;
 
 /** Rings are simplified to this fraction of the outline's longer side, which holds the payload down at any scale. */
 const SIMPLIFY_FRACTION = 1 / 1500;

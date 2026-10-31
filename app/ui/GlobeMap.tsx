@@ -75,6 +75,7 @@ export function GlobeMap({
 }) {
   const container = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState<MapLibreMap | null>(null); // the map, once the style and our layers exist
+  const [failed, setFailed] = useState(false); // the style never loaded, so there is no globe to wait for
   const drawnKey = useRef<string | null>(null);
   const flights = useRef(0);
   // An outline waiting for its flight's moveend. A newer selection replaces or clears it, which cancels the wait.
@@ -133,7 +134,14 @@ export function GlobeMap({
         });
       };
 
+      // Only a failure before the style has loaded leaves the page without a globe. A later tile error is MapLibre's to retry.
+      let styled = false;
+      m.on("error", () => {
+        if (!styled && !cancelled) setFailed(true);
+      });
+
       m.on("style.load", () => {
+        styled = true;
         m.setProjection({ type: "globe" });
         // Each call is guarded: a custom BASEMAP_STYLE_URL may lack a layer or property, and must not throw.
         const paint = (id: string, prop: string, value: unknown) => {
@@ -195,6 +203,7 @@ export function GlobeMap({
       cancelled = true;
       timers.forEach(clearTimeout);
       setReady(null);
+      setFailed(false);
       map?.remove();
     };
   }, [styleUrl, onClick]);
@@ -229,5 +238,14 @@ export function GlobeMap({
     });
   }, [ready, panelOpen]);
 
-  return <div ref={container} className={styles.map} aria-label="Globe of history. Arrow keys pan, plus and minus zoom." />;
+  return (
+    <>
+      <div ref={container} className={styles.map} aria-label="Globe of history. Arrow keys pan, plus and minus zoom." />
+      {failed && (
+        <p className={styles.mapError} role="status">
+          The map could not load.
+        </p>
+      )}
+    </>
+  );
 }

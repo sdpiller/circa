@@ -6,7 +6,7 @@
  */
 import { queryArea, type AreaAnswer, type AreaQueryInput } from "../lib/db/area.ts";
 import { getDb } from "../lib/db/connection.ts";
-import { PUBLISHED } from "../lib/stories/catalog.ts";
+import { missingCites, PUBLISHED } from "../lib/stories/catalog.ts";
 
 type Click = { name: string; lon: number; lat: number; from: number; to: number; intent?: "click" | "range" };
 
@@ -106,6 +106,11 @@ function problems(a: AreaAnswer): string[] {
   for (const item of [...a.events, ...a.others]) {
     const row = provinceOf.get(item.qid) as { province_id: string | null };
     if (row.province_id === null || !ids.has(row.province_id)) out.push(`${item.qid} is outside the outline`);
+  }
+  const story = a.storyId ? PUBLISHED.find((p) => p.entry.id === a.storyId) : undefined;
+  if (story) {
+    const missing = missingCites(story, a);
+    if (missing.length > 0) out.push(`story ${a.storyId} would be hidden, missing ${missing.join(",")}`);
   }
   return out;
 }

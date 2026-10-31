@@ -111,6 +111,15 @@ export function areaReducer(s: AreaState, a: AreaAction): AreaState {
         const moved: AreaState = { ...s, range: { from: a.body.from, to: a.body.to }, intent: "range" };
         return { ...moved, answer: { url: requestUrl(moved)!, body: a.body } };
       }
+      const kept = s.answer;
+      if (a.body === null && kept?.body) {
+        // A failed "show more" must not wipe the list it was extending: same question, only longer limits.
+        const was = paramsOf(kept.url);
+        const failed = paramsOf(a.url);
+        if (baseOf(was) === baseOf(failed) && was.get("intent") === failed.get("intent")) {
+          return { ...s, eventsLimit: Number(was.get("eventsLimit")), othersLimit: Number(was.get("othersLimit")) };
+        }
+      }
       return { ...s, answer: { url: a.url, body: a.body } };
     }
   }
