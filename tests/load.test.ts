@@ -1,8 +1,9 @@
 import Database from "better-sqlite3";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { parseProvinces } from "../etl/boundaries-parse.ts";
 import { dedupe, isTooWide } from "../etl/build.ts";
 import { runSpotChecks, SPOT_CHECKS, toRow, writeDatabase } from "../etl/load.ts";
 import type { EventRecord } from "../etl/normalize.ts";
@@ -146,5 +147,44 @@ describe("runSpotChecks", () => {
     expect(results[1].detail).toContain("WRONG YEAR");
     expect(results[2].detail).toContain("WRONG PLACE");
     expect(results[3].detail).toContain("missing");
+  });
+});
+
+describe("province assignment", () => {
+  let dir: string;
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), "chronoglobe-test-"));
+  });
+  afterEach(() => rmSync(dir, { recursive: true, force: true }));
+
+  const provinces = parseProvinces(JSON.parse(readFileSync(join(import.meta.dirname, "fixtures", "boundaries", "naturalearth.json"), "utf8")));
+  const region = { source: "cliopatria" as const, name: "Roman Republic", from_year: -509, to_year: -28, area: 1, wikidata: "Q17167", west: 10, south: 40, east: 14, north: 44, geojson: "{}" };
+
+  it("gives an event inside a province its id, a near one the nearest, and a far one nothing", () => {
+    const path = join(dir, "geo.db");
+    const inside = toRow(rec({ qid: "Q1", lat: 38.1, lon: 23.8 }));
+    const snapped = toRow(rec({ qid: "Q2", lat: 37.0, lon: 23.8 })); // about 100 km south of the box
+    const far = toRow(rec({ qid: "Q3", lat: 33.5, lon: 23.8 })); // about 500 km south
+    writeDatabase(path, [inside, snapped, far], {}, { provinces, regions: [region] });
+    const db = new Database(path, { readonly: true });
+    const ids = Object.fromEntries((db.prepare("SELECT qid, province_id FROM events").all() as { qid: string; province_id: string | null }[]).map((r) => [r.qid, r.province_id]));
+    expect(ids).toEqual({ Q1: "GRC-2884", Q2: "GRC-2884", Q3: null });
+    expect(db.prepare("SELECT COUNT(*) AS n FROM provinces").get()).toEqual({ n: 2 });
+    expect(db.prepare("SELECT name, from_year, to_year FROM regions").get()).toEqual({ name: "Roman Republic", from_year: -509, to_year: -28 });
+    db.close();
+  });
+
+  it("reports how many events were inside, snapped and unassigned", () => {
+    const path = join(dir, "stats.db");
+    const rows = [toRow(rec({ qid: "Q1", lat: 38.1, lon: 23.8 })), toRow(rec({ qid: "Q2", lat: 37.0, lon: 23.8 })), toRow(rec({ qid: "Q3", lat: 33.5, lon: 23.8 }))];
+    expect(writeDatabase(path, rows, {}, { provinces, regions: [] })).toEqual({ inside: 1, snapped: 1, unassigned: 1 });
+  });
+
+  it("works with no geography, leaving province_id null", () => {
+    const path = join(dir, "none.db");
+    writeDatabase(path, [toRow(rec({}))], {});
+    const db = new Database(path, { readonly: true });
+    expect(db.prepare("SELECT province_id FROM events").get()).toEqual({ province_id: null });
+    db.close();
   });
 });

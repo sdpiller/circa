@@ -1,0 +1,87 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "featurecla": "Admin-1 states provinces",
+    "adm1_code": "GRC-2884",
+    "iso_3166_2": "GR-A1",
+    "iso_a2": "GR",
+    "name": "Attiki",
+    "name_local": "Αττική",
+    "type_en": "Region",
+    "admin": "Greece",
+    "latitude": 38.0626,
+    "longitude": 23.7997,
+    "sov_a3": "GRC",
+    "area_sqkm": 0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       23.5,
+       37.9
+      ],
+      [
+       24,
+       37.9
+      ],
+      [
+       24,
+       38.3
+      ],
+      [
+       23.5,
+       38.3
+      ],
+      [
+       23.5,
+       37.9
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "featurecla": "Admin-1 states provinces",
+    "adm1_code": "ATA+99?",
+    "name": null,
+    "admin": "Antarctica",
+    "latitude": -80,
+    "longitude": 0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -1,
+       -81
+      ],
+      [
+       1,
+       -81
+      ],
+      [
+       1,
+       -79
+      ],
+      [
+       -1,
+       -79
+      ],
+      [
+       -1,
+       -81
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

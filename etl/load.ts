@@ -9,10 +9,13 @@
  *        npm run etl               (fetch whatever is missing, then load)
  */
 import Database from "better-sqlite3";
-import { mkdirSync, renameSync, rmSync } from "node:fs";
-import { dirname } from "node:path";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { z } from "zod";
 import { formatYear } from "../lib/time/index.ts";
 import { cellsForPoint } from "../lib/cells.ts";
+import { applyStrikes, containingProvince, nearestProvince, parseBasemaps, parseCliopatria, parseProvinces, regionNamesDoc, snapshotRanges, unzipEntry, type NewRegion, type ProvinceRow } from "./boundaries-parse.ts";
+import { basemapSnapshots, CLIOPATRIA_FILE, NATURALEARTH_FILE } from "./boundaries.ts";
 import { DB_PATH, EventRow, SCHEMA_SQL } from "../lib/db/schema.ts";
 import { buildDataset } from "./build.ts";
 import { loadConfig } from "./fetch.ts";
@@ -40,8 +43,41 @@ export function toRow(r: EventRecord): EventRow {
   });
 }
 
+/** An event this far or less outside every province is placed in the nearest one (Task 4 measured what it catches). */
+export const SNAP_KM = 150;
+
+export type GeoData = { provinces: ProvinceRow[]; regions: NewRegion[] };
+export type AssignStats = { inside: number; snapped: number; unassigned: number };
+
+/** Inserts provinces and regions, then sets events.province_id for every event already in the table. */
+export function loadGeo(db: Database.Database, geo: GeoData): AssignStats {
+  const addProvince = db.prepare(`INSERT INTO provinces (id, name, country, lon, lat, west, south, east, north, area, geojson)
+    VALUES (@id, @name, @country, @lon, @lat, @west, @south, @east, @north, @area, @geojson)`);
+  const addRegion = db.prepare(`INSERT INTO regions (source, name, from_year, to_year, area, wikidata, west, south, east, north, geojson)
+    VALUES (@source, @name, @from_year, @to_year, @area, @wikidata, @west, @south, @east, @north, @geojson)`);
+  const setProvince = db.prepare("UPDATE events SET province_id = ? WHERE qid = ?");
+  const stats: AssignStats = { inside: 0, snapped: 0, unassigned: 0 };
+  db.transaction(() => {
+    for (const p of geo.provinces) addProvince.run(p);
+    for (const r of geo.regions) addRegion.run(r);
+    if (geo.provinces.length === 0) return;
+    for (const e of db.prepare("SELECT qid, lat, lon FROM events").all() as { qid: string; lat: number; lon: number }[]) {
+      const inside = containingProvince(geo.provinces, e.lon, e.lat);
+      const p = inside ?? nearestProvince(geo.provinces, e.lon, e.lat, SNAP_KM);
+      if (!p) {
+        stats.unassigned++;
+        continue;
+      }
+      if (inside) stats.inside++;
+      else stats.snapped++;
+      setProvince.run(p.id, e.qid);
+    }
+  })();
+  return stats;
+}
+
 /** Write a complete database to `path`, which must not exist yet. */
-export function writeDatabase(path: string, rows: EventRow[], info: Record<string, string>): void {
+export function writeDatabase(path: string, rows: EventRow[], info: Record<string, string>, geo: GeoData = { provinces: [], regions: [] }): AssignStats {
   const db = new Database(path);
   try {
     db.pragma("journal_mode = DELETE"); // single file, nothing left beside it after close
@@ -57,7 +93,9 @@ export function writeDatabase(path: string, rows: EventRow[], info: Record<strin
       for (const row of rows) insert.run({ ...row, ...cellsForPoint(row.lat, row.lon) });
       for (const [k, v] of Object.entries(info)) setInfo.run(k, v);
     })();
+    const stats = loadGeo(db, geo);
     db.exec("ANALYZE");
+    return stats;
   } finally {
     db.close();
   }
@@ -88,6 +126,22 @@ export function runSpotChecks(db: Database.Database): SpotResult[] {
   });
 }
 
+/** Reads the boundary files fetched by etl:boundaries, writes docs/region-names.md, and returns what goes in the database. */
+export function readGeo(): GeoData {
+  const snapshots = basemapSnapshots();
+  const missing = [NATURALEARTH_FILE, CLIOPATRIA_FILE, ...snapshots.map((s) => s.file)].filter((f) => !existsSync(f));
+  if (missing.length) throw new Error(`Boundary files are missing (${missing.length}, first: ${missing[0]}). Run npm run etl:boundaries first.`);
+
+  const provinces = parseProvinces(JSON.parse(readFileSync(NATURALEARTH_FILE, "utf8")));
+  const all: NewRegion[] = parseCliopatria(JSON.parse(unzipEntry(readFileSync(CLIOPATRIA_FILE), ".geojson").toString("utf8")));
+  const ranges = snapshotRanges(snapshots.map((s) => s.year));
+  for (const [i, s] of snapshots.entries()) all.push(...parseBasemaps(JSON.parse(readFileSync(s.file, "utf8")), ranges[i]));
+
+  const struck = new Set(z.array(z.string()).parse(JSON.parse(readFileSync(join(import.meta.dirname, "struck-names.json"), "utf8"))));
+  writeFileSync(join(import.meta.dirname, "..", "docs", "region-names.md"), regionNamesDoc(all, struck));
+  return { provinces, regions: applyStrikes(all, struck) };
+}
+
 function main() {
   const allowMissing = process.argv.includes("--allow-missing");
   const started = Date.now();
@@ -108,20 +162,24 @@ function main() {
   }
   if (invalid.length) throw new Error(`${invalid.length} rows failed validation, first ones:\n${invalid.slice(0, 5).join("\n")}`);
 
+  const geo = readGeo();
   mkdirSync(dirname(DB_PATH), { recursive: true });
   const tmp = `${DB_PATH}.tmp`;
   rmSync(tmp, { force: true });
-  writeDatabase(tmp, rows, {
+  const assigned = writeDatabase(tmp, rows, {
     built_at: new Date().toISOString(),
     events: String(rows.length),
     classes: String(ds.stats.length),
     dropped_out_of_window: String(ds.dropped.outOfWindow),
     dropped_too_wide: String(ds.dropped.tooWide),
     missing_classes: ds.missing.join(",") || "none",
-  });
+    provinces: String(geo.provinces.length),
+    regions: String(geo.regions.length),
+  }, geo);
 
   const check = new Database(tmp, { readonly: true });
   const results = runSpotChecks(check);
+  const names = check.prepare("SELECT COUNT(DISTINCT name) AS n FROM regions WHERE source = 'basemaps'").get() as { n: number };
   const byKind = check.prepare("SELECT kind, COUNT(*) AS n FROM events GROUP BY kind ORDER BY n DESC").all() as { kind: string; n: number }[];
   check.close();
   for (const r of results) console.log(`${r.ok ? "pass" : "FAIL"}  ${r.name}: ${r.detail}`);
@@ -139,6 +197,8 @@ function main() {
     throw err;
   }
   console.log(`\nWrote ${DB_PATH}: ${rows.length.toLocaleString("en-US")} rows in ${((Date.now() - started) / 1000).toFixed(1)} s`);
+  console.log(`  provinces ${geo.provinces.length.toLocaleString("en-US")}, regions ${geo.regions.length.toLocaleString("en-US")} (${names.n} distinct basemaps names)`);
+  console.log(`  events in a province ${assigned.inside.toLocaleString("en-US")}, snapped within ${SNAP_KM} km ${assigned.snapped.toLocaleString("en-US")}, unassigned ${assigned.unassigned.toLocaleString("en-US")}`);
   for (const { kind, n } of byKind) console.log(`  ${kind.padEnd(10)} ${n.toLocaleString("en-US")}`);
   console.log(`  dropped: ${ds.dropped.outOfWindow} outside the year window, ${ds.dropped.tooWide} with intervals over 1,000 years`);
 }

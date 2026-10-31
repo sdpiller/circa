@@ -1,0 +1,257 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "Name": "Roman Republic",
+    "FromYear": -509,
+    "ToYear": -28,
+    "Area": 123456,
+    "Type": "POLITY",
+    "Wikipedia": "Roman Republic",
+    "Wikidata": "Q17167",
+    "SeshatID": "",
+    "Components": "",
+    "MemberOf": ""
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       10,
+       40
+      ],
+      [
+       14,
+       40
+      ],
+      [
+       14,
+       44
+      ],
+      [
+       10,
+       44
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "Name": "(Alliance between Elam and Babylonia)",
+    "FromYear": -1300,
+    "ToYear": -1241,
+    "Area": 237180.9,
+    "Type": "RELATION",
+    "Wikipedia": "(Alliance between Elam and Babylonia)",
+    "Wikidata": "Q128904",
+    "SeshatID": "",
+    "Components": "Elam;Babylonia",
+    "MemberOf": ""
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       10,
+       40
+      ],
+      [
+       14,
+       40
+      ],
+      [
+       14,
+       44
+      ],
+      [
+       10,
+       44
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "Name": "Relation Row",
+    "FromYear": -900,
+    "ToYear": -800,
+    "Area": 10,
+    "Type": "RELATION",
+    "Wikipedia": "Relation Row",
+    "Wikidata": "Q1",
+    "SeshatID": "",
+    "Components": "",
+    "MemberOf": ""
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       10,
+       40
+      ],
+      [
+       14,
+       40
+      ],
+      [
+       14,
+       44
+      ],
+      [
+       10,
+       44
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "Name": "(Placeholder Polity)",
+    "FromYear": -900,
+    "ToYear": -800,
+    "Area": 10,
+    "Type": "POLITY",
+    "Wikipedia": "(Placeholder Polity)",
+    "Wikidata": "Q2",
+    "SeshatID": "",
+    "Components": "",
+    "MemberOf": ""
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       10,
+       40
+      ],
+      [
+       14,
+       40
+      ],
+      [
+       14,
+       44
+      ],
+      [
+       10,
+       44
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "Name": "Zero Start",
+    "FromYear": 0,
+    "ToYear": 100,
+    "Area": 500,
+    "Type": "POLITY",
+    "Wikipedia": "Zero Start",
+    "Wikidata": "Q3",
+    "SeshatID": "",
+    "Components": "",
+    "MemberOf": ""
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       10,
+       40
+      ],
+      [
+       14,
+       40
+      ],
+      [
+       14,
+       44
+      ],
+      [
+       10,
+       44
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "Name": "Zero End",
+    "FromYear": -50,
+    "ToYear": 0,
+    "Area": 500,
+    "Type": "POLITY",
+    "Wikipedia": "Zero End",
+    "Wikidata": "Q4",
+    "SeshatID": "",
+    "Components": "",
+    "MemberOf": ""
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       10,
+       40
+      ],
+      [
+       14,
+       40
+      ],
+      [
+       14,
+       44
+      ],
+      [
+       10,
+       44
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

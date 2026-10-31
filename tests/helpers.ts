@@ -1,5 +1,7 @@
 import Database from "better-sqlite3";
 import { cellsForPoint } from "../lib/cells.ts";
+import { loadGeo } from "../etl/load.ts";
+import type { NewRegion, ProvinceRow } from "../etl/boundaries-parse.ts";
 import { SCHEMA_SQL, type EventRow } from "../lib/db/schema.ts";
 
 let n = 0;
@@ -39,5 +41,12 @@ export function makeDb(rows: EventRow[]): Database.Database {
     @h3_r2, @h3_r3, @h3_r4, @h3_r5)`);
   for (const r of rows) insert.run({ ...r, ...cellsForPoint(r.lat, r.lon) });
   db.exec("ANALYZE");
+  return db;
+}
+
+/** An in-memory database with events, provinces and regions; events get their province as the loader does. */
+export function makeGeoDb(rows: EventRow[], provinces: ProvinceRow[], regions: NewRegion[]): Database.Database {
+  const db = makeDb(rows);
+  loadGeo(db, { provinces, regions });
   return db;
 }

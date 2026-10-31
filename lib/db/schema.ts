@@ -31,7 +31,9 @@ CREATE TABLE events (
   h3_r2 TEXT NOT NULL,
   h3_r3 TEXT NOT NULL,
   h3_r4 TEXT NOT NULL,
-  h3_r5 TEXT NOT NULL
+  h3_r5 TEXT NOT NULL,
+  -- Natural Earth adm1_code of the province holding the event, or the nearest within the snap distance (etl/load.ts).
+  province_id TEXT
 );
 CREATE INDEX idx_events_years ON events(start_year, end_year);
 CREATE INDEX idx_events_geo ON events(lat, lon);
@@ -47,6 +49,34 @@ CREATE INDEX idx_events_r2 ON events(h3_r2);
 CREATE INDEX idx_events_r3 ON events(h3_r3);
 CREATE INDEX idx_events_r4 ON events(h3_r4);
 CREATE INDEX idx_events_r5 ON events(h3_r5);
+
+CREATE INDEX idx_events_province ON events(province_id, kind, sitelinks DESC);
+
+-- Natural Earth admin-1 provinces: the building blocks of every outline.
+CREATE TABLE provinces (
+  id TEXT PRIMARY KEY,             -- adm1_code
+  name TEXT NOT NULL,
+  country TEXT NOT NULL,
+  lon REAL NOT NULL,               -- representative point
+  lat REAL NOT NULL,
+  west REAL NOT NULL, south REAL NOT NULL, east REAL NOT NULL, north REAL NOT NULL,
+  area REAL NOT NULL,              -- km2
+  geojson TEXT NOT NULL
+);
+
+-- Historical regions from Cliopatria and historical-basemaps. A basemaps snapshot is a year range.
+CREATE TABLE regions (
+  id INTEGER PRIMARY KEY,
+  source TEXT NOT NULL,            -- cliopatria | basemaps
+  name TEXT NOT NULL,
+  from_year INTEGER NOT NULL,      -- historical numbering, no year 0
+  to_year INTEGER NOT NULL,
+  area REAL NOT NULL,              -- km2
+  wikidata TEXT,
+  west REAL NOT NULL, south REAL NOT NULL, east REAL NOT NULL, north REAL NOT NULL,
+  geojson TEXT NOT NULL
+);
+CREATE INDEX idx_regions_years ON regions(from_year, to_year);
 
 CREATE TABLE build_info (
   key TEXT PRIMARY KEY,

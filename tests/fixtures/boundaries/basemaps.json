@@ -1,0 +1,200 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "NAME": "Persian Empire",
+    "ABBREVN": "Persian Empire",
+    "SUBJECTO": "Persian Empire",
+    "BORDERPRECISION": 1,
+    "PARTOF": "Persian Empire"
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        20,
+        30
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        40,
+        40
+       ],
+       [
+        20,
+        40
+       ],
+       [
+        20,
+        30
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "NAME": null,
+    "ABBREVN": null,
+    "SUBJECTO": null,
+    "BORDERPRECISION": 1,
+    "PARTOF": null
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        20,
+        30
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        40,
+        40
+       ],
+       [
+        20,
+        40
+       ],
+       [
+        20,
+        30
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "NAME": "  ",
+    "ABBREVN": "  ",
+    "SUBJECTO": "  ",
+    "BORDERPRECISION": 1,
+    "PARTOF": "  "
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        20,
+        30
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        40,
+        40
+       ],
+       [
+        20,
+        40
+       ],
+       [
+        20,
+        30
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "NAME": " Persian Empire ",
+    "ABBREVN": " Persian Empire ",
+    "SUBJECTO": " Persian Empire ",
+    "BORDERPRECISION": 1,
+    "PARTOF": " Persian Empire "
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        20,
+        30
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        40,
+        40
+       ],
+       [
+        20,
+        40
+       ],
+       [
+        20,
+        30
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "NAME": "Athens",
+    "ABBREVN": "Athens",
+    "SUBJECTO": "Athens",
+    "BORDERPRECISION": 1,
+    "PARTOF": "Athens"
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        20,
+        30
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        40,
+        40
+       ],
+       [
+        20,
+        40
+       ],
+       [
+        20,
+        30
+       ]
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}
