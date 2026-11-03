@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { AreaQuery, queryArea, type AreaAnswer, type AreaQueryInput } from "../lib/db/area.ts";
+import { AreaQuery, OutlineQuery, queryArea, queryOutline, type AreaAnswer, type AreaQueryInput } from "../lib/db/area.ts";
+import { pointInGeometry } from "../lib/geo/geometry.ts";
 import type { PublishedStory } from "../lib/narrative/publish.ts";
 import { box, makeGeoDb, province, region, resetRowCounter, row, story } from "./helpers.ts";
 
@@ -24,6 +25,10 @@ describe("queryArea: the click", () => {
     expect(r.eventsTotal).toBe(1);
     expect(r.storyId).toBeNull();
     expect([r.from, r.to]).toEqual([-500, -300]);
+  });
+
+  it("gives every point of one province the same outline", () => {
+    expect(run([], { lat: 0.1, lon: 0.9 }).selection).toEqual(run().selection);
   });
 
   it("a click 40 km off the coast counts as the nearest province", () => {
@@ -127,6 +132,55 @@ describe("queryArea: the lists", () => {
     const r = run([nowhere, at(-400, { qid: "Q100" })], {}, [story("athens", ["IN"], -500, -300, ["Q200"])]);
     expect(r.events.map((e) => e.qid)).toEqual(["Q100"]);
     expect(r.eventsTotal).toBe(1);
+  });
+});
+
+describe("queryOutline: the hover", () => {
+  const hover = (over: Partial<AreaQueryInput> = {}, stories: readonly PublishedStory[] = []) => {
+    const { lat, lon, from, to } = { ...q, ...over };
+    return queryOutline(makeGeoDb([], provinces(), regions()), { lat, lon, from, to }, stories).outline;
+  };
+  const shapeOf = (h: ReturnType<typeof hover>) => h && { fill: h.fill, lines: h.lines };
+  const clickShape = (over: Partial<AreaQueryInput> = {}, stories: readonly PublishedStory[] = []) => {
+    const s = run([], over, stories).selection;
+    return s.kind === "none" ? null : { fill: s.fill, lines: s.lines };
+  };
+
+  it("previews the outline a click at the same point gets", () => {
+    expect(hover()).not.toBeNull();
+    expect(shapeOf(hover())).toEqual(clickShape());
+  });
+
+  it("says where in the province it holds, so the browser can reuse it there", () => {
+    const h = hover()!.holds!;
+    expect(h.id).toBe("IN/0");
+    expect(pointInGeometry(0.9, 0.1, h.shape)).toBe(true);
+    expect(pointInGeometry(1.5, 0.5, h.shape)).toBe(false);
+  });
+
+  it("previews a story's outline where a click would open the story", () => {
+    const wide = [story("athens", ["IN", "OUT"], -500, -300)];
+    const shape = shapeOf(hover({ from: -450, to: -350 }, wide));
+    expect(shape).toEqual(clickShape({ from: -450, to: -350 }, wide));
+    expect(shape).not.toEqual(shapeOf(hover({ from: -450, to: -350 })));
+  });
+
+  it("is null where a click selects nothing", () => {
+    expect(hover({ lat: -0.54, lon: 0.5 })).toBeNull();
+  });
+});
+
+describe("OutlineQuery", () => {
+  const good = { lat: "38", lon: "23.7", from: "-500", to: "-300" };
+  const fails = (over: object) => OutlineQuery.safeParse({ ...good, ...over }).success === false;
+
+  it("parses strings to numbers", () => {
+    expect(OutlineQuery.parse(good)).toEqual({ lat: 38, lon: 23.7, from: -500, to: -300 });
+  });
+  it("rejects year 0, from after to, and a point off the globe", () => {
+    expect(fails({ from: "0" })).toBe(true);
+    expect(fails({ from: "-300", to: "-500" })).toBe(true);
+    expect(fails({ lon: "181" })).toBe(true);
   });
 });
 

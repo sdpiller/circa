@@ -17,7 +17,14 @@ function resolve(provinces: ProvinceRow[], regions: NewRegion[], q: { from: numb
   const db = makeGeoDb([], provinces, regions);
   const [lon, lat] = q.click ?? [CLICK.lon, CLICK.lat];
   const clicked = provinces.find((p) => p.id === (q.clicked ?? "P0"))!;
-  return resolveOutline(db, { lon, lat, from: q.from, to: q.to, clicked, story: q.story ?? null });
+  return resolveOutline(db, { lon, lat, from: q.from, to: q.to, clicked, story: q.story ?? null }).selection;
+}
+
+/** What the hover is told: where else in the clicked province the same answer holds. */
+function holds(provinces: ProvinceRow[], regions: NewRegion[], click: Position, clicked = "P0") {
+  const db = makeGeoDb([], provinces, regions);
+  const p = provinces.find((x) => x.id === clicked)!;
+  return resolveOutline(db, { lon: click[0], lat: click[1], from: -500, to: -300, clicked: p, story: null, sample: true }).holds;
 }
 
 const span = (first: number, last: number) => Array.from({ length: last - first + 1 }, (_, i) => `P${first + i}`);
@@ -94,6 +101,14 @@ describe("resolveOutline: which provinces", () => {
     expect(sorted(s.provinceIds)).toEqual(["P0", "P1"]);
   });
 
+  it("measures the cap from the clicked province's representative point, wherever the click was", () => {
+    // With P0's point at 0.05 degrees, P7's centre is about 828 km away; the click at 0.95 is about 728 km from it
+    const provinces = [province("P0", box(0, 0, 1, 1), { lon: 0.05 }), ...strip().slice(1)];
+    const s = resolve(provinces, [region("basemaps", "Atlas", -500, -300, box(0, 0, 9, 1))], { from: -500, to: -300, click: [0.95, 0.5] });
+    expect(s.provinceIds).toContain("P6");
+    expect(s.provinceIds).not.toContain("P7");
+  });
+
   it("adds a province within the cap and leaves one past it, and says it was capped", () => {
     expect(CAP_KM).toBe(800);
     // P7's centre is about 778 km from the click, P8's about 890 km
@@ -141,6 +156,29 @@ describe("resolveOutline: which provinces", () => {
     const small = province("SMALL", box(4.5, -1.3, 5.5, -0.6));
     const s = resolve([big, small], [], { from: -500, to: -300, click: [4, -0.36], clicked: "BIG" });
     expect(s.provinceIds).toContain("BIG");
+  });
+});
+
+describe("resolveOutline: where the answer holds", () => {
+  it("holds across the whole province when every part of it gets the same region", () => {
+    const h = holds(strip(), [region("basemaps", "Atlas", -500, -300, box(0, 0, 3, 1))], [0.5, 0.5]);
+    expect(h).toEqual({ id: "P0/0", shape: box(0, 0, 1, 1).coordinates });
+  });
+
+  it("holds nowhere else when the province straddles two regions", () => {
+    const regions = [region("basemaps", "West", -500, -300, box(0, 0, 0.5, 1)), region("basemaps", "East", -500, -300, box(0.5, 0, 3, 1))];
+    expect(holds(strip(), regions, [0.2, 0.5])).toBeNull();
+  });
+
+  it("holds only on the clicked island of a province in pieces", () => {
+    const isles: AreaGeometry = { type: "MultiPolygon", coordinates: [box(0, 0, 1, 1).coordinates as Position[][], box(3, 0, 4, 1).coordinates as Position[][]] };
+    const h = holds([province("P0", isles, { lon: 0.5, lat: 0.5 })], [], [3.5, 0.5]);
+    expect(h).toEqual({ id: "P0/1", shape: box(3, 0, 4, 1).coordinates });
+  });
+
+  it("is not asked for by a click", () => {
+    const db = makeGeoDb([], strip(), []);
+    expect(resolveOutline(db, { lon: 0.5, lat: 0.5, from: -500, to: -300, clicked: strip()[0], story: null }).holds).toBeNull();
   });
 });
 

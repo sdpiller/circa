@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AREA_LIMIT_MAX, EVENTS_STEP, OTHERS_STEP, areaUrl, cardPlacement, firstSentences, moreControl, summaryApiUrl, wikidataUrl } from "../lib/box.ts";
+import { AREA_LIMIT_MAX, EVENTS_STEP, OTHERS_STEP, areaUrl, cardPlacement, firstSentences, moreControl, outlineUrl, summaryApiUrl, wikidataUrl } from "../lib/box.ts";
 import { itemMeta, what } from "../lib/items.ts";
 
 describe("areaUrl", () => {
@@ -11,6 +11,12 @@ describe("areaUrl", () => {
 
   it("uses the default steps and cap from the global constraints", () => {
     expect([EVENTS_STEP, OTHERS_STEP, AREA_LIMIT_MAX]).toEqual([25, 30, 200]);
+  });
+});
+
+describe("outlineUrl", () => {
+  it("builds the hover query from a point and a range", () => {
+    expect(outlineUrl({ lat: 37.98, lon: 23.72, from: -500, to: -300 })).toBe("/api/outline?lat=37.98&lon=23.72&from=-500&to=-300");
   });
 });
 

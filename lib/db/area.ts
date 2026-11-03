@@ -6,8 +6,10 @@ import type Database from "better-sqlite3";
 import { z } from "zod";
 import { citedQids, type PublishedStory } from "../narrative/publish.ts";
 import { resolveOutline, type Selection } from "../outline/resolve.ts";
-import { PUBLISHED, storyFor } from "../stories/catalog.ts";
+import { PUBLISHED, storyFor, type Intent } from "../stories/catalog.ts";
 import { isQueryableYear, MAX_YEAR, MIN_YEAR } from "../time/index.ts";
+import type { AreaGeometry } from "../geo/geometry.ts";
+import { simplifyGeometry } from "../geo/outline.ts";
 import { provinceAt } from "./provinces.ts";
 import type { EventRow } from "./schema.ts";
 
@@ -15,19 +17,24 @@ const num = z.string().trim().min(1, "required").pipe(z.coerce.number());
 export const year = num.pipe(z.number().refine(isQueryableYear, `must be a whole year from ${MIN_YEAR} to ${MAX_YEAR}, and never 0`));
 const limit = z.string().trim().min(1).pipe(z.coerce.number()).pipe(z.number().int().min(1).max(200));
 
+const place = {
+  lat: num.pipe(z.number().min(-90).max(90)),
+  lon: num.pipe(z.number().min(-180).max(180)),
+  from: year,
+  to: year,
+};
+const inOrder = (q: { from: number; to: number }) => q.from <= q.to;
+const ORDER = { message: "from must not be after to", path: ["from"] };
+
 /** Query string of GET /api/area. Years use historical numbering (1 BCE = -1). */
 export const AreaQuery = z
-  .object({
-    lat: num.pipe(z.number().min(-90).max(90)),
-    lon: num.pipe(z.number().min(-180).max(180)),
-    from: year,
-    to: year,
-    intent: z.enum(["click", "range"]),
-    eventsLimit: limit.default(25),
-    othersLimit: limit.default(30),
-  })
-  .refine((q) => q.from <= q.to, { message: "from must not be after to", path: ["from"] });
+  .object({ ...place, intent: z.enum(["click", "range"]), eventsLimit: limit.default(25), othersLimit: limit.default(30) })
+  .refine(inOrder, ORDER);
 export type AreaQueryInput = z.output<typeof AreaQuery>;
+
+/** Query string of GET /api/outline: a point under the mouse and the range, read as a click. */
+export const OutlineQuery = z.object(place).refine(inOrder, ORDER);
+export type OutlineQueryInput = z.output<typeof OutlineQuery>;
 
 export type AreaItem = Pick<
   EventRow,
@@ -81,14 +88,37 @@ function section(db: Database.Database, group: Group, p: { ids: string; from: nu
 /** Ties in sitelinks go by qid, compared like SQLite's default BINARY collation, so the order is stable. */
 const byQid = (a: AreaItem, b: AreaItem) => (a.qid < b.qid ? -1 : a.qid > b.qid ? 1 : 0);
 
-export function queryArea(db: Database.Database, q: AreaQueryInput, stories: readonly PublishedStory[] = PUBLISHED): AreaAnswer {
+/** The province at the point, any story it opens, and the outline. Shared by the click and the hover, so they agree. */
+function select(db: Database.Database, q: OutlineQueryInput & { intent: Intent; sample?: boolean }, stories: readonly PublishedStory[]) {
   const clicked = provinceAt(db, q.lon, q.lat);
-  if (!clicked) return { selection: { kind: "none" }, storyId: null, from: q.from, to: q.to, events: [], eventsTotal: 0, others: [], othersTotal: 0 };
-
+  if (!clicked) return null;
   const story = storyFor(clicked.id, q.from, q.to, q.intent, stories);
   const from = story ? story.entry.from : q.from;
   const to = story ? story.entry.to : q.to;
-  const selection = resolveOutline(db, { lon: q.lon, lat: q.lat, from, to, clicked, story });
+  return { story, from, to, ...resolveOutline(db, { lon: q.lon, lat: q.lat, from, to, clicked, story, sample: q.sample }) };
+}
+
+/** Province shapes sent to the browser are simplified to about a kilometre: enough to tell which province the mouse is in. */
+const SHAPE_TOLERANCE_DEG = 0.01;
+
+/**
+ * What the map previews under the mouse: the outline a click there would draw, or null where it would select
+ * nothing. `holds` is where a click would get the same outline, so the browser can reuse it there: a piece of
+ * the province, named by `id`. It is null when the region changes inside the piece, and the answer is for this point only.
+ */
+export type HoverOutline = Pick<Selection, "fill" | "lines"> & { holds: { id: string; shape: AreaGeometry } | null };
+
+export function queryOutline(db: Database.Database, q: OutlineQueryInput, stories: readonly PublishedStory[] = PUBLISHED): { outline: HoverOutline | null } {
+  const s = select(db, { ...q, intent: "click", sample: true }, stories);
+  if (!s) return { outline: null };
+  const holds = s.holds && { id: s.holds.id, shape: simplifyGeometry({ type: "Polygon", coordinates: s.holds.shape }, SHAPE_TOLERANCE_DEG) };
+  return { outline: { fill: s.selection.fill, lines: s.selection.lines, holds } };
+}
+
+export function queryArea(db: Database.Database, q: AreaQueryInput, stories: readonly PublishedStory[] = PUBLISHED): AreaAnswer {
+  const s = select(db, q, stories);
+  if (!s) return { selection: { kind: "none" }, storyId: null, from: q.from, to: q.to, events: [], eventsTotal: 0, others: [], othersTotal: 0 };
+  const { story, from, to, selection } = s;
 
   const p = { ids: JSON.stringify(selection.provinceIds), from, to };
   const cited = story ? citedQids(story) : [];

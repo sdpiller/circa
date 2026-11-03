@@ -257,6 +257,17 @@ export function buildOutline(
   return { rings, keptIds, areaKm2: kept.reduce((sum, i) => sum + areas[i], 0), openChains };
 }
 
+/** Every ring simplified; rings that collapse below a triangle are dropped, and a polygon goes with its outer ring. */
+export function simplifyGeometry(g: AreaGeometry, toleranceDeg: number): { type: "MultiPolygon"; coordinates: Ring[][] } {
+  const coordinates: Ring[][] = [];
+  for (const [outer, ...holes] of polygonsOf(g)) {
+    const o = simplifyRing(outer, toleranceDeg);
+    if (o.length < 4) continue;
+    coordinates.push([o, ...holes.map((h) => simplifyRing(h, toleranceDeg)).filter((h) => h.length >= 4)]);
+  }
+  return { type: "MultiPolygon", coordinates };
+}
+
 /** Iterative Douglas-Peucker on a closed ring (first and last vertex equal), so long coastlines cannot overflow the stack. */
 export function simplifyRing(r: Ring, toleranceDeg: number): Ring {
   if (r.length < 5) return r;

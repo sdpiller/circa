@@ -49,7 +49,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
 
   return (
     <main className={`${styles.app} ${panelOpen ? styles.appPanelOpen : ""}`}>
-      <GlobeMap styleUrl={styleUrl} outline={outlineOf(area)} panelOpen={panelOpen} onClick={onClick} />
+      <GlobeMap styleUrl={styleUrl} outline={outlineOf(area)} range={area.range} panelOpen={panelOpen} onClick={onClick} />
 
       <header className={styles.masthead}>
         <h1 className={styles.wordmark}>Chronoglobe</h1>

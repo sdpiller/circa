@@ -23,6 +23,12 @@ export function areaUrl(q: AreaRequest): string {
   return `/api/area?${p}`;
 }
 
+/** The outline a click at the point would draw, for the hover preview. */
+export function outlineUrl(q: { lat: number; lon: number; from: number; to: number }): string {
+  const p = new URLSearchParams({ lat: String(q.lat), lon: String(q.lon), from: String(q.from), to: String(q.to) });
+  return `/api/outline?${p}`;
+}
+
 /** By Wikidata item: the server looks up the item's own Wikipedia title. */
 export function summaryApiUrl(qid: string): string {
   return `/api/summary?${new URLSearchParams({ qid })}`;
