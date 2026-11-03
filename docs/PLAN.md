@@ -1,4 +1,4 @@
-# Chronoglobe: plan, phases, and background
+# Circa (formerly Chronoglobe): plan, phases, and background
 
 Companion to `CLAUDE.md`. `CLAUDE.md` holds the standing rules and conventions. This file holds the origin story, product framing, phase-by-phase plan, backlog, and open assumptions. Read the relevant phase before starting it. Context date: 2026-10-28.
 
@@ -85,8 +85,18 @@ Dropped by the owner: the play button ("I never imagined pressing play. This isn
 
 Acceptance: the list in section 6 of the spec.
 
-### Phase 7 (optional): Deploy
-Run locally first. SQLite on serverless is awkward: prefer a host with a persistent volume, or ship the DB file read-only.
+### Phase 7: Deploy as Circa at samarchive.com/circa (planned 2026-11-03)
+Owner decisions: the app is renamed **Circa** (Latin "around": the mark on a fuzzy date, and what a globe does). It lives at samarchive.com/circa as its own Vercel project on the owner's Hobby account, joined to samarchive (a separate Next.js project, "rainfall") by one rewrite in samarchive's config. Code goes to a public GitHub repo and deploys on push to main. The read-only database is a public file in Vercel Blob that each build downloads.
+
+Steps, local first:
+1. Rename to Circa everywhere current (wordmark, title, README, CLAUDE.md, package name, User-Agent, database file `data/circa.db`). Historical docs keep the old name.
+2. Serve under `/circa` (Next.js `basePath`), including every API URL the browser builds.
+3. Production caching: CDN cache headers on area, outline and summary answers; the summary cache falls back to a temporary file where the disk is read-only.
+4. Build: `prebuild` downloads the database from `CIRCA_DB_URL` when it is missing and checks its SHA-256 against a hash committed in the repo; the API routes trace the file. Node pinned to the version tested locally.
+5. GPL-3.0: the build writes the processed historical-basemaps outlines to a downloadable file with the GPL text and credit, linked from Sources and the README.
+6. Outward, each confirmed with the owner first: public GitHub repo, Vercel project and environment variables, Blob upload, first deploy, then samarchive's rewrite and its link to Circa.
+
+Acceptance: (a) samarchive.com/circa loads the globe with no console errors; a click, a story, show more, a hover card and the hover preview all work there, and samarchive's own pages are unchanged; (b) the database hash check fails the build on a wrong or missing file; (c) a repeat area or summary request is served from the CDN; (d) the GPL data file downloads and says what it is; (e) cold and warm click times measured on Vercel and logged; (f) function size and the Hobby usage after a day logged in decisions.md.
 
 ## 4. Backlog (ideas deliberately deferred; do not start without the owner's go-ahead)
 

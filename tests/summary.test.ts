@@ -74,7 +74,7 @@ describe("getSummary", () => {
     expect(r.status).toBe("ok");
     expect(cache.store.get("Battle of Marathon")).toMatchObject({ title: "Battle of Marathon" });
     const init = (fetchFn.mock.calls[0] as unknown as [string, RequestInit])[1];
-    expect((init.headers as Record<string, string>)["User-Agent"]).toBe("Chronoglobe/0.1 (me@example.com)");
+    expect((init.headers as Record<string, string>)["User-Agent"]).toBe("Circa/0.1 (me@example.com)");
   });
 
   it("stores missing for a 404", async () => {

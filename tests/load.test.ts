@@ -82,7 +82,7 @@ describe("toRow", () => {
 describe("writeDatabase", () => {
   let dir: string;
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "chronoglobe-test-"));
+    dir = mkdtempSync(join(tmpdir(), "circa-test-"));
   });
   afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
@@ -126,7 +126,7 @@ describe("writeDatabase", () => {
 describe("runSpotChecks", () => {
   let dir: string;
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "chronoglobe-test-"));
+    dir = mkdtempSync(join(tmpdir(), "circa-test-"));
   });
   afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
@@ -149,7 +149,7 @@ describe("runSpotChecks", () => {
 describe("province assignment", () => {
   let dir: string;
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "chronoglobe-test-"));
+    dir = mkdtempSync(join(tmpdir(), "circa-test-"));
   });
   afterEach(() => rmSync(dir, { recursive: true, force: true }));
 

@@ -1,9 +1,10 @@
 {
-  "name": "chronoglobe",
+  "name": "circa",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run db:fetch && npm run open-data",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -14,6 +15,8 @@
     "audit": "node etl/audit.ts",
     "etl:boundaries": "node --env-file-if-exists=.env.local etl/boundaries.ts",
     "etl:load": "node etl/load.ts",
+    "db:fetch": "node etl/db-file.ts",
+    "open-data": "node etl/open-data.ts",
     "etl": "npm run etl:fetch && npm run etl:boundaries && npm run etl:load",
     "bench:area": "node etl/bench-area.ts",
     "story:publish": "node etl/story-publish.ts",
@@ -38,7 +41,7 @@
     "vitest": "^5.0.5"
   },
   "engines": {
-    "node": ">=22.18"
+    "node": "22.x"
   },
   "type": "module"
 }

@@ -6,7 +6,7 @@ const display = Fraunces({ subsets: ["latin"], variable: "--font-display", displ
 const text = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-text", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Chronoglobe",
+  title: "Circa",
   description: "A globe of documented human history, from 3500 BCE to today.",
 };
 

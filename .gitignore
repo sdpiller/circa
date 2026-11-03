@@ -44,5 +44,8 @@ next-env.d.ts
 # local data (SQLite DB, raw Wikidata fetches)
 /data/
 
+# written by npm run open-data before each build
+/public/open-data/
+
 # local memory plugin
 /.remember/

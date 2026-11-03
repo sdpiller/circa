@@ -5,7 +5,7 @@ import { itemMeta, what } from "../lib/items.ts";
 describe("areaUrl", () => {
   it("builds the area query from a point, a range, an intent and limits", () => {
     expect(areaUrl({ lat: 37.98, lon: 23.72, from: -500, to: -300, intent: "click", eventsLimit: 25, othersLimit: 30 })).toBe(
-      "/api/area?lat=37.98&lon=23.72&from=-500&to=-300&intent=click&eventsLimit=25&othersLimit=30",
+      "/circa/api/area?lat=37.98&lon=23.72&from=-500&to=-300&intent=click&eventsLimit=25&othersLimit=30",
     );
   });
 
@@ -16,13 +16,13 @@ describe("areaUrl", () => {
 
 describe("outlineUrl", () => {
   it("builds the hover query from a point and a range", () => {
-    expect(outlineUrl({ lat: 37.98, lon: 23.72, from: -500, to: -300 })).toBe("/api/outline?lat=37.98&lon=23.72&from=-500&to=-300");
+    expect(outlineUrl({ lat: 37.98, lon: 23.72, from: -500, to: -300 })).toBe("/circa/api/outline?lat=37.98&lon=23.72&from=-500&to=-300");
   });
 });
 
 describe("summaryApiUrl and wikidataUrl", () => {
   it("asks for a summary by Wikidata item, never by title", () => {
-    expect(summaryApiUrl("Q31900")).toBe("/api/summary?qid=Q31900");
+    expect(summaryApiUrl("Q31900")).toBe("/circa/api/summary?qid=Q31900");
   });
 
   it("links a Wikidata item", () => {

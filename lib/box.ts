@@ -2,6 +2,7 @@
  * Pure helpers for the area box: request URLs, "show more" steps, and trimming a Wikipedia extract
  * for the hover card.
  */
+import { BASE_PATH } from "./base.ts";
 
 /** Default box limits and their "show more" steps (global constraints), capped like the API. */
 export const EVENTS_STEP = 25;
@@ -20,18 +21,18 @@ export function areaUrl(q: AreaRequest): string {
     eventsLimit: String(q.eventsLimit),
     othersLimit: String(q.othersLimit),
   });
-  return `/api/area?${p}`;
+  return `${BASE_PATH}/api/area?${p}`;
 }
 
 /** The outline a click at the point would draw, for the hover preview. */
 export function outlineUrl(q: { lat: number; lon: number; from: number; to: number }): string {
   const p = new URLSearchParams({ lat: String(q.lat), lon: String(q.lon), from: String(q.from), to: String(q.to) });
-  return `/api/outline?${p}`;
+  return `${BASE_PATH}/api/outline?${p}`;
 }
 
 /** By Wikidata item: the server looks up the item's own Wikipedia title. */
 export function summaryApiUrl(qid: string): string {
-  return `/api/summary?${new URLSearchParams({ qid })}`;
+  return `${BASE_PATH}/api/summary?${new URLSearchParams({ qid })}`;
 }
 
 export function wikidataUrl(qid: string): string {

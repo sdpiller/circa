@@ -1,4 +1,6 @@
-# Chronoglobe
+# Circa
+
+Formerly Chronoglobe; renamed by the owner on 2026-11-03 (decisions.md entry 34).
 
 A 3D globe of human history. The user spins and zooms the globe, picks a year range (roughly 3500 BCE to present), and explores. The globe starts blank: no grid, no dots. Clicking anywhere reveals an outline of the region that mattered in the chosen years, and a reading column opens with the events, people and places inside that outline. For twenty featured places and eras, the column also opens with a short story written offline by Claude and grounded ONLY in the items it cites. The story quality is the product; the globe is the vehicle. Do not compete on historical borders: outlines are approximate and built from modern provinces, and the UI says so.
 

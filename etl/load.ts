@@ -1,5 +1,5 @@
 /**
- * Load stage: data/raw/ -> data/chronoglobe.db.
+ * Load stage: data/raw/ -> data/circa.db.
  *
  * Builds a fresh database in a temp file, validates every row with zod, runs spot checks, and only
  * then renames it over the old one, so a failed or interrupted load never leaves a broken database.
@@ -9,6 +9,7 @@
  *        npm run etl               (fetch whatever is missing, then load)
  */
 import Database from "better-sqlite3";
+import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { z } from "zod";
@@ -17,6 +18,7 @@ import { containingProvince, nearestProvince, type ProvinceRow } from "../lib/ge
 import { applyStrikes, parseBasemaps, parseCliopatria, parseProvinces, regionNamesDoc, snapshotRanges, unzipEntry, type NewRegion } from "./boundaries-parse.ts";
 import { basemapSnapshots, CLIOPATRIA_FILE, NATURALEARTH_FILE } from "./boundaries.ts";
 import { DB_PATH, EventRow, SCHEMA_SQL } from "../lib/db/schema.ts";
+import { HASH_PATH } from "./db-file.ts";
 import { buildDataset } from "./build.ts";
 import { loadConfig } from "./fetch.ts";
 import type { EventRecord } from "./normalize.ts";
@@ -194,6 +196,9 @@ function main() {
     throw err;
   }
   writeFileSync(join(import.meta.dirname, "..", "docs", "region-names.md"), geo.namesDoc); // only after the build succeeded
+  // The hash a deploy checks the downloaded database against (etl/db-file.ts). Commit it with the data change.
+  writeFileSync(HASH_PATH, `${createHash("sha256").update(readFileSync(DB_PATH)).digest("hex")}
+`);
   console.log(`\nWrote ${DB_PATH}: ${rows.length.toLocaleString("en-US")} rows in ${((Date.now() - started) / 1000).toFixed(1)} s`);
   console.log(`  provinces ${geo.provinces.length.toLocaleString("en-US")}, regions ${geo.regions.length.toLocaleString("en-US")} (${names.n} distinct basemaps names)`);
   console.log(`  events in a province ${assigned.inside.toLocaleString("en-US")}, snapped within ${SNAP_KM} km ${assigned.snapped.toLocaleString("en-US")}, unassigned ${assigned.unassigned.toLocaleString("en-US")}`);

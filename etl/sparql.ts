@@ -57,7 +57,7 @@ class RetryableError extends Error {}
 export function userAgent(): string {
   const contact = process.env.WIKIMEDIA_CONTACT;
   if (!contact) throw new Error("WIKIMEDIA_CONTACT is required (see .env.example)");
-  return `Chronoglobe/0.1 (${contact}) node/${process.version}`;
+  return `Circa/0.1 (${contact}) node/${process.version}`;
 }
 
 export async function query(endpoint: EndpointName, sparql: string, timeoutMs = 300_000): Promise<SparqlResults> {

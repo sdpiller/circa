@@ -52,7 +52,7 @@ describe("click", () => {
     const s = run([{ type: "click", point: ATHENS }]);
     expect(s.point).toEqual(ATHENS);
     expect(s.intent).toBe("click");
-    expect(requestUrl(s)).toBe("/api/area?lat=37.98&lon=23.72&from=-500&to=-300&intent=click&eventsLimit=25&othersLimit=30");
+    expect(requestUrl(s)).toBe("/circa/api/area?lat=37.98&lon=23.72&from=-500&to=-300&intent=click&eventsLimit=25&othersLimit=30");
   });
 
   it("resets the limits and keeps the old answer out of view", () => {

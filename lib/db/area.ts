@@ -13,6 +13,12 @@ import { simplifyGeometry } from "../geo/outline.ts";
 import { provinceAt } from "./provinces.ts";
 import type { EventRow } from "./schema.ts";
 
+/**
+ * Answers change only when the database does, which is a new deployment, and Vercel's CDN starts each
+ * deployment empty. A story clicked from the list, or a click someone else made, is then served without a function.
+ */
+export const ANSWER_CACHE = "public, max-age=3600, s-maxage=86400";
+
 const num = z.string().trim().min(1, "required").pipe(z.coerce.number());
 export const year = num.pipe(z.number().refine(isQueryableYear, `must be a whole year from ${MIN_YEAR} to ${MAX_YEAR}, and never 0`));
 const limit = z.string().trim().min(1).pipe(z.coerce.number()).pipe(z.number().int().min(1).max(200));

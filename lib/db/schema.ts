@@ -1,12 +1,12 @@
 /**
- * SQLite schema for Chronoglobe, and the zod schema every events row must pass before insert.
+ * SQLite schema for Circa, and the zod schema every events row must pass before insert.
  * Based on the schema in CLAUDE.md, with additions logged in docs/decisions.md (entry 23).
  */
 import { join } from "node:path";
 import { z } from "zod";
 
 /** npm scripts and Next.js both run from the repo root. */
-export const DB_PATH = join(process.cwd(), "data", "chronoglobe.db");
+export const DB_PATH = join(process.cwd(), "data", "circa.db");
 
 export const SCHEMA_SQL = `
 CREATE TABLE events (

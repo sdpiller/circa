@@ -1,5 +1,5 @@
 /**
- * Year conventions for Chronoglobe.
+ * Year conventions for Circa.
  *
  * Storage uses HISTORICAL numbering: 1 BCE = -1, 1 CE = 1, and there is no year 0.
  *

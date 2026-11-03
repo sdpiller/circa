@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useReducer, useState } from "react";
+import { BASE_PATH, OUTLINES_FILE } from "../../lib/base.ts";
 import type { AreaAnswer } from "../../lib/db/area.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
 import type { PublishedStory } from "../../lib/narrative/publish.ts";
@@ -52,7 +53,7 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
       <GlobeMap styleUrl={styleUrl} outline={outlineOf(area)} range={area.range} panelOpen={panelOpen} onClick={onClick} />
 
       <header className={styles.masthead}>
-        <h1 className={styles.wordmark}>Chronoglobe</h1>
+        <h1 className={styles.wordmark}>Circa</h1>
         <StoriesList onChoose={onChoose} />
       </header>
 
@@ -67,7 +68,8 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
           <li>
             Historical outlines: <a href="https://github.com/Seshat-Global-History-Databank/cliopatria">Cliopatria</a> (
             <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>), shapes processed; and{" "}
-            <a href="https://github.com/aourednik/historical-basemaps">historical-basemaps</a> (GPL-3.0).
+            <a href="https://github.com/aourednik/historical-basemaps">historical-basemaps</a> (GPL-3.0). The outlines as processed here:{" "}
+            <a href={`${BASE_PATH}/open-data/${OUTLINES_FILE}`}>download</a> (GPL-3.0, <a href={`${BASE_PATH}/open-data/README.txt`}>about the file</a>).
           </li>
           <li>
             Modern boundaries: <a href="https://www.naturalearthdata.com">Natural Earth</a> (public domain).

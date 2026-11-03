@@ -45,7 +45,7 @@ async function download(url: string, dest: string): Promise<boolean> {
   if (existsSync(dest)) return false;
   mkdirSync(join(dest, ".."), { recursive: true });
   const contact = process.env.WIKIMEDIA_CONTACT ?? "no contact set";
-  const res = await fetch(url, { headers: { "User-Agent": `Chronoglobe/0.1 (${contact}) node/${process.version}` } });
+  const res = await fetch(url, { headers: { "User-Agent": `Circa/0.1 (${contact}) node/${process.version}` } });
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   writeFileSync(`${dest}.tmp`, Buffer.from(await res.arrayBuffer()));
   renameSync(`${dest}.tmp`, dest);
