@@ -122,12 +122,19 @@ const BasemapsFeature = z.object({
   geometry: Geometry,
 });
 
+/**
+ * Names a source file mangled, and what the other snapshots call them. world_1878.geojson has "M?ori", while
+ * 1783, 1800, 1880 and 1900 have "Māori". The owner chose to correct it (2026-11-03). Never a change of name.
+ */
+const NAME_FIXES: Readonly<Record<string, string>> = { "M?ori": "Māori" };
+
 /** One historical-basemaps snapshot, as rows valid for the given year range. Unnamed features are dropped. */
 export function parseBasemaps(fc: unknown, snapshot: { from: number; to: number }): NewRegion[] {
   const out: NewRegion[] = [];
   for (const f of FeatureCollection.parse(fc).features) {
     const { properties: p, geometry } = BasemapsFeature.parse(f);
-    const name = p.NAME?.trim() ?? "";
+    const raw = p.NAME?.trim() ?? "";
+    const name = NAME_FIXES[raw] ?? raw;
     if (name === "") continue;
     out.push({ source: "basemaps", name, from_year: snapshot.from, to_year: snapshot.to, area: geometryAreaKm2(geometry), wikidata: null, ...regionBase(geometry) });
   }

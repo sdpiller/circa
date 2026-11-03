@@ -63,6 +63,12 @@ describe("parseBasemaps and applyStrikes", () => {
     expect(rows[0].area).toBeGreaterThan(0); // computed with ringAreaKm2, the file has no area
   });
 
+  it("corrects a name the source file mangled", () => {
+    const geometry = { type: "Polygon", coordinates: [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]] };
+    const fixed = parseBasemaps({ features: [{ properties: { NAME: "M?ori" }, geometry }] }, { from: 1847, to: 1879 });
+    expect(fixed[0].name).toBe("Māori");
+  });
+
   it("drops a struck basemaps name and leaves a Cliopatria row of the same name", () => {
     const clio = parseCliopatria(fixture("cliopatria")).filter((r) => r.name === "Roman Republic");
     const kept = applyStrikes([...rows, ...clio], new Set(["Athens", "Roman Republic"]));
