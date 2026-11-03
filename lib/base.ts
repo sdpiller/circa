@@ -6,3 +6,6 @@ export const BASE_PATH = "/circa";
 
 /** The processed historical-basemaps outlines, written to public/open-data/ by npm run open-data (GPL-3.0). */
 export const OUTLINES_FILE = "historical-basemaps-processed.geojson.gz";
+
+/** Where visitors reach Circa. The project's own vercel.app address serves the same pages, so pages name this one as canonical. */
+export const PUBLIC_URL = "https://samarchive.com/circa";
