@@ -10,7 +10,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03): a blank cream globe where a click reveals a region, with an outline preview under the mouse (decisions.md entries 32 and 33). Next is Phase 7 (optional): deploy. (Update this line at every phase gate.)
+Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
