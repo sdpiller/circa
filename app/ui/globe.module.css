@@ -707,3 +707,27 @@
 .storyCredit a {
   color: var(--muted);
 }
+
+/* /circa/preview: the whole frame is the globe, on paper, fading in like the main map. */
+.preview {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+
+.preview.ready {
+  opacity: 1;
+}
+
+/* The map credit stays visible (OpenStreetMap's license asks for it) but quiet. */
+.preview :global(.maplibregl-ctrl-attrib) {
+  background: transparent;
+  font-size: 9px;
+  color: var(--ink-soft);
+}
+
+.preview :global(.maplibregl-ctrl-attrib a) {
+  color: inherit;
+}

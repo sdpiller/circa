@@ -14,19 +14,9 @@ import type { HoverOutline } from "../../lib/db/area.ts";
 import { HoverCache } from "../../lib/hover.ts";
 import type { MapOutline } from "../../lib/selection.ts";
 import type { YearRange } from "../../lib/time/index.ts";
+import { ACCENT, LAND, paintCream } from "./cream.ts";
 import { easeOut, still } from "./motion.ts";
 import styles from "./globe.module.css";
-
-/** Map paint values, matching the palette in globals.css and spec 3.2. */
-const LAND = "#f8f4ea";
-const WATER = "#e3ded2";
-const LINE = "#cfc8ba";
-const ROAD = "#e6e0d3";
-const INK = "#241f1a";
-const MUTED = "#7f786e";
-const ACCENT = "#5140a4";
-
-const COUNTRY_LABELS = ["label_country_1", "label_country_2", "label_country_3"];
 
 /** Motion and framing, spec 3.4. The panel's CSS slide uses the same time and about the same curve. */
 const SLIDE_MS = 460;
@@ -170,23 +160,7 @@ export function GlobeMap({
       m.on("style.load", () => {
         styled = true;
         m.setProjection({ type: "globe" });
-        // Each call is guarded: a custom BASEMAP_STYLE_URL may lack a layer or property, and must not throw.
-        const paint = (id: string, prop: string, value: unknown) => {
-          if (m.getLayer(id)) m.setPaintProperty(id, prop as never, value as never);
-        };
-        for (const l of m.getStyle().layers) {
-          if (l.type === "line" && "source" in l && l.source === "openmaptiles") paint(l.id, "line-color", ROAD);
-          if (l.type === "fill" && l.id !== "water") paint(l.id, "fill-color", LAND);
-          if (l.type === "symbol") {
-            paint(l.id, "text-color", MUTED);
-            paint(l.id, "text-halo-color", LAND);
-            paint(l.id, "text-halo-width", 1.2);
-          }
-        }
-        paint("background", "background-color", LAND);
-        paint("water", "fill-color", WATER);
-        for (const id of ["boundary_2", "boundary_3", "boundary_disputed"]) paint(id, "line-color", LINE);
-        for (const id of COUNTRY_LABELS) paint(id, "text-color", INK);
+        paintCream(m);
 
         // Start with every name group off. The style's own minzoom is removed: apparent zoom decides instead.
         LABEL_GROUPS.forEach((g, i) => {
