@@ -708,8 +708,9 @@
   color: var(--muted);
 }
 
-/* /circa/preview: the whole frame is the globe, on paper, fading in like the main map. */
-.preview {
+/* /circa/preview: the whole frame is the globe, on paper, fading in like the main map. The class twice, so
+   MapLibre's own `.maplibregl-map { position: relative }` never wins on stylesheet order (as with .app > .map). */
+.preview.preview {
   position: fixed;
   inset: 0;
   background: var(--paper);
@@ -717,7 +718,7 @@
   transition: opacity 900ms ease-out;
 }
 
-.preview.ready {
+.preview.preview.ready {
   opacity: 1;
 }
 
