@@ -1,8 +1,10 @@
 import maplibre from "maplibre-gl/package.json" with { type: "json" };
 import { describe, expect, it } from "vitest";
-import { frameOutline, MAX_FLY_ZOOM, MIN_FLY_ZOOM } from "../lib/camera.ts";
+import { frameOutline, MAX_FLY_ZOOM, MIN_FLY_ZOOM, RANGE_H } from "../lib/camera.ts";
 
-const VIEW = { width: 1440, height: 900, panelWidth: 420 };
+/** The desktop layout: the panel on the right, the dates along the bottom. */
+const desk = (width: number, height: number, panel: number) => ({ width, height, insets: { top: 0, right: panel, bottom: RANGE_H } });
+const VIEW = desk(1440, 900, 420);
 type Box = [number, number, number, number];
 const GREECE: Box = [19.4, 34.8, 28.2, 41.7];
 
@@ -29,14 +31,14 @@ describe("frameOutline", () => {
   it("finds a box's widest point when it is not a corner", () => {
     // Widest on the equator: sin 60 = 0.866 of the radius, against 0.557 at the corners. Tall enough a window
     // that width is what limits; at 900 high the height limits, and the corners give the same zoom.
-    const { zoom } = frameOutline([-60, -50, 60, 50], { width: 1440, height: 1200, panelWidth: 420 });
+    const { zoom } = frameOutline([-60, -50, 60, 50], desk(1440, 1200, 420));
     const radius = 450 / Math.sin((60 * Math.PI) / 180);
     expect(zoom).toBeCloseTo(Math.log2((radius * 2 * Math.PI) / 512), 6);
   });
 
   it("gets closer as the panel leaves more room, when width is what limits", () => {
     const box: Box = [-15, -1, 15, 1];
-    expect(frameOutline(box, { ...VIEW, panelWidth: 200 }).zoom).toBeGreaterThan(frameOutline(box, VIEW).zoom);
+    expect(frameOutline(box, desk(1440, 900, 200)).zoom).toBeGreaterThan(frameOutline(box, VIEW).zoom);
   });
 
   it("lowers the zoom toward the poles, where MapLibre draws the same zoom larger", () => {
@@ -54,12 +56,22 @@ describe("frameOutline", () => {
 
   it("clamps a tiny area in and a huge one out", () => {
     expect(frameOutline([23.7, 37.9, 23.8, 38], VIEW).zoom).toBe(MAX_FLY_ZOOM);
-    expect(frameOutline([-180, -80, 180, 80], { width: 1000, height: 600, panelWidth: 360 }).zoom).toBe(MIN_FLY_ZOOM);
+    expect(frameOutline([-180, -80, 180, 80], desk(1000, 600, 360)).zoom).toBe(MIN_FLY_ZOOM);
   });
 
   it("does not break on a single point or a window with no free room", () => {
     expect(frameOutline([10, 10, 10, 10], VIEW).zoom).toBe(MAX_FLY_ZOOM);
-    expect(frameOutline(GREECE, { width: 300, height: 200, panelWidth: 108 }).zoom).toBe(MIN_FLY_ZOOM);
+    expect(frameOutline(GREECE, desk(300, 200, 108)).zoom).toBe(MIN_FLY_ZOOM);
+  });
+
+  it("frames a phone's outline between the masthead and the half sheet", () => {
+    // 390 x 844, a 48 px masthead and a 422 px sheet: 374 high less 2 x 45 of margin. Side margins shrink to
+    // 6% of a narrow window, 23.4 px each.
+    const phone = { width: 390, height: 844, insets: { top: 48, right: 0, bottom: 422 } };
+    const tall = (374 - 90) / 2 / Math.sin((5 * Math.PI) / 180);
+    expect(frameOutline([-1, -5, 1, 5], phone).zoom).toBeCloseTo(Math.log2((tall * 2 * Math.PI) / 512), 3);
+    const wide = (390 - 2 * 23.4) / 2 / Math.sin((15 * Math.PI) / 180);
+    expect(frameOutline([-15, -1, 15, 1], phone).zoom).toBeCloseTo(Math.log2((wide * 2 * Math.PI) / 512), 2);
   });
 });
 

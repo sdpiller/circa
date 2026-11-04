@@ -131,6 +131,18 @@ export function yearToSlider(year: number): number {
   return Math.round(p0 + ((a - y0) / (y1 - y0)) * (p1 - p0));
 }
 
+/**
+ * The year `years` whole years earlier (dir -1) or later (dir 1), for the step buttons beside the dates.
+ * Whole years, not slider notches: after 1700 a notch is about 1.6 years, so stepping by notches skips
+ * years. Counted in astronomical numbering, so it never lands on year 0; clamped to the scale's ends.
+ */
+export function nudgeYear(year: number, dir: -1 | 1, years = 1): number {
+  const a = historicalToAstronomical(year) + dir * years;
+  const lo = historicalToAstronomical(MIN_YEAR);
+  const hi = historicalToAstronomical(MAX_YEAR);
+  return astronomicalToHistorical(Math.min(Math.max(a, lo), hi));
+}
+
 /** Number of years in an inclusive historical range. There is no year 0, so -1 to 1 is 2 years. */
 export function yearCount(from: number, to: number): number {
   return historicalToAstronomical(to) - historicalToAstronomical(from) + 1;

@@ -7,6 +7,9 @@ import {
   formatYear,
   historicalToAstronomical,
   midYear,
+  MAX_YEAR,
+  MIN_YEAR,
+  nudgeYear,
   overlaps,
   yearCount,
   yearFromEntityTime,
@@ -175,5 +178,27 @@ describe("midYear", () => {
     expect(midYear(-100, 100)).not.toBe(0);
     expect(midYear(-1, 1)).not.toBe(0);
     expect(midYear(-2, -1)).not.toBe(0);
+  });
+});
+
+describe("nudgeYear", () => {
+  it("moves by whole years", () => {
+    expect(nudgeYear(1915, 1)).toBe(1916);
+    expect(nudgeYear(1066, -1)).toBe(1065);
+    expect(nudgeYear(-490, 1)).toBe(-489);
+    expect(nudgeYear(1900, 1, 10)).toBe(1910);
+  });
+
+  it("skips year 0 in both directions", () => {
+    expect(nudgeYear(-1, 1)).toBe(1);
+    expect(nudgeYear(1, -1)).toBe(-1);
+    expect(nudgeYear(-5, 1, 10)).toBe(6);
+    expect(nudgeYear(5, -1, 10)).toBe(-6);
+  });
+
+  it("stops at the ends of the scale", () => {
+    expect(nudgeYear(MAX_YEAR, 1)).toBe(MAX_YEAR);
+    expect(nudgeYear(MIN_YEAR, -1)).toBe(MIN_YEAR);
+    expect(nudgeYear(MAX_YEAR - 3, 1, 10)).toBe(MAX_YEAR);
   });
 });
