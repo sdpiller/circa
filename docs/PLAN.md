@@ -98,6 +98,13 @@ Steps, local first:
 
 Acceptance: (a) samarchive.com/circa loads the globe with no console errors; a click, a story, show more, a hover card and the hover preview all work there, and samarchive's own pages are unchanged; (b) the database hash check fails the build on a wrong or missing file; (c) a repeat area or summary request is served from the CDN; (d) the GPL data file downloads and says what it is; (e) cold and warm click times measured on Vercel and logged; (f) function size and the Hobby usage after a day logged in decisions.md.
 
+### Phase 8: Circa on phones (planned 2026-11-03)
+The owner tried Circa on a phone: the reading column was unusable (`min(420px, 36vw)` is 140 px on a 390 px phone) and the year slider was hard to use (small handles, too coarse, crowded). Phase 6 had made layouts below 1024 px a non-goal. Runs alongside Phase 7's last item, (f), which only waits for usage data. Design: `docs/superpowers/specs/2026-11-03-mobile-design.md`; as built: decisions.md entry 36.
+
+Owner decisions: below 700 px wide the reading column is a bottom sheet, half height with the globe framing the outline above it, a tap or swipe on its handle for full height; while it is open the year slider sits inside it; touch screens get step buttons beside the dates, one year a tap, repeating when held.
+
+Acceptance: (a) on a 390 x 844 phone a tap on land opens the half sheet and the outline is framed in the top half, clear of the masthead; (b) the handle expands and collapses the sheet by tap and by swipe; (c) a story in the sheet reads at 17 px over at least 340 px; (d) both slider handles take a thumb, and the step buttons land exact years (1914 to 1918 in under ten taps after a rough drag); (e) nothing overlaps, closed or open: masthead, Stories, slider, Sources, map credit; (f) a tapped name opens its card and a tapped citation scrolls to its event; (g) desktop at 1280 and 1024 px is unchanged and the desktop camera tests pass as they were; (h) tests, typecheck and lint clean. The owner's read on a real phone, from a Vercel preview, is the gate.
+
 ## 4. Backlog (ideas deliberately deferred; do not start without the owner's go-ahead)
 
 - Physical record layer (the owner's original idea, closer to Picterra): earthquakes from the USGS catalog, fire hotspots from NASA FIRMS (free key, roughly 2000 onward), land cover change from CORINE Land Cover (Europe, a few snapshots 1990 to 2018), forest loss from Hansen/Global Forest Watch, surface water change from JRC Global Surface Water. Use precomputed datasets only, no custom ML.

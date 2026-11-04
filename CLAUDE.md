@@ -10,7 +10,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. (Update this line at every phase gate.)
+Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. Phase 8, Circa on phones, is built on branch `phase-8-mobile` (decisions.md entry 36) and waits for the owner's read on a real phone. (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
@@ -71,7 +71,8 @@ Ask before adding any dependency not listed here. If you believe Python is bette
 /lib/db              SQLite access, queries (area, provinces, regions)
 /lib/geo             point in polygon, distance, area, merging provinces into an outline
 /lib/outline         which region a click gets (choose), scale line, resolve
-/lib/camera.ts       frameOutline: zoom and centre for an outline
+/lib/camera.ts       frameOutline: zoom and centre for an outline, given the insets the panel takes
+/lib/layout.ts       the wide and narrow (phone) layouts in numbers: panel width, insets
 /lib/labels.ts       map names by apparent zoom
 /lib/selection.ts    client selection state and the area URL
 /lib/stories         story catalog and storyFor
