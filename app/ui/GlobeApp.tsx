@@ -11,9 +11,12 @@ import { GlobeMap } from "./GlobeMap.tsx";
 import { RangeControl } from "./RangeControl.tsx";
 import { StoriesList } from "./StoriesList.tsx";
 import styles from "./globe.module.css";
+import { useNarrow } from "./useNarrow.ts";
 
 // Dragging the range slider changes the range on every step: wait for a pause before asking.
 const FETCH_DEBOUNCE_MS = 120;
+
+const CAPTION = "Documented history is not the same as history: coverage is uneven worldwide.";
 
 export function GlobeApp({ styleUrl }: { styleUrl: string }) {
   const [area, dispatch] = useReducer(areaReducer, initialArea);
@@ -48,19 +51,31 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
     setPanelFocus((n) => n + 1);
   }, []);
 
+  // On a phone the panel is a bottom sheet. Expanded to full height for the point it was expanded at only, so a
+  // new area, or the same one opened again, starts at half height.
+  const narrow = useNarrow();
+  const [fullAt, setFullAt] = useState<Position | null>(null);
+  if (!panelOpen && fullAt !== null) setFullAt(null); // a story's point is the same object each time it is chosen
+  const full = fullAt !== null && fullAt === area.point;
+  const setFull = useCallback((f: boolean) => setFullAt(f ? area.point : null), [area.point]);
+  const rangeInSheet = narrow && panelOpen;
+  const range = <RangeControl range={area.range} onChange={onRange} />;
+
   return (
     <main className={`${styles.app} ${panelOpen ? styles.appPanelOpen : ""}`}>
-      <GlobeMap styleUrl={styleUrl} outline={outlineOf(area)} range={area.range} panelOpen={panelOpen} onClick={onClick} />
+      <GlobeMap styleUrl={styleUrl} outline={outlineOf(area)} range={area.range} panelOpen={panelOpen} narrow={narrow} onClick={onClick} />
 
       <header className={styles.masthead}>
         <h1 className={styles.wordmark}>Circa</h1>
         <StoriesList onChoose={onChoose} />
       </header>
 
-      <section className={styles.rangePanel} aria-label="Year range">
-        <RangeControl range={area.range} onChange={onRange} />
-        <p className={styles.caption}>Documented history is not the same as history: coverage is uneven worldwide.</p>
-      </section>
+      {!rangeInSheet && (
+        <section className={styles.rangePanel} aria-label="Year range">
+          {range}
+          <p className={styles.caption}>{CAPTION}</p>
+        </section>
+      )}
 
       <details className={styles.sources}>
         <summary>Sources</summary>
@@ -84,7 +99,12 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
         </ul>
       </details>
 
-      <AreaPanel area={area} dispatch={dispatch} focusRequest={panelFocus} />
+      <AreaPanel
+        area={area}
+        dispatch={dispatch}
+        focusRequest={panelFocus}
+        sheet={narrow ? { full, setFull, range: rangeInSheet ? range : null, caption: CAPTION } : null}
+      />
     </main>
   );
 }

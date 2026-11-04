@@ -1,7 +1,7 @@
 /* Cream, thin rules, no rounded cards. Palette variables live in globals.css. */
 
 .app {
-  --panel-width: min(420px, 36vw); /* the same value as panelWidth() in GlobeMap.tsx */
+  --panel-width: clamp(320px, 36vw, 420px); /* the same value as panelWidth() in lib/layout.ts */
   --range-h: 170px; /* the same value as RANGE_H in lib/camera.ts */
   --slide: 460ms cubic-bezier(0.22, 0.61, 0.36, 1);
   position: fixed;
@@ -184,8 +184,16 @@
   color: var(--ink);
 }
 
-.dates {
+.datesRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: 6px;
+}
+
+.dates {
+  flex: 1;
   font-family: var(--font-display), Georgia, serif;
   font-size: 34px;
   font-weight: 400;
@@ -303,11 +311,6 @@
   color: var(--ink-soft);
 }
 
-@media (max-width: 640px) {
-  .rangePanel {
-    bottom: 48px;
-  }
-}
 
 /* The reading column: over the map, off screen until a click. Not clipped, so a hover card can overhang. */
 .panel {
@@ -731,4 +734,307 @@
 
 .preview :global(.maplibregl-ctrl-attrib a) {
   color: inherit;
+}
+
+/* The panel's text, under the bottom sheet's handle and dates on a phone. Positioned for the loading line. */
+.panelMain {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Step buttons beside the dates and the bottom sheet's parts: hidden until a touch screen or a phone asks for them. */
+.steps,
+.sheetHandle,
+.sheetRange,
+.sheetCaption {
+  display: none;
+}
+
+.step {
+  width: 36px;
+  height: 36px;
+  font: 22px/1 var(--font-text), Georgia, serif;
+  color: var(--accent);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.step:active {
+  background: var(--paper-sunk);
+}
+
+/* A finger, not a mouse: bigger handles and step buttons, and taps at least 44 px tall without changing the look. */
+@media (pointer: coarse) {
+  .steps {
+    display: flex;
+    gap: 4px;
+  }
+
+  /* The dates share their row with the step buttons: one line, sized to the slider's width (cqi), so even
+     "1000 BCE to 1000 CE" fits on a phone and beside a tablet's panel. */
+  .range {
+    container-type: inline-size;
+  }
+
+  .dates {
+    font-size: min(34px, 5.6cqi);
+    white-space: nowrap;
+  }
+
+  .slider,
+  .slider input {
+    height: 44px;
+  }
+
+  .track,
+  .trackFill {
+    top: 21px;
+  }
+
+  .slider input::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+  }
+
+  .slider input::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .panelClose {
+    width: 44px;
+    height: 44px;
+    top: 6px;
+    right: 6px;
+  }
+
+  /* A button is inline-block, so its padding would open up the line; the negative margin takes it back. */
+  .cite {
+    padding-block: 8px;
+    margin-block: -8px;
+  }
+
+  .eventRow {
+    min-height: 44px;
+  }
+
+  /* Padding, not a 44 px min-height: the names wrap in rows, which a min-height would spread apart. */
+  .nameButton {
+    padding-block: 8px;
+  }
+
+  .more {
+    min-height: 44px;
+  }
+
+  /* Not the sheet's handle, which takes no browser gesture at all, so a swipe on it reaches the page. */
+  .app button:not(.sheetHandle) {
+    touch-action: manipulation;
+  }
+}
+
+/* Below desktop widths the slider runs close to the window's edge: its end ticks sit inside it, not centred on it. */
+@media (max-width: 1023px) {
+  .ticks span:first-child {
+    transform: translateX(-8px);
+  }
+
+  .ticks span:last-child {
+    transform: translateX(calc(-100% + 8px));
+  }
+}
+
+/* A phone held upright (NARROW_MAX in lib/layout.ts): the reading column becomes a sheet along the bottom. */
+@media (max-width: 699px) {
+  .app {
+    --masthead-h: 48px; /* MASTHEAD_H in lib/layout.ts */
+  }
+
+  /* Soft paper behind the wordmark and Sources, which would otherwise tangle with the map's names up close. */
+  .app::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    height: 72px;
+    background: linear-gradient(var(--paper) 50%, transparent);
+    pointer-events: none;
+  }
+
+  /* Above the sheet, so the Stories list opens over it. */
+  .masthead {
+    z-index: 3;
+    left: 16px;
+  }
+
+  .rangePanel {
+    bottom: 36px;
+    width: calc(100% - 32px);
+  }
+
+  .appPanelOpen .rangePanel {
+    transform: translateX(-50%);
+  }
+
+  .datesRow {
+    gap: 6px;
+  }
+
+  .step {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
+
+  /* Three ticks fit a phone: the ends and the turn of the era. */
+  .ticks span:nth-child(2),
+  .ticks span:nth-child(4),
+  .ticks span:nth-child(5) {
+    display: none;
+  }
+
+  /* The credits leave the crowded bottom for the empty top right, and open downward, over the sheet. */
+  .sources {
+    top: 18px;
+    right: 16px;
+    bottom: auto;
+    left: auto;
+    z-index: 3;
+  }
+
+  .sources summary {
+    text-align: right;
+  }
+
+  .sources ul {
+    top: calc(100% + 8px);
+    right: 0;
+    bottom: auto;
+    left: auto;
+  }
+
+  /* The map's credit (OpenStreetMap's license asks for it) rises above the half sheet instead of sliding left. */
+  .appPanelOpen :global(.maplibregl-ctrl-bottom-right) {
+    transform: translateY(-50dvh);
+  }
+
+  /* Height, not a transform, for half and full: a translated sheet would hide its own bottom, footer and all. */
+  .panel {
+    top: auto;
+    left: 0;
+    width: auto;
+    height: 50dvh; /* SHEET_HALF in lib/layout.ts */
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    box-shadow: 0 -18px 40px -28px rgba(36, 31, 26, 0.28);
+    transform: translateY(102%);
+    transition:
+      transform var(--slide),
+      height var(--slide);
+  }
+
+  .panelOpen {
+    transform: none;
+  }
+
+  .panelFull {
+    height: calc(100dvh - var(--masthead-h));
+  }
+
+  .sheetHandle {
+    display: block;
+    flex: none;
+    width: 100%;
+    height: 36px; /* the close button shares this row, clear of the step buttons below */
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .sheetHandle span {
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 0 auto;
+    border-radius: 2px;
+    background: var(--rule);
+  }
+
+  .sheetRange {
+    display: block;
+    flex: none;
+    padding: 0 16px 4px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .sheetRange .datesRow {
+    margin-bottom: 0;
+  }
+
+  .sheetRange .slider,
+  .sheetRange .slider input {
+    height: 36px;
+  }
+
+  .sheetRange .track,
+  .sheetRange .trackFill {
+    top: 17px;
+  }
+
+  .sheetCaption {
+    display: block;
+    font-style: italic;
+  }
+
+  .panelClose {
+    top: 0;
+    right: 8px;
+    height: 36px;
+  }
+
+  .panelHead {
+    padding: 12px 44px 10px 20px;
+  }
+
+  .panelName {
+    font-size: 26px;
+  }
+
+  /* The dates are right above, in the slider. */
+  .sheetRange ~ .panelMain .panelYears {
+    display: none;
+  }
+
+  .panelLoading {
+    top: 12px;
+    left: 20px;
+  }
+
+  .panelBody {
+    padding: 14px 20px 20px;
+  }
+
+  .panelFooter {
+    padding: 6px 20px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 699px) and (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
 }

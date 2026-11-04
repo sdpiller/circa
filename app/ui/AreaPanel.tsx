@@ -4,7 +4,7 @@
  * and scale, then the story if one applies, then events (each expandable to Wikipedia's opening paragraph),
  * then people and places (names with hover cards). Always mounted, so it can slide; the map never resizes.
  */
-import { useCallback, useEffect, useRef, useState, type ActionDispatch } from "react";
+import { useCallback, useEffect, useRef, useState, type ActionDispatch, type ReactNode } from "react";
 import { EVENTS_STEP, OTHERS_STEP, moreControl } from "../../lib/box.ts";
 import type { AreaItem } from "../../lib/db/area.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
@@ -25,7 +25,23 @@ type Held = { answer: NonNullable<AreaState["answer"]>; base: string; point: Pos
 const FLASH: Keyframe[] = [{ backgroundColor: "#e7e2f3" }, {}];
 const FLASH_MS = 900;
 
-export function AreaPanel({ area, dispatch, focusRequest }: { area: AreaState; dispatch: ActionDispatch<[AreaAction]>; focusRequest: number }) {
+/** On a phone the panel is a bottom sheet with the year range in it (decisions.md entry 36). */
+export type Sheet = { full: boolean; setFull: (full: boolean) => void; range: ReactNode; caption: string };
+
+/** A drag this far up or down the sheet's handle is a swipe. */
+const SWIPE_PX = 30;
+
+export function AreaPanel({
+  area,
+  dispatch,
+  focusRequest,
+  sheet,
+}: {
+  area: AreaState;
+  dispatch: ActionDispatch<[AreaAction]>;
+  focusRequest: number;
+  sheet: Sheet | null;
+}) {
   const open = area.point !== null;
   const pending = open && area.answer?.url !== requestUrl(area);
   const current = shownAnswer(area);
@@ -140,86 +156,141 @@ export function AreaPanel({ area, dispatch, focusRequest }: { area: AreaState; d
     <aside
       ref={panelRef}
       tabIndex={-1}
-      className={`${styles.panel} ${open ? styles.panelOpen : ""}`}
+      className={`${styles.panel} ${open ? styles.panelOpen : ""} ${sheet?.full ? styles.panelFull : ""}`}
       aria-hidden={!open}
       inert={!open}
       aria-labelledby={selection ? "area-name" : undefined}
     >
+      {sheet && <SheetHandle full={sheet.full} setFull={sheet.setFull} onClose={close} />}
       <button type="button" className={styles.panelClose} onClick={close} aria-label="Close area">
         ×
       </button>
 
-      {open && !current && (
-        <p className={`${styles.panelLoading} ${fading ? styles.panelLoadingLate : ""}`} role="status">
-          Loading
-        </p>
+      {/* Outside the fading text below: a drag on the slider brings new answers, and must not lose its handle to them. */}
+      {sheet?.range && (
+        <section className={styles.sheetRange} aria-label="Year range">
+          {sheet.range}
+        </section>
       )}
 
-      {/* A new key for new text: it fades in, and its list starts scrolled to the top. */}
-      <div key={swapKey} className={`${styles.swap} ${fading ? styles.swapOut : ""}`} inert={fading}>
-        {selection && body && (
-          <header className={styles.panelHead}>
-            <h2 id="area-name" className={styles.panelName}>
-              {selection.name}
-            </h2>
-            {selection.source === "basemaps" && <p className={styles.panelAtlas}>{ATLAS_LINE}</p>}
-            <p className={styles.panelYears}>{formatRange(body.from, body.to)}</p>
-            <p className={styles.panelScale}>{scaleLine(selection)}</p>
-          </header>
+      {/* Positioned, so the loading line sits at the top of the text, below the sheet's handle and dates. */}
+      <div className={styles.panelMain}>
+        {open && !current && (
+          <p className={`${styles.panelLoading} ${fading ? styles.panelLoadingLate : ""}`} role="status">
+            Loading
+          </p>
         )}
 
-        <div ref={bodyRef} className={styles.panelBody} aria-busy={pending} data-scroller>
-          {shown &&
-            (!body ? (
-              <p role="status">Could not load this area.</p>
-            ) : body.eventsTotal + body.othersTotal === 0 ? (
-              <p role="status">Nothing documented here for these years.</p>
-            ) : (
-              <>
-                {story && missing.length === 0 && (
-                  <>
-                    <h3 className={styles.storyPlace}>{story.entry.place}</h3>
-                    <Story story={story} onCite={onCite} />
-                  </>
-                )}
-                {body.events.length > 0 && (
-                  <>
-                    <h3 ref={eventsHeadingRef} className={styles.panelSection}>
-                      Events
-                    </h3>
-                    <ul className={styles.events} data-list="events">
-                      {body.events.map((item) => (
-                        <EventRow key={item.qid} item={item} open={expanded.has(item.qid)} focused={item.qid === citedQid} onToggle={() => toggle(item.qid)} />
-                      ))}
-                    </ul>
-                    <More shown={body.events.length} total={body.eventsTotal} limit={area.eventsLimit} step={EVENTS_STEP} pending={pending} onMore={(next, kb) => showMore("events", next, kb)} />
-                  </>
-                )}
-                {body.others.length > 0 && (
-                  <>
-                    <h3 className={styles.panelSection}>People and places</h3>
-                    <ul className={styles.names} data-list="others">
-                      {body.others.map((item) => (
-                        <NameWithCard
-                          key={item.qid}
-                          item={item}
-                          open={openCard === item.qid}
-                          focused={item.qid === citedQid}
-                          onOpen={() => setCard(item.qid)}
-                          onClose={() => setCard((c) => (c === item.qid ? null : c))}
-                        />
-                      ))}
-                    </ul>
-                    <More shown={body.others.length} total={body.othersTotal} limit={area.othersLimit} step={OTHERS_STEP} pending={pending} onMore={(next, kb) => showMore("others", next, kb)} />
-                  </>
-                )}
-              </>
-            ))}
+        {/* A new key for new text: it fades in, and its list starts scrolled to the top. */}
+        <div key={swapKey} className={`${styles.swap} ${fading ? styles.swapOut : ""}`} inert={fading}>
+          {selection && body && (
+            <header className={styles.panelHead}>
+              <h2 id="area-name" className={styles.panelName}>
+                {selection.name}
+              </h2>
+              {selection.source === "basemaps" && <p className={styles.panelAtlas}>{ATLAS_LINE}</p>}
+              <p className={styles.panelYears}>{formatRange(body.from, body.to)}</p>
+              <p className={styles.panelScale}>{scaleLine(selection)}</p>
+            </header>
+          )}
+
+          <div ref={bodyRef} className={styles.panelBody} aria-busy={pending} data-scroller>
+            {shown &&
+              (!body ? (
+                <p role="status">Could not load this area.</p>
+              ) : body.eventsTotal + body.othersTotal === 0 ? (
+                <p role="status">Nothing documented here for these years.</p>
+              ) : (
+                <>
+                  {story && missing.length === 0 && (
+                    <>
+                      <h3 className={styles.storyPlace}>{story.entry.place}</h3>
+                      <Story story={story} onCite={onCite} />
+                    </>
+                  )}
+                  {body.events.length > 0 && (
+                    <>
+                      <h3 ref={eventsHeadingRef} className={styles.panelSection}>
+                        Events
+                      </h3>
+                      <ul className={styles.events} data-list="events">
+                        {body.events.map((item) => (
+                          <EventRow key={item.qid} item={item} open={expanded.has(item.qid)} focused={item.qid === citedQid} onToggle={() => toggle(item.qid)} />
+                        ))}
+                      </ul>
+                      <More shown={body.events.length} total={body.eventsTotal} limit={area.eventsLimit} step={EVENTS_STEP} pending={pending} onMore={(next, kb) => showMore("events", next, kb)} />
+                    </>
+                  )}
+                  {body.others.length > 0 && (
+                    <>
+                      <h3 className={styles.panelSection}>People and places</h3>
+                      <ul className={styles.names} data-list="others">
+                        {body.others.map((item) => (
+                          <NameWithCard
+                            key={item.qid}
+                            item={item}
+                            open={openCard === item.qid}
+                            focused={item.qid === citedQid}
+                            onOpen={() => setCard(item.qid)}
+                            onClose={() => setCard((c) => (c === item.qid ? null : c))}
+                          />
+                        ))}
+                      </ul>
+                      <More shown={body.others.length} total={body.othersTotal} limit={area.othersLimit} step={OTHERS_STEP} pending={pending} onMore={(next, kb) => showMore("others", next, kb)} />
+                    </>
+                  )}
+                </>
+              ))}
+          </div>
         </div>
       </div>
 
-      <footer className={styles.panelFooter}>Descriptions from Wikidata. Paragraphs and pictures from Wikipedia (CC BY-SA), linked per item.</footer>
+      <footer className={styles.panelFooter}>
+        {sheet?.range && <p className={styles.sheetCaption}>{sheet.caption}</p>}
+        Descriptions from Wikidata. Paragraphs and pictures from Wikipedia (CC BY-SA), linked per item.
+      </footer>
     </aside>
+  );
+}
+
+/**
+ * The bar at the top of the bottom sheet. A tap switches between half and full height. A swipe up expands it,
+ * a swipe down collapses it, or at half height closes the area. A swipe can be followed by a click on the
+ * handle; `swiped` makes that click do nothing, and every press clears it, since a long swipe may bring no click.
+ */
+function SheetHandle({ full, setFull, onClose }: { full: boolean; setFull: (full: boolean) => void; onClose: () => void }) {
+  const startY = useRef<number | null>(null);
+  const swiped = useRef(false);
+  return (
+    <button
+      type="button"
+      className={styles.sheetHandle}
+      aria-expanded={full}
+      aria-label={full ? "Collapse the reading panel" : "Expand the reading panel"}
+      onPointerDown={(e) => {
+        startY.current = e.clientY;
+        swiped.current = false;
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }}
+      onPointerUp={(e) => {
+        const dy = startY.current === null ? 0 : e.clientY - startY.current;
+        startY.current = null;
+        if (Math.abs(dy) < SWIPE_PX) return;
+        swiped.current = true;
+        if (dy < 0) setFull(true);
+        else if (full) setFull(false);
+        else onClose();
+      }}
+      onPointerCancel={() => {
+        startY.current = null;
+      }}
+      onClick={() => {
+        if (swiped.current) swiped.current = false;
+        else setFull(!full);
+      }}
+    >
+      <span aria-hidden="true" />
+    </button>
   );
 }
 

@@ -6,12 +6,13 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
 import type { GeoJSONSource, Map as MapLibreMap, MapLibreEvent, MapMouseEvent } from "maplibre-gl";
-import { frameOutline, RANGE_H } from "../../lib/camera.ts";
+import { frameOutline } from "../../lib/camera.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
 import { apparentZoom, FADE_MS, LABEL_GROUPS, labelGroupOn } from "../../lib/labels.ts";
 import { outlineUrl } from "../../lib/box.ts";
 import type { HoverOutline } from "../../lib/db/area.ts";
 import { HoverCache } from "../../lib/hover.ts";
+import { insetsFor } from "../../lib/layout.ts";
 import type { MapOutline } from "../../lib/selection.ts";
 import type { YearRange } from "../../lib/time/index.ts";
 import { ACCENT, LAND, paintCream } from "./cream.ts";
@@ -26,8 +27,6 @@ const OFF_GLOBE_PX = 4;
 /** At most one hover request in this time, which bounds a sweep over water or along a coast, where no answer is reused. */
 const ASK_GAP_MS = 40;
 const HOVER_FADE_MS = 150;
-/** The same value as --panel-width in globe.module.css. */
-const panelWidth = () => Math.min(420, window.innerWidth * 0.36);
 
 const EMPTY = { type: "FeatureCollection" as const, features: [] };
 
@@ -57,13 +56,13 @@ function drawHover(m: MapLibreMap, h: HoverOutline | null) {
 }
 
 /** `flight` comes back on this flight's own moveend, even an interrupted one. Padding, not offset: it stays on the camera. */
-function flyToOutline(m: MapLibreMap, o: MapOutline, flight: number) {
-  const right = panelWidth();
+function flyToOutline(m: MapLibreMap, o: MapOutline, flight: number, narrow: boolean) {
   const box = m.getContainer();
+  const insets = insetsFor(narrow, box.clientWidth, box.clientHeight);
   m.flyTo(
     {
-      ...frameOutline(o.bounds, { width: box.clientWidth, height: box.clientHeight, panelWidth: right }),
-      padding: { top: 0, left: 0, right, bottom: RANGE_H },
+      ...frameOutline(o.bounds, { width: box.clientWidth, height: box.clientHeight, insets }),
+      padding: { ...insets, left: 0 },
       duration: still() ? 0 : FLY_MS,
       curve: 1.35,
       essential: true,
@@ -77,6 +76,7 @@ export function GlobeMap({
   outline,
   range,
   panelOpen,
+  narrow,
   onClick,
 }: {
   styleUrl: string;
@@ -84,6 +84,8 @@ export function GlobeMap({
   /** The years the hover preview asks about. */
   range: YearRange;
   panelOpen: boolean;
+  /** The phone layout: the panel is a sheet along the bottom, not a column on the right. */
+  narrow: boolean;
   onClick: (point: Position) => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
@@ -96,6 +98,7 @@ export function GlobeMap({
   const padded = useRef(false);
   const rangeNow = useRef(range);
   const hoverAgain = useRef(() => {}); // asks the preview again for wherever the mouse is
+  const narrowNow = useRef(narrow);
 
   useEffect(() => {
     let cancelled = false;
@@ -282,6 +285,10 @@ export function GlobeMap({
   }, [styleUrl, onClick]);
 
   useEffect(() => {
+    narrowNow.current = narrow;
+  }, [narrow]);
+
+  useEffect(() => {
     rangeNow.current = range;
     hoverAgain.current();
   }, [range]);
@@ -298,7 +305,7 @@ export function GlobeMap({
     } else if (outline.fly) {
       setOutlineOpacity(ready, false);
       waiting.current = { flight: ++flights.current, outline };
-      flyToOutline(ready, outline, flights.current);
+      flyToOutline(ready, outline, flights.current, narrowNow.current);
     } else if (waiting.current) {
       waiting.current.outline = outline; // a range answer during the flight: draw the newest on arrival
     } else {
@@ -309,8 +316,11 @@ export function GlobeMap({
   useEffect(() => {
     if (!ready || padded.current === panelOpen) return;
     padded.current = panelOpen;
+    // Wide: room on the right only, as before phones were laid out. Narrow: the masthead and the half sheet.
+    const box = ready.getContainer();
+    const insets = insetsFor(narrowNow.current, box.clientWidth, box.clientHeight);
     ready.easeTo({
-      padding: panelOpen ? { right: panelWidth() } : { top: 0, right: 0, bottom: 0, left: 0 },
+      padding: !panelOpen ? { top: 0, right: 0, bottom: 0, left: 0 } : narrowNow.current ? { top: insets.top, bottom: insets.bottom } : { right: insets.right },
       duration: still() ? 0 : SLIDE_MS,
       easing: easeOut,
     });

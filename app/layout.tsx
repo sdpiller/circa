@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Newsreader } from "next/font/google";
 import { PUBLIC_URL } from "../lib/base.ts";
 import "./globals.css";
@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   description: "A globe of documented human history, from 3500 BCE to today.",
   alternates: { canonical: PUBLIC_URL },
 };
+
+/** The browser's own bars, on a phone, in the page's paper (--paper in globals.css). */
+export const viewport: Viewport = { themeColor: "#faf7f0" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

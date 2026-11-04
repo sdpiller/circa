@@ -4,9 +4,9 @@
  * range inputs, so keyboard and screen-reader support come from the browser. A range that arrives from outside,
  * a story or a list entry, is counted to with both numbers and handles; a drag is shown as it happens.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TWEEN_MS, tweenRange } from "../../lib/selection.ts";
-import { formatRange, formatYear, MAX_YEAR, MIN_YEAR, SLIDER_STEPS, sliderToYear, yearToSlider, type YearRange } from "../../lib/time/index.ts";
+import { formatRange, formatYear, MAX_YEAR, MIN_YEAR, nudgeYear, SLIDER_STEPS, sliderToYear, yearToSlider, type YearRange } from "../../lib/time/index.ts";
 import { easeOut, still } from "./motion.ts";
 import styles from "./globe.module.css";
 
@@ -39,13 +39,36 @@ export function RangeControl({ range, onChange }: { range: YearRange; onChange: 
     onChange(r);
   };
 
+  // The step buttons repeat while held, so they read the range through a ref that every render and step refreshes.
+  const latest = useRef(range);
+  useEffect(() => {
+    latest.current = range;
+  }, [range]);
+  const step = (end: "from" | "to", dir: -1 | 1, years: number) => {
+    const r = latest.current;
+    const next = end === "from" ? { from: Math.min(nudgeYear(r.from, dir, years), r.to), to: r.to } : { from: r.from, to: Math.max(nudgeYear(r.to, dir, years), r.from) };
+    if (next.from === r.from && next.to === r.to) return;
+    latest.current = next;
+    drag(next);
+  };
+
   const fromPos = yearToSlider(shown.from);
   const toPos = yearToSlider(shown.to);
   return (
     <div className={styles.range}>
-      <p className={styles.dates} aria-hidden="true">
-        {formatRange(shown.from, shown.to)}
-      </p>
+      <div className={styles.datesRow}>
+        <div className={styles.steps}>
+          <StepButton label="Start year earlier" sign="−" onStep={(n) => step("from", -1, n)} />
+          <StepButton label="Start year later" sign="+" onStep={(n) => step("from", 1, n)} />
+        </div>
+        <p className={styles.dates} aria-hidden="true">
+          {formatRange(shown.from, shown.to)}
+        </p>
+        <div className={styles.steps}>
+          <StepButton label="End year earlier" sign="−" onStep={(n) => step("to", -1, n)} />
+          <StepButton label="End year later" sign="+" onStep={(n) => step("to", 1, n)} />
+        </div>
+      </div>
       {/* The numbers above count; this holds where they end up, so a screen reader hears one value. */}
       <output className={styles.visuallyHidden} aria-live="polite">
         {formatRange(range.from, range.to)}
@@ -83,5 +106,53 @@ export function RangeControl({ range, onChange }: { range: YearRange; onChange: 
         ))}
       </div>
     </div>
+  );
+}
+
+/** Held this long, a step button starts repeating; after REPEAT_FAST repeats it moves ten years at a time. */
+const HOLD_MS = 400;
+const REPEAT_MS = 80;
+const REPEAT_FAST = 12;
+
+/**
+ * One year earlier or later, for a touch screen, where dragging cannot land an exact year (decisions.md entry 36).
+ * A press steps at once and repeats while held. The click that follows a press is ignored, so it does not step
+ * twice; a click with no press before it (detail 0: Enter or Space) steps once.
+ */
+function StepButton({ label, sign, onStep }: { label: string; sign: string; onStep: (years: number) => void }) {
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const stop = () => clearTimeout(timer.current);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const press = () => {
+    stop();
+    onStep(1);
+    let repeats = 0;
+    const again = () => {
+      repeats++;
+      onStep(repeats > REPEAT_FAST ? 10 : 1);
+      timer.current = setTimeout(again, REPEAT_MS);
+    };
+    timer.current = setTimeout(again, HOLD_MS);
+  };
+
+  return (
+    <button
+      type="button"
+      className={styles.step}
+      aria-label={label}
+      onPointerDown={(e) => {
+        if (e.button === 0) press();
+      }}
+      onPointerUp={stop}
+      onPointerLeave={stop}
+      onPointerCancel={stop}
+      onContextMenu={(e) => e.preventDefault()}
+      onClick={(e) => {
+        if (e.detail === 0) onStep(1);
+      }}
+    >
+      {sign}
+    </button>
   );
 }
