@@ -47,19 +47,20 @@
   outline-offset: -2px;
 }
 
-/* A flexible second column, so a wide open list does not push the link away from the wordmark. */
+/* A flexible last column, so a wide open list does not push the links away from the wordmark. */
 .masthead {
   position: absolute;
   top: 18px;
   left: 22px;
   z-index: 1;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto auto 1fr;
   align-items: baseline;
   column-gap: 22px;
 }
 
 .wordmark {
+  grid-row: 1; /* with the links, so the three keep their order in the first row */
   font-family: var(--font-display), Georgia, serif;
   font-size: 13px;
   font-weight: 500;
@@ -68,7 +69,9 @@
   color: var(--ink);
 }
 
+/* Both links in the first row: the Stories list, which spans the row below, comes between them in the markup. */
 .storiesToggle {
+  grid-row: 1;
   justify-self: start;
   padding: 0;
   font: inherit;
@@ -104,7 +107,8 @@
   overflow: hidden;
 }
 
-.storiesBody {
+.storiesBody,
+.savedBody {
   margin-top: 10px;
   max-height: calc(100dvh - 90px);
   overflow-y: auto;
@@ -141,6 +145,85 @@
 .storiesBody li button:hover {
   color: var(--accent);
   transform: translateX(3px);
+}
+
+/* Saved items: wider than Stories, since a row opens to a paragraph. */
+.saved {
+  width: min(380px, calc(100vw - 44px));
+}
+
+.savedBody:focus-visible,
+.saved:focus-visible {
+  outline: none;
+}
+
+.savedBody > .panelSection:first-child {
+  margin-top: 4px;
+}
+
+.savedCount {
+  color: var(--muted);
+}
+
+.savedItems {
+  list-style: none;
+}
+
+.savedItems > li {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--paper-sunk);
+}
+
+.savedRow {
+  display: block;
+  width: 100%;
+  padding: 8px 4px 4px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.savedRow:hover {
+  background: var(--paper-sunk);
+}
+
+.savedItems .summary {
+  margin-left: 4px;
+}
+
+.savedActions {
+  display: flex;
+  gap: 16px;
+  padding: 0 4px;
+}
+
+.savedActions button {
+  padding: 2px 0;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  /* An underline, not a border: it stays with the text when a touch screen makes the button 44 px tall. */
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.savedActions button:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink-soft);
+}
+
+.savedFoot {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 /* Year range, bottom centre */
@@ -469,8 +552,56 @@
   list-style: none;
 }
 
+/* The row, and its bookmark beside it: a sibling, since buttons cannot nest. The paragraph spans both. */
 .events > li {
+  display: grid;
+  grid-template-columns: 1fr auto;
   border-bottom: 1px solid var(--paper-sunk);
+}
+
+.events > li > .summary {
+  grid-column: 1 / -1;
+}
+
+.saveMark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  padding: 0;
+  color: var(--rule);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 160ms;
+}
+
+.events > li:hover .saveMark,
+.saveMark:focus-visible {
+  color: var(--muted);
+}
+
+.saveMark:hover,
+.saveMark[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+.saveWord {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.saveWord:hover,
+.saveWord[aria-pressed="true"] {
+  color: var(--accent);
 }
 
 .eventRow {
@@ -571,7 +702,7 @@
   }
 }
 
-.focused > button {
+.focused > button:first-child {
   background: var(--paper-sunk);
   box-shadow: inset 3px 0 0 var(--accent);
 }
@@ -824,6 +955,17 @@
   }
 
   .eventRow {
+    min-height: 44px;
+  }
+
+  /* No hover to reveal it on a touch screen, so the bookmark shows plainly. */
+  .saveMark {
+    width: 44px;
+    color: var(--muted);
+  }
+
+  .saveWord,
+  .savedActions button {
     min-height: 44px;
   }
 

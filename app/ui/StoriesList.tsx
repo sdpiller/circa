@@ -1,16 +1,16 @@
 "use client";
 /**
  * The way to a story without knowing where it is: one link by the wordmark, opening a short list ordered by
- * start year. Always mounted, so it can expand; inert while closed, so Tab skips it.
+ * start year. Always mounted, so it can expand; inert while closed, so Tab skips it. Open or closed is the
+ * app's to hold, so opening Saved closes it.
  */
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { PublishedStory } from "../../lib/narrative/publish.ts";
 import { STORIES } from "../../lib/stories/catalog.ts";
 import { formatRange } from "../../lib/time/index.ts";
 import styles from "./globe.module.css";
 
-export function StoriesList({ onChoose }: { onChoose: (story: PublishedStory) => void }) {
-  const [open, setOpen] = useState(false);
+export function StoriesList({ open, setOpen, onChoose }: { open: boolean; setOpen: (open: boolean) => void; onChoose: (story: PublishedStory) => void }) {
   const toggle = useRef<HTMLButtonElement>(null);
 
   return (

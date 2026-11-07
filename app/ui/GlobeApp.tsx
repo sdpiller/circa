@@ -4,11 +4,13 @@ import { BASE_PATH, OUTLINES_FILE } from "../../lib/base.ts";
 import type { AreaAnswer } from "../../lib/db/area.ts";
 import type { Position } from "../../lib/geo/geometry.ts";
 import type { PublishedStory } from "../../lib/narrative/publish.ts";
+import type { SavedItem } from "../../lib/saved.ts";
 import { areaReducer, initialArea, outlineOf, requestUrl } from "../../lib/selection.ts";
 import type { YearRange } from "../../lib/time/index.ts";
 import { AreaPanel } from "./AreaPanel.tsx";
 import { GlobeMap } from "./GlobeMap.tsx";
 import { RangeControl } from "./RangeControl.tsx";
+import { SavedList } from "./SavedList.tsx";
 import { StoriesList } from "./StoriesList.tsx";
 import styles from "./globe.module.css";
 import { useNarrow } from "./useNarrow.ts";
@@ -50,6 +52,16 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
     dispatch({ type: "choose", point: story.point, range: { from: story.entry.from, to: story.entry.to } });
     setPanelFocus((n) => n + 1);
   }, []);
+  // A saved item reopens the area it was found in, pinned so the list holds it.
+  const onShowSaved = useCallback((saved: SavedItem) => {
+    dispatch({ type: "choose", point: saved.point, range: saved.range, pin: saved.item.qid });
+    setPanelFocus((n) => n + 1);
+  }, []);
+
+  // The two lists by the wordmark: opening one closes the other.
+  const [menu, setMenu] = useState<"stories" | "saved" | null>(null);
+  const setStoriesOpen = useCallback((o: boolean) => setMenu(o ? "stories" : null), []);
+  const setSavedOpen = useCallback((o: boolean) => setMenu(o ? "saved" : null), []);
 
   // On a phone the panel is a bottom sheet. Expanded to full height for the point it was expanded at only, so a
   // new area, or the same one opened again, starts at half height.
@@ -67,7 +79,8 @@ export function GlobeApp({ styleUrl }: { styleUrl: string }) {
 
       <header className={styles.masthead}>
         <h1 className={styles.wordmark}>Circa</h1>
-        <StoriesList onChoose={onChoose} />
+        <StoriesList open={menu === "stories"} setOpen={setStoriesOpen} onChoose={onChoose} />
+        <SavedList open={menu === "saved"} setOpen={setSavedOpen} onShow={onShowSaved} />
       </header>
 
       {!rangeInSheet && (

@@ -14,6 +14,7 @@ import { missingCites, PUBLISHED } from "../../lib/stories/catalog.ts";
 import { formatRange } from "../../lib/time/index.ts";
 import { NameWithCard } from "./HoverCard.tsx";
 import { still } from "./motion.ts";
+import { SaveToggle, type SaveAt } from "./SaveToggle.tsx";
 import { Story } from "./Story.tsx";
 import { SummaryText } from "./SummaryText.tsx";
 import styles from "./globe.module.css";
@@ -83,7 +84,10 @@ export function AreaPanel({
     console.warn(`Featured story hidden, cited items missing from the panel: ${missingKey}`);
   }, [missingKey]);
 
-  const citedQid = cited?.base === base ? cited.qid : null;
+  // A saved item reopened here stays marked until a citation is chosen or the pin goes (click, drag, close).
+  const citedQid = cited?.base === base ? cited.qid : area.pin;
+  // Where a saved item was found: only for the answer to the question on screen, not text fading out.
+  const saveAt: SaveAt = current?.body && area.point ? { point: area.point, range: { from: current.body.from, to: current.body.to } } : null;
   const onCite = (qid: string | null) => {
     setCited({ base, qid });
     const instant = still();
@@ -124,6 +128,23 @@ export function AreaPanel({
   useEffect(() => {
     if (focusRequest > 0) panelRef.current?.focus({ preventScroll: true });
   }, [focusRequest]);
+
+  // A saved item reopened here: once its row is drawn, scroll to it and flash it, once per area and pin.
+  const pinKey = area.pin && current?.body ? `${base} ${area.pin}` : null;
+  const pinShownRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!pinKey || !area.pin) {
+      if (!area.pin) pinShownRef.current = null; // the next reopening of the same item flashes again
+      return;
+    }
+    if (pinShownRef.current === pinKey) return;
+    const row = bodyRef.current?.querySelector(`[data-qid="${area.pin}"]`);
+    if (!row) return;
+    pinShownRef.current = pinKey;
+    const instant = still();
+    row.scrollIntoView({ block: "center", behavior: instant ? "auto" : "smooth" });
+    if (!instant) row.querySelector("button")?.animate(FLASH, FLASH_MS);
+  });
 
   // Before the effect below: a "show more" from an area left behind must not pull focus into the next one.
   useEffect(() => {
@@ -215,7 +236,7 @@ export function AreaPanel({
                       </h3>
                       <ul className={styles.events} data-list="events">
                         {body.events.map((item) => (
-                          <EventRow key={item.qid} item={item} open={expanded.has(item.qid)} focused={item.qid === citedQid} onToggle={() => toggle(item.qid)} />
+                          <EventRow key={item.qid} item={item} open={expanded.has(item.qid)} focused={item.qid === citedQid} saveAt={saveAt} onToggle={() => toggle(item.qid)} />
                         ))}
                       </ul>
                       <More shown={body.events.length} total={body.eventsTotal} limit={area.eventsLimit} step={EVENTS_STEP} pending={pending} onMore={(next, kb) => showMore("events", next, kb)} />
@@ -231,6 +252,7 @@ export function AreaPanel({
                             item={item}
                             open={openCard === item.qid}
                             focused={item.qid === citedQid}
+                            saveAt={saveAt}
                             onOpen={() => setCard(item.qid)}
                             onClose={() => setCard((c) => (c === item.qid ? null : c))}
                           />
@@ -294,7 +316,7 @@ function SheetHandle({ full, setFull, onClose }: { full: boolean; setFull: (full
   );
 }
 
-function EventRow({ item, open, focused, onToggle }: { item: AreaItem; open: boolean; focused: boolean; onToggle: () => void }) {
+function EventRow({ item, open, focused, saveAt, onToggle }: { item: AreaItem; open: boolean; focused: boolean; saveAt: SaveAt; onToggle: () => void }) {
   const approx = item.loc_confidence === "inherited";
   return (
     <li data-qid={item.qid} className={focused ? styles.focused : undefined}>
@@ -309,6 +331,7 @@ function EventRow({ item, open, focused, onToggle }: { item: AreaItem; open: boo
           {item.description && <span className={styles.eventDesc}>{item.description}</span>}
         </span>
       </button>
+      <SaveToggle item={item} list="events" at={saveAt} variant="row" />
       {open && <SummaryText item={item} />}
     </li>
   );

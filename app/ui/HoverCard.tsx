@@ -13,6 +13,7 @@ import type { AreaItem } from "../../lib/db/area.ts";
 import { itemMeta, what } from "../../lib/items.ts";
 import { formatRange } from "../../lib/time/index.ts";
 import styles from "./globe.module.css";
+import { SaveToggle, type SaveAt } from "./SaveToggle.tsx";
 import { useSummary } from "./useSummary.ts";
 
 export const HOVER_INTENT_MS = 250;
@@ -21,12 +22,14 @@ export function NameWithCard({
   item,
   open,
   focused,
+  saveAt,
   onOpen,
   onClose,
 }: {
   item: AreaItem;
   open: boolean;
   focused: boolean;
+  saveAt: SaveAt;
   onOpen: () => void;
   onClose: () => void;
 }) {
@@ -34,6 +37,9 @@ export function NameWithCard({
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [place, setPlace] = useState<CSSProperties>({ top: 0 });
   const onCloseRef = useRef(onClose);
+  // A finger has no hover: a touch ends in a pointer leave. One that began in the card is a tap on its link
+  // or its Save, and must not close the card before the tap lands.
+  const pressInCard = useRef(false);
 
   useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => {
@@ -71,8 +77,12 @@ export function NameWithCard({
         clearTimeout(timer.current);
         timer.current = setTimeout(show, HOVER_INTENT_MS);
       }}
-      onPointerLeave={() => {
+      onPointerDown={(e) => {
+        pressInCard.current = (e.target as Element).closest("[data-card]") !== null;
+      }}
+      onPointerLeave={(e) => {
         clearTimeout(timer.current);
+        if (e.pointerType !== "mouse" && pressInCard.current) return;
         if (open) onClose();
       }}
       onBlur={(e) => {
@@ -93,7 +103,7 @@ export function NameWithCard({
       >
         {item.label}
       </button>
-      {open && <HoverCard id={cardId} item={item} place={place} />}
+      {open && <HoverCard id={cardId} item={item} place={place} saveAt={saveAt} />}
     </li>
   );
 }
@@ -117,13 +127,13 @@ function placeCard(b: HTMLElement | null): CSSProperties | null {
   return cardPlacement(r, inner, list.getBoundingClientRect(), window.innerHeight);
 }
 
-function HoverCard({ id, item, place }: { id: string; item: AreaItem; place: CSSProperties }) {
+function HoverCard({ id, item, place, saveAt }: { id: string; item: AreaItem; place: CSSProperties; saveAt: SaveAt }) {
   const s = useSummary(item.qid, item.wikipedia_title !== null);
   const summary = s.state === "ok" ? s.summary : null;
   const description = summary?.description ?? item.description;
   const meta = itemMeta({ years: formatRange(item.start_year, item.end_year), what: what(item), approx: item.loc_confidence === "inherited" });
   return (
-    <div id={id} className={styles.hoverCard} style={place}>
+    <div id={id} className={styles.hoverCard} style={place} data-card>
       {summary?.thumbnail && (
         // A remote Commons thumbnail at its own small size; next/image would need a remote loader for no gain.
         // eslint-disable-next-line @next/next/no-img-element
@@ -152,6 +162,7 @@ function HoverCard({ id, item, place }: { id: string; item: AreaItem; place: CSS
             </a>
           </>
         )}
+        <SaveToggle item={item} list="others" at={saveAt} variant="card" />
       </div>
     </div>
   );
