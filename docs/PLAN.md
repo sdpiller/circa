@@ -105,6 +105,13 @@ Owner decisions: below 700 px wide the reading column is a bottom sheet, half he
 
 Acceptance: (a) on a 390 x 844 phone a tap on land opens the half sheet and the outline is framed in the top half, clear of the masthead; (b) the handle expands and collapses the sheet by tap and by swipe; (c) a story in the sheet reads at 17 px over at least 340 px; (d) both slider handles take a thumb, and the step buttons land exact years (1914 to 1918 in under ten taps after a rough drag); (e) nothing overlaps, closed or open: masthead, Stories, slider, Sources, map credit; (f) a tapped name opens its card and a tapped citation scrolls to its event; (g) desktop at 1280 and 1024 px is unchanged and the desktop camera tests pass as they were; (h) tests, typecheck and lint clean. The owner's read on a real phone, from a Vercel preview, is the gate.
 
+### Phase 9: Saved items (planned 2026-11-07)
+The owner wants visitors to save events, people and places and come back to them, without accounts. Design: `docs/superpowers/specs/2026-11-07-saved-items-design.md`; as built: decisions.md entry 37.
+
+Owner decisions: events, people and places can all be saved; a saved row opens to its paragraph in the list and has "Show on globe", which reopens its area. The owner offered Supabase; the list stays in the browser instead, since without accounts a server cannot join one person's devices.
+
+Acceptance: (a) an event and a person, saved and the page reloaded, are both listed; (b) "Show on globe" flies to the same outline and years and marks the row, also for an item that was past "Show more"; (c) unsaving in the panel or removing from the list updates both, and a second tab follows; (d) a corrupt stored value gives an empty list and no console error; (e) on a 390 x 844 phone the toggles take a thumb and nothing overlaps; (f) desktop otherwise unchanged; tests, typecheck and lint clean. The owner's read is the gate.
+
 ## 4. Backlog (ideas deliberately deferred; do not start without the owner's go-ahead)
 
 - Physical record layer (the owner's original idea, closer to Picterra): earthquakes from the USGS catalog, fire hotspots from NASA FIRMS (free key, roughly 2000 onward), land cover change from CORINE Land Cover (Europe, a few snapshots 1990 to 2018), forest loss from Hansen/Global Forest Watch, surface water change from JRC Global Surface Water. Use precomputed datasets only, no custom ML.

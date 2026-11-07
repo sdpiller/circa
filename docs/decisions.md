@@ -313,3 +313,21 @@ The owner asked at the Phase 6 gate for the outline to appear under the mouse, f
 **Smaller changes.** On phones Sources moves to the top right and opens downward, the bottom being crowded; a paper fade sits behind the top edge so the map's names do not tangle with the wordmark; the map credit rises above the half sheet. Below 1024 px the slider's end ticks sit inside its ends instead of being centred on them and clipped. The page tells phone browsers to paint their bars in the paper colour. Not done: `viewport-fit=cover` and safe-area padding, which only matter when the page draws under the phone's own bars, and it does not ask to.
 
 **Known, not fixed.** MapLibre's compact credit starts expanded and, at tablet widths with the panel open, covers the Sources link until the map is first dragged. An open name card can overhang the sheet's handle; a tap anywhere else closes it.
+
+## 37. Saved items in the browser, no backend and no accounts (2026-11-07, Phase 9, owner decided)
+
+**What.** A visitor can save events, people and places, and find them again under "Saved" by the Stories link. Design: `docs/superpowers/specs/2026-11-07-saved-items-design.md`.
+
+**localStorage, not Supabase.** The owner offered a Supabase backend. Accounts stay a non-goal, and without them a server cannot tell that a phone and a laptop belong to one person, so a backend (anonymous sign-in included) would give the same per-browser list as localStorage, plus a dependency, keys, row-level security, a publicly writable table and a running cost. So the list lives in the browser: one device, gone when the visitor clears site data, said plainly under the list ("Saved in this browser only"). If feedback asks for another device, an export link can carry the list, still with no server.
+
+**The key is `circa.saved.v1`.** Under samarchive.com/circa the browser counts Circa as samarchive.com, so every samarchive page shares this storage; the key is namespaced and versioned. The vercel.app address keeps a separate list.
+
+**A record is a snapshot** of the item as listed (the area answer's own fields), which list it was in, the point and years of the area it was found in, and when it was saved. The saved list reads with no request beyond Wikipedia's paragraph, and outlives a database rebuild that drops the item. Records are checked with zod on every read: broken JSON gives an empty list, a broken record is dropped and the rest kept.
+
+**"Show on globe" reopens the area the item was found in, pinned.** Not the item's own coordinates: a different point or other years can resolve to an outline whose provinces leave the item out. A saved item may rank below the top 25 or 30, so `GET /api/area` takes an optional `pin` (a QID) and appends it through the path that appends a story's cited items: no new query, and a pin outside the outline or the years is simply absent. The pin is held in the selection until the next click, drag or close, and the panel marks the pinned row as it marks a cited one, after scrolling to it and flashing it once.
+
+**Touch: a tap inside a name card no longer closes it.** A finger has no hover, so every tap ends in a pointer leave, and the name's list item closed its card on that leave before the tap landed on the card's Save or its Wikipedia link. A press that begins inside the card now skips that close. This changes Phase 8's phone cards, which were never checked for a tap inside the card.
+
+**Measured.** No new dependency. 458 tests (13 new). In the browser: an event and a person saved, the page reloaded, both listed; "Show on globe" brought back Aristotle marked in the Athens list; an event below the top 25 ("Spartan–Argive wars") came back when pinned; a malformed pin is a 400; a corrupt stored value gives an empty list and no error; a removal in one tab shows in another; on a 390 x 844 touch phone the card stayed open through a tap on Save.
+
+**Known, not fixed.** On desktop the masthead sits on the map with no backdrop, so up close its links can cross the map's names, as Stories alone already could; Saved widens that strip. A saved item's text is the snapshot: if Wikidata's label or description changes in a rebuild, the saved list keeps the old words until the item is saved again.

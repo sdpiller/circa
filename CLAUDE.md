@@ -10,7 +10,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. Phase 8, Circa on phones, complete and approved by the owner (2026-11-03, decisions.md entry 36). (Update this line at every phase gate.)
+Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. Phase 8, Circa on phones, complete and approved by the owner (2026-11-03, decisions.md entry 36). Phase 9, saved items kept in the browser with no accounts and no backend, is built on branch phase-9-saved and waits for the owner's read (decisions.md entry 37). (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
@@ -65,8 +65,8 @@ Ask before adding any dependency not listed here. If you believe Python is bette
 
 ```
 /app                 Next.js routes and UI
-/app/ui              GlobeApp, GlobeMap, AreaPanel, RangeControl, StoriesList, Story
-/app/api/area        GET a click (lat, lon, from, to, intent): outline, story, event lists
+/app/ui              GlobeApp, GlobeMap, AreaPanel, RangeControl, StoriesList, Story, SavedList, SaveToggle, useSaved
+/app/api/area        GET a click (lat, lon, from, to, intent, optional pin): outline, story, event lists
 /app/api/summary     GET a Wikipedia extract for an item, cached in data/cache.db
 /lib/db              SQLite access, queries (area, provinces, regions)
 /lib/geo             point in polygon, distance, area, merging provinces into an outline
@@ -75,6 +75,7 @@ Ask before adding any dependency not listed here. If you believe Python is bette
 /lib/layout.ts       the wide and narrow (phone) layouts in numbers: panel width, insets
 /lib/labels.ts       map names by apparent zoom
 /lib/selection.ts    client selection state and the area URL
+/lib/saved.ts        saved items: the stored record, parsed with zod (browser storage is in app/ui/useSaved.ts)
 /lib/stories         story catalog and storyFor
 /lib/time            year conventions, range helpers
 /lib/narrative       story checker, publish, staleness
