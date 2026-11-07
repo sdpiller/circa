@@ -127,6 +127,18 @@ describe("queryArea: the lists", () => {
     expect(r.events.map((e) => e.qid)).toEqual(["Q100"]);
   });
 
+  it("appends a pinned item outside the top N, as a saved item asks", () => {
+    const rows = [at(-450, { qid: "Q100", sitelinks: 9 }), at(-490, { qid: "Q102", sitelinks: 1 }), at(-400, { qid: "Q103", kind: "birth", sitelinks: 1 }), at(-400, { qid: "Q104", kind: "birth", sitelinks: 7 })];
+    expect(run(rows, { eventsLimit: 1, othersLimit: 1, pin: "Q102" }).events.map((e) => e.qid)).toEqual(["Q102", "Q100"]);
+    expect(run(rows, { eventsLimit: 1, othersLimit: 1, pin: "Q103" }).others.map((e) => e.qid)).toEqual(["Q104", "Q103"]);
+  });
+
+  it("a pinned item outside the outline or the years is simply absent", () => {
+    const rows = [at(-400, { qid: "Q100" }), at(-400, { ...OUT, qid: "Q300" }), at(100, { qid: "Q301" })];
+    expect(run(rows, { pin: "Q300" }).events.map((e) => e.qid)).toEqual(["Q100"]);
+    expect(run(rows, { pin: "Q301" }).events.map((e) => e.qid)).toEqual(["Q100"]);
+  });
+
   it("an item with no province is never listed, even when cited", () => {
     const nowhere = at(-400, { qid: "Q200", lat: -40, lon: 100 }); // past the loader's snap distance
     const r = run([nowhere, at(-400, { qid: "Q100" })], {}, [story("athens", ["IN"], -500, -300, ["Q200"])]);
@@ -208,6 +220,11 @@ describe("AreaQuery", () => {
   it("rejects an unknown or missing intent", () => {
     expect(fails({ intent: "hover" })).toBe(true);
     expect(fails({ intent: undefined })).toBe(true);
+  });
+  it("takes an optional pin, a Wikidata item id", () => {
+    expect(AreaQuery.parse({ ...good, pin: "Q42" })).toMatchObject({ pin: "Q42" });
+    expect(fails({ pin: "42" })).toBe(true);
+    expect(fails({ pin: "Q42); DROP" })).toBe(true);
   });
   it("rejects a limit out of bounds and an empty number", () => {
     expect(fails({ eventsLimit: "0" })).toBe(true);

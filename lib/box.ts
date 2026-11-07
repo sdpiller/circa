@@ -9,7 +9,16 @@ export const EVENTS_STEP = 25;
 export const OTHERS_STEP = 30;
 export const AREA_LIMIT_MAX = 200;
 
-export type AreaRequest = { lat: number; lon: number; from: number; to: number; intent: "click" | "range"; eventsLimit: number; othersLimit: number };
+export type AreaRequest = {
+  lat: number;
+  lon: number;
+  from: number;
+  to: number;
+  intent: "click" | "range";
+  eventsLimit: number;
+  othersLimit: number;
+  pin?: string | null;
+};
 
 export function areaUrl(q: AreaRequest): string {
   const p = new URLSearchParams({
@@ -21,6 +30,7 @@ export function areaUrl(q: AreaRequest): string {
     eventsLimit: String(q.eventsLimit),
     othersLimit: String(q.othersLimit),
   });
+  if (q.pin) p.set("pin", q.pin);
   return `${BASE_PATH}/api/area?${p}`;
 }
 

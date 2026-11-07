@@ -19,13 +19,15 @@ export type AreaState = {
   answer: { url: string; body: AreaAnswer | null } | null;
   /** The next outline for this point moves the camera: a click or a story, until the point has its first answer. */
   fly: boolean;
+  /** A saved item reopened here, which the list must hold even below the top N. Gone at the next click, drag or close. */
+  pin: string | null;
 };
 
 export type AreaList = "events" | "others";
 
 export type AreaAction =
   | { type: "click"; point: Position }
-  | { type: "choose"; point: Position; range: YearRange }
+  | { type: "choose"; point: Position; range: YearRange; pin?: string }
   | { type: "drag"; range: YearRange }
   | { type: "more"; list: AreaList; next: number }
   | { type: "close" }
@@ -39,12 +41,13 @@ export const initialArea: AreaState = {
   othersLimit: OTHERS_STEP,
   answer: null,
   fly: false,
+  pin: null,
 };
 
 export function requestUrl(s: AreaState): string | null {
   if (!s.point) return null;
   const [lon, lat] = s.point;
-  return areaUrl({ lat, lon, from: s.range.from, to: s.range.to, intent: s.intent, eventsLimit: s.eventsLimit, othersLimit: s.othersLimit });
+  return areaUrl({ lat, lon, from: s.range.from, to: s.range.to, intent: s.intent, eventsLimit: s.eventsLimit, othersLimit: s.othersLimit, pin: s.pin });
 }
 
 const paramsOf = (url: string) => new URLSearchParams(url.slice(url.indexOf("?") + 1));
@@ -93,19 +96,19 @@ export function tweenRange(a: YearRange, b: YearRange, t: number): YearRange {
 export function areaReducer(s: AreaState, a: AreaAction): AreaState {
   switch (a.type) {
     case "click":
-      return { ...s, point: a.point, intent: "click", eventsLimit: EVENTS_STEP, othersLimit: OTHERS_STEP, fly: true };
+      return { ...s, point: a.point, intent: "click", eventsLimit: EVENTS_STEP, othersLimit: OTHERS_STEP, fly: true, pin: null };
     case "choose":
-      return { ...s, point: a.point, range: a.range, intent: "range", eventsLimit: EVENTS_STEP, othersLimit: OTHERS_STEP, fly: true };
+      return { ...s, point: a.point, range: a.range, intent: "range", eventsLimit: EVENTS_STEP, othersLimit: OTHERS_STEP, fly: true, pin: a.pin ?? null };
     case "drag":
       // A camera still owed to this point stays owed: the drag may have beaten the click's first answer.
-      return { ...s, range: a.range, intent: "range", fly: s.fly && !(answerIsHere(s) && s.answer?.body) };
+      return { ...s, range: a.range, intent: "range", fly: s.fly && !(answerIsHere(s) && s.answer?.body), pin: null };
     case "more":
       return a.list === "events" ? { ...s, eventsLimit: a.next } : { ...s, othersLimit: a.next };
     case "close":
-      return { ...s, point: null, answer: null };
+      return { ...s, point: null, answer: null, pin: null };
     case "answered": {
       if (a.url !== requestUrl(s)) return s;
-      if (a.body?.selection.kind === "none") return { ...s, point: null, answer: null };
+      if (a.body?.selection.kind === "none") return { ...s, point: null, answer: null, pin: null };
       if (a.body && (a.body.from !== s.range.from || a.body.to !== s.range.to)) {
         // A click opened a story and moved the range. Filed under the new question, so nothing is fetched again.
         const moved: AreaState = { ...s, range: { from: a.body.from, to: a.body.to }, intent: "range" };

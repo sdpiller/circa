@@ -32,9 +32,18 @@ const place = {
 const inOrder = (q: { from: number; to: number }) => q.from <= q.to;
 const ORDER = { message: "from must not be after to", path: ["from"] };
 
-/** Query string of GET /api/area. Years use historical numbering (1 BCE = -1). */
+/**
+ * Query string of GET /api/area. Years use historical numbering (1 BCE = -1). `pin` is a saved item the
+ * list must hold even below the top N (decisions.md entry 37).
+ */
 export const AreaQuery = z
-  .object({ ...place, intent: z.enum(["click", "range"]), eventsLimit: limit.default(25), othersLimit: limit.default(30) })
+  .object({
+    ...place,
+    intent: z.enum(["click", "range"]),
+    eventsLimit: limit.default(25),
+    othersLimit: limit.default(30),
+    pin: z.string().regex(/^Q\d+$/, "must be a Wikidata item id").optional(),
+  })
   .refine(inOrder, ORDER);
 export type AreaQueryInput = z.output<typeof AreaQuery>;
 
@@ -127,7 +136,8 @@ export function queryArea(db: Database.Database, q: AreaQueryInput, stories: rea
   const { story, from, to, selection } = s;
 
   const p = { ids: JSON.stringify(selection.provinceIds), from, to };
-  const cited = story ? citedQids(story) : [];
+  // A pinned item rides along with a story's citations: appended when it falls outside the top N.
+  const cited = [...(story ? citedQids(story) : []), ...(q.pin ? [q.pin] : [])];
   const ev = section(db, "events", p, q.eventsLimit, cited);
   const ot = section(db, "others", p, q.othersLimit, cited);
   ev.items.sort((a, b) => a.start_year - b.start_year || b.sitelinks - a.sitelinks || byQid(a, b));

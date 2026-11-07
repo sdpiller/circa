@@ -9,6 +9,12 @@ describe("areaUrl", () => {
     );
   });
 
+  it("adds a pin only when there is one", () => {
+    const q = { lat: 1, lon: 2, from: -500, to: -300, intent: "range", eventsLimit: 25, othersLimit: 30 } as const;
+    expect(areaUrl({ ...q, pin: "Q42" })).toBe("/circa/api/area?lat=1&lon=2&from=-500&to=-300&intent=range&eventsLimit=25&othersLimit=30&pin=Q42");
+    expect(areaUrl({ ...q, pin: null })).not.toContain("pin");
+  });
+
   it("uses the default steps and cap from the global constraints", () => {
     expect([EVENTS_STEP, OTHERS_STEP, AREA_LIMIT_MAX]).toEqual([25, 30, 200]);
   });

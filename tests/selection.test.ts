@@ -158,6 +158,23 @@ describe("choose", () => {
     const before = areaReducer(clicked(THESSALY), { type: "more", list: "events", next: 50 });
     expect(areaReducer(before, { type: "choose", point: ATHENS, range: ROMAN }).eventsLimit).toBe(EVENTS_STEP);
   });
+
+  it("carries a saved item's pin into the request, and a story's choice has none", () => {
+    const s = areaReducer(initialArea, { type: "choose", point: ATHENS, range: ROMAN, pin: "Q42" });
+    expect(s.pin).toBe("Q42");
+    expect(requestUrl(s)).toContain("pin=Q42");
+    expect(areaReducer(s, { type: "choose", point: ATHENS, range: ROMAN }).pin).toBeNull();
+  });
+
+  it("keeps the pin through show more and its answer, and drops it on a click, a drag or close", () => {
+    const pinned = answered(areaReducer(initialArea, { type: "choose", point: ATHENS, range: CLASSICAL, pin: "Q42" }));
+    expect(pinned.pin).toBe("Q42");
+    expect(shownAnswer(pinned)).not.toBeNull();
+    expect(areaReducer(pinned, { type: "more", list: "events", next: 50 }).pin).toBe("Q42");
+    expect(areaReducer(pinned, { type: "click", point: THESSALY }).pin).toBeNull();
+    expect(areaReducer(pinned, { type: "drag", range: ROMAN }).pin).toBeNull();
+    expect(areaReducer(pinned, { type: "close" }).pin).toBeNull();
+  });
 });
 
 describe("more", () => {
