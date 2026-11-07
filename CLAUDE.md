@@ -10,7 +10,7 @@ This is a for-fun solo project built with Claude Code. Prefer simple, boring, wo
 
 ## Current status
 
-Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. Phase 8, Circa on phones, complete and approved by the owner (2026-11-03, decisions.md entry 36). Phase 9, saved items kept in the browser with no accounts and no backend, is built on branch phase-9-saved and waits for the owner's read (decisions.md entry 37). (Update this line at every phase gate.)
+Phase 5 complete and approved by the owner (2026-10-30): twenty featured stories, written offline and checked mechanically (decisions.md entries 30 and 31). Phase 6 complete and approved by the owner (2026-11-03). Phase 7 is built and live (decisions.md entries 34 and 35): Circa is deployed on Vercel, served at samarchive.com/circa, and leads samarchive's front page. Left before its gate: acceptance (f), the function size on Vercel and the first day of Hobby usage. Phase 8, Circa on phones, complete and approved by the owner (2026-11-03, decisions.md entry 36). Phase 9, saved items kept in the browser with no accounts and no backend, was merged to main and deployed at the owner's request (2026-11-07, decisions.md entry 37); the owner's read on a real phone is still the gate. (Update this line at every phase gate.)
 
 ## Working style (how to collaborate with the owner)
 
