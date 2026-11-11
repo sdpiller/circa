@@ -1,0 +1,37 @@
+# Runs on every push and pull request: lint, type check (next typegen +
+# tsc), and the full Vitest suite. No secrets are available here.
+# The production build is not run: its prebuild step downloads the
+# database from CIRCA_DB_URL and verifies it against etl/circa-db.sha256.
+# To add it, store CIRCA_DB_URL as a repository secret and add a build
+# step with `env: CIRCA_DB_URL: ${{ secrets.CIRCA_DB_URL }}`.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install (exactly what package-lock.json pins)
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Tests
+        run: npm test
